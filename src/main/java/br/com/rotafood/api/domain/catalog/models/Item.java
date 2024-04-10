@@ -31,11 +31,7 @@ public class Item {
     private UUID id;
 
     private String type;
-    private UUID categoryId;
     private String status;
-    
-    @OneToOne(mappedBy = "item", cascade = CascadeType.ALL)
-    private Price price;
 
     private String externalCode;
     private Integer index;
@@ -44,11 +40,24 @@ public class Item {
     @JoinColumn(name = "productId")
     private Product product;
 
+    @ManyToOne
+    @JoinColumn(name = "catalogId")
+    private Catalog catalog;
+
+    @ManyToOne
+    @JoinColumn(name = "categoryId")
+    private Category category;
+
     @OneToMany(mappedBy = "item")
     private List<OptionGroup> optionGroups;
 
     @OneToMany(mappedBy = "item")
     private List<Shift> shifts;
+
+    @OneToOne(mappedBy = "item", cascade = CascadeType.ALL)
+    private Price price;
+
+    
 
     
 

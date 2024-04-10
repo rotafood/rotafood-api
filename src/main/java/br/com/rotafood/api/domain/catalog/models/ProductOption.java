@@ -1,14 +1,14 @@
 package br.com.rotafood.api.domain.catalog.models;
-
 import java.util.List;
 import java.util.UUID;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -18,31 +18,29 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "prices")
+@Table(name = "productOptions")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Price {
+public class ProductOption {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private Double value;
-    private Double originalValue;
+    @Column(nullable = false)
+    private String name;
 
-    @OneToMany(mappedBy = "price")
-    private List<ScalePrice> scalePrices;
+    @Column(nullable = false, length = 2000)
+    private String description;
+
+
+    @OneToMany(mappedBy = "productOption", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Price> prices;
 
     @OneToOne
-    @JoinColumn(name = "itemId", referencedColumnName = "id")
-    private Item item;
+    @JoinColumn(name = "optionId")
+    private Option option;
 
-    @ManyToOne
-    @JoinColumn(name = "productId")
-    private Product product;
-
-    @ManyToOne
-    @JoinColumn(name = "productOptionId")
-    private ProductOption productOption;
+    
 }

@@ -18,7 +18,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "option_groups")
+@Table(name = "optionGroups")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -34,11 +34,14 @@ public class OptionGroup {
     private Integer index;
     private String optionGroupType;
 
-    @OneToMany(mappedBy = "optionGroup", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Option> options;
+    @ManyToOne
+    @JoinColumn(name = "productId", referencedColumnName = "id")
+    private Product product;
 
     @ManyToOne
     @JoinColumn(name = "itemId")
     private Item item;
-
+    
+    @OneToMany(mappedBy = "optionGroup", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Option> options;
 }
