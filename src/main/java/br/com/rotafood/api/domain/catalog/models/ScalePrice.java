@@ -12,7 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "scale_prices")
+@Table(name = "scalePrices")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor

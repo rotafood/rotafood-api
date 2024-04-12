@@ -31,18 +31,16 @@ public class Item {
     private UUID id;
 
     private String type;
-    private String status;
+
+    private Status status;
 
     private String externalCode;
+
     private Integer index;
 
     @ManyToOne
     @JoinColumn(name = "productId")
     private Product product;
-
-    @ManyToOne
-    @JoinColumn(name = "catalogId")
-    private Catalog catalog;
 
     @ManyToOne
     @JoinColumn(name = "categoryId")
@@ -54,11 +52,10 @@ public class Item {
     @OneToMany(mappedBy = "item")
     private List<Shift> shifts;
 
+    @OneToMany(mappedBy = "item")
+    private List<ItemContextModifier> contextModifiers;
+
     @OneToOne(mappedBy = "item", cascade = CascadeType.ALL)
     private Price price;
-
-    
-
-    
 
 }
