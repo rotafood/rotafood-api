@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -33,11 +34,13 @@ public class Price {
     @OneToMany(mappedBy = "price")
     private List<ScalePrice> scalePrices;
 
-    @OneToOne
-    @JoinColumn(name = "itemId", referencedColumnName = "id")
+    @OneToOne(mappedBy = "price")
     private Item item;
 
-    @OneToOne
-    @JoinColumn(name = "productOptionId")
+    @OneToOne(mappedBy = "price")
     private ProductOption product;
+
+    @ManyToOne
+    @JoinColumn(name = "itemContextModifierId", referencedColumnName = "id")
+    private ItemContextModifier itemContextModifier;
 }

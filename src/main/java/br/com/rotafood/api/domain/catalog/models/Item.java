@@ -1,7 +1,7 @@
 package br.com.rotafood.api.domain.catalog.models;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -55,7 +55,8 @@ public class Item {
     @OneToMany(mappedBy = "item")
     private List<ItemContextModifier> contextModifiers;
 
-    @OneToOne(mappedBy = "item", cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "priceId")
     private Price price;
 
 }

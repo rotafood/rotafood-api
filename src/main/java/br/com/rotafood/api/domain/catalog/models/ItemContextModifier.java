@@ -29,7 +29,7 @@ public class ItemContextModifier {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @OneToMany(mappedBy = "contextModifier")
+    @OneToMany(mappedBy = "itemContextModifier")
     private List<Price> prices;
 
     @ManyToOne
