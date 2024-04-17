@@ -5,7 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 
-import br.com.rotafood.api.domain.merchant.MerchantUser;
+import br.com.rotafood.api.domain.merchant.models.MerchantUser;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

@@ -3,8 +3,9 @@ package br.com.rotafood.api.domain.catalog.models;
 import java.util.List;
 import java.util.UUID;
 
-import jakarta.persistence.CascadeType;
+import br.com.rotafood.api.domain.merchant.models.Merchant;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -23,7 +24,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class OptionGroup {
+public class ProductOptionGroup {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -42,6 +43,10 @@ public class OptionGroup {
     @JoinColumn(name = "itemId")
     private Item item;
     
-    @OneToMany(mappedBy = "optionGroup", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Option> options;
+    @OneToMany(mappedBy = "productOptionGroup")
+    private List<ProductOption> options;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "merchantId")
+    private Merchant merchant;
 }

@@ -1,17 +1,15 @@
-package br.com.rotafood.api.domain.merchant;
+package br.com.rotafood.api.domain.order.models;
 
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
-import java.util.List;
-import br.com.rotafood.api.domain.address.models.Address;
-import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -19,20 +17,27 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "addresses")
+@Table(name = "order_payments")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Merchant {
+public class OrderPayment {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @OneToOne
-    @JoinColumn(name = "addressId")
-    private Address address;
+    @Column(length = 1024)
+    private String description;
 
-    @OneToMany(mappedBy = "merchant", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<MerchantUser> merchantUsers;
+    @OneToMany(mappedBy = "payment")
+    private List<OrderPaymentMethod> methods;
+
+    @Column(precision = 10, scale = 2)
+    private BigDecimal pending;
+
+    @Column(precision = 10, scale = 2)
+    private BigDecimal prepaid;
+
 }
+

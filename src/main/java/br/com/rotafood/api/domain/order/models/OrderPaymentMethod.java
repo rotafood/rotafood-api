@@ -1,9 +1,12 @@
-package br.com.rotafood.api.domain.merchant;
+package br.com.rotafood.api.domain.order.models;
 
-
+import java.math.BigDecimal;
 import java.util.UUID;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -16,23 +19,28 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "addresses")
+@Table(name = "order_payments")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class MerchantUser {
+public class OrderPaymentMethod {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private String email;
+    @Column(length = 1024)
+    private String description;
 
-    private String password;
-
-    private Integer phone;
+    @Enumerated(EnumType.STRING)
+    private PaymentMethodOption method;
 
     @ManyToOne
-    @JoinColumn(name = "merchantId")
-    private Merchant merchant;
+    @JoinColumn(name = "orderPaymentId")
+    private OrderPayment payment;
+
+    @Column(precision = 10, scale = 2)
+    private BigDecimal value;
+
 }
+

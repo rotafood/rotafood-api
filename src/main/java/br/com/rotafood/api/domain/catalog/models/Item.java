@@ -18,6 +18,8 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 import java.util.UUID;
 
+import br.com.rotafood.api.domain.merchant.models.Merchant;
+
 
 @Entity
 @Table(name = "items")
@@ -38,25 +40,26 @@ public class Item {
 
     private Integer index;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "productId")
     private Product product;
 
+    @OneToOne
+    @JoinColumn(name = "priceId")
+    private Price price;
+
+    @OneToMany(mappedBy = "item")
+    private List<ItemShift> shifts;
+
+    @OneToMany(mappedBy = "item")
+    private List<ItemContextModifier> contextModifiers;
+    
     @ManyToOne
     @JoinColumn(name = "categoryId")
     private Category category;
 
-    @OneToMany(mappedBy = "item")
-    private List<OptionGroup> optionGroups;
-
-    @OneToMany(mappedBy = "item")
-    private List<Shift> shifts;
-
-    @OneToMany(mappedBy = "item")
-    private List<ItemContextModifier> contextModifiers;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "priceId")
-    private Price price;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "merchantId")
+    private Merchant merchant;
 
 }

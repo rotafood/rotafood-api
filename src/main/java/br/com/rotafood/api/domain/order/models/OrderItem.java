@@ -1,9 +1,7 @@
-package br.com.rotafood.api.domain.catalog.models;
+package br.com.rotafood.api.domain.order.models;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,22 +11,19 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Table(name = "orderItems")
 @Entity
-@Table(name = "scalePrices")
-@Getter
-@NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "id")
-public class ScalePrice {
+@NoArgsConstructor
+@EqualsAndHashCode
+@Getter
+@Setter
+public class OrderItem {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-
-    private Integer minQuantity;
-    
-    @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal price;
-
 
 }

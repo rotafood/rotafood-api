@@ -1,8 +1,10 @@
 package br.com.rotafood.api.domain.catalog.models;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -28,8 +30,11 @@ public class Price {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private Double value;
-    private Double originalValue;
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal value;
+
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal originalValue;
 
     @OneToMany(mappedBy = "price")
     private List<ScalePrice> scalePrices;

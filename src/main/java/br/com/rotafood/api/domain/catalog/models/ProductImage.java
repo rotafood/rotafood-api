@@ -2,40 +2,36 @@ package br.com.rotafood.api.domain.catalog.models;
 
 import java.util.UUID;
 
+import br.com.rotafood.api.domain.storage.models.Image;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
-@Table(name = "options")
-@Getter
-@NoArgsConstructor
+@Table(name = "productImage")
 @AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 @EqualsAndHashCode(of = "id")
-public class Option {
+public class ProductImage {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+    
 
-    private String status;
-    private Integer index;
-    private Double price;
-    private String externalCode;
-
-    @ManyToOne
-    @JoinColumn(name = "optionGroupId")
-    private OptionGroup optionGroup;
-
-    @OneToOne(mappedBy = "option")
-    private ProductOption product;
+    @OneToOne
+    @JoinColumn(name = "imageId")
+    private Image image;
 
 }

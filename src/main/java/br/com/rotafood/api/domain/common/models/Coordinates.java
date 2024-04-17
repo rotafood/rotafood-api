@@ -1,9 +1,5 @@
-package br.com.rotafood.api.domain.catalog.models;
+package br.com.rotafood.api.domain.common.models;
 
-import java.math.BigDecimal;
-import java.util.UUID;
-
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,20 +11,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "scalePrices")
+@Table(name = "addresses")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class ScalePrice {
+public class Coordinates {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
-
-    private Integer minQuantity;
-    
-    @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal price;
-
-
+    private String id;
+    private float latitude;
+    private float longitude;
 }
