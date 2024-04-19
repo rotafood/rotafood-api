@@ -19,7 +19,7 @@ import java.util.UUID;
 
 
 @Entity
-@Table(name = "itemContextModifiers")
+@Table(name = "item_context_modifiers")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -30,7 +30,7 @@ public class ItemContextModifier {
     private UUID id;
 
     @OneToMany(mappedBy = "itemContextModifier")
-    private List<Price> prices;
+    private List<CatalogPrice> prices;
 
     @ManyToOne
     @JoinColumn(name = "itemId")

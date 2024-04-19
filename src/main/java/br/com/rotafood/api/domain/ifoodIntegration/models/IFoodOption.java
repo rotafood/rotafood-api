@@ -15,7 +15,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "ifoodProductOptions")
+@Table(name = "ifood_product_options")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,7 +29,7 @@ public class IFoodOption {
     private UUID ifoodOptionId;
 
     @OneToOne
-    @JoinColumn(name = "productOptionId")
+    @JoinColumn(name = "product_option_id")
     private ProductOption productOption;
     
 }

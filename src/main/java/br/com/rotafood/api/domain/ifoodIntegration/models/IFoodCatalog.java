@@ -16,7 +16,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "ifoodEvents")
+@Table(name = "ifood_catalogs")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -34,7 +34,7 @@ public class IFoodCatalog {
     private String refreshToken;
 
     @OneToOne
-    @JoinColumn(name = "catalogId")
+    @JoinColumn(name = "catalog_id")
     private Catalog catalog;
     
 }

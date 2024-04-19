@@ -16,7 +16,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "shifts")
+@Table(name = "item_shifts")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor

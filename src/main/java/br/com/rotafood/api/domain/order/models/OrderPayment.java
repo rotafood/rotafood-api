@@ -9,6 +9,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -30,14 +32,19 @@ public class OrderPayment {
     @Column(length = 1024)
     private String description;
 
-    @OneToMany(mappedBy = "payment")
-    private List<OrderPaymentMethod> methods;
-
+    
     @Column(precision = 10, scale = 2)
     private BigDecimal pending;
-
+    
     @Column(precision = 10, scale = 2)
     private BigDecimal prepaid;
+    
+    @OneToMany(mappedBy = "payment")
+    private List<OrderPaymentMethod> methods;
+    
+    @ManyToOne
+    @JoinColumn(name = "orderId")
+    private Order order;
 
 }
 

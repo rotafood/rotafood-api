@@ -33,7 +33,7 @@ public class Address {
     private String streetNumber;
     private String formattedAddress;
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "coordinatesId", referencedColumnName = "id")
+    @JoinColumn(name = "coordinate_id", referencedColumnName = "id")
     private Coordinates coordinates;
 
 }

@@ -16,7 +16,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "ifoodEvents")
+@Table(name = "ifood_categories")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -30,7 +30,7 @@ public class IFoodCategory {
     private UUID ifoodId;
 
     @OneToOne
-    @JoinColumn(name = "categoryId")
+    @JoinColumn(name = "category_id")
     private Category category;
     
 }

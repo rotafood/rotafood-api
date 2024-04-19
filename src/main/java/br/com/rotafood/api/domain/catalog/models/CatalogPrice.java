@@ -20,12 +20,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "prices")
+@Table(name = "catalog_prices")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Price {
+public class CatalogPrice {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;

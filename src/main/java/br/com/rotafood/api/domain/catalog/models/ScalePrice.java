@@ -15,7 +15,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "scalePrices")
+@Table(name = "scale_prices")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor

@@ -62,7 +62,13 @@ public class Product {
     @OneToOne
     @JoinColumn(name = "imageId")
     private Image image;
+    
+    @OneToOne(mappedBy = "product")
+    private ProductOption option;
 
+    @OneToOne(mappedBy = "product")
+    private Item item;
+    
     @OneToOne
     @JoinColumn(name = "productSellingOptionId")
     private ProductSellingOption sellingOption;
@@ -70,8 +76,6 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<ProductOptionGroup> optionGroups;
 
-    @OneToOne(mappedBy = "product")
-    private Item item;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "merchantId")

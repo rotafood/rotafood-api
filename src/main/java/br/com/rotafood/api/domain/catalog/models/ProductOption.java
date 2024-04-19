@@ -19,7 +19,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "options")
+@Table(name = "product_options")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -38,14 +38,15 @@ public class ProductOption {
     private Integer index;
 
     @OneToOne
-    @JoinColumn(name = "priceId")
-    private Price price;
+    @JoinColumn(name = "catalogPriceId")
+    private CatalogPrice price;
 
     @ManyToOne
-    @JoinColumn(name = "optionGroupId")
-    private ProductOptionGroup optionGroup;
+    @JoinColumn(name = "productOptionGroupId")  
+    private ProductOptionGroup productOptionGroup;
 
-    @OneToOne(mappedBy = "option")
+    @OneToOne
+    @JoinColumn(name = "productId")
     private Product product;
 
 }

@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "productSellingOption")
+@Table(name = "product_option_groups")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor

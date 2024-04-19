@@ -16,7 +16,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "ifoodMerchants")
+@Table(name = "ifood_merchants")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -34,7 +34,7 @@ public class IFoodMerchant {
     private String ifoodRefreshToken;
 
     @OneToOne
-    @JoinColumn(name = "merchantId")
+    @JoinColumn(name = "merchant_id")
     private Merchant merchant;
     
 }

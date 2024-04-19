@@ -19,7 +19,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "optionGroups")
+@Table(name = "product_option_groups")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor

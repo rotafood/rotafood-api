@@ -23,7 +23,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "addresses")
+@Table(name = "merchants")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor

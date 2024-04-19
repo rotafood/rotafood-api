@@ -65,32 +65,25 @@ public class Order {
     @JoinColumn(name = "merchantId")
     private Merchant merchant;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "totalId")
+    @OneToOne(mappedBy = "order")
     private OrderTotal total;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customerId")
+    @OneToOne(mappedBy = "order")
     private OrderCustomer customer;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "deliveryId")
+    @OneToOne(mappedBy = "order")
     private OrderDelivery delivery;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "scheduleId")
+    @OneToOne(mappedBy = "order")
     private OrderSchedule schedule;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "indoorId")
+    @OneToOne(mappedBy = "order")
     private OrderIndoor indoor;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "takeoutId")
+    @OneToOne(mappedBy = "order")
     private OrderTakeout takeout;
     
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "paymentId")
+    @OneToOne(mappedBy = "order")
     private OrderPayment payment;
 
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
