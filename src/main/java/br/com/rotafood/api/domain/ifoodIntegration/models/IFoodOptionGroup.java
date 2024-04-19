@@ -1,7 +1,7 @@
 package br.com.rotafood.api.domain.ifoodIntegration.models;
 import java.util.UUID;
 
-import br.com.rotafood.api.domain.catalog.models.Product;
+import br.com.rotafood.api.domain.catalog.models.ProductOptionGroup;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,21 +15,21 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "ifoodProducts")
+@Table(name = "ifoodOptionGroups")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class IFoodProduct {
+public class IFoodOptionGroup {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private UUID ifoodOptionId;
+    private UUID ifoodId;
 
     @OneToOne
-    @JoinColumn(name = "productId")
-    private Product product;
+    @JoinColumn(name = "productOptionGroupId")
+    private ProductOptionGroup productOptionGroup;
     
 }
