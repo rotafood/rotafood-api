@@ -25,10 +25,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class ProductOption {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -38,8 +38,8 @@ public class ProductOption {
     private Integer index;
 
     @OneToOne
-    @JoinColumn(name = "catalogPriceId")
-    private CatalogPrice price;
+    @JoinColumn(name = "priceId")
+    private Price price;
 
     @ManyToOne
     @JoinColumn(name = "productOptionGroupId")  

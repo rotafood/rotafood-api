@@ -30,7 +30,7 @@ public class ItemContextModifier {
     private UUID id;
 
     @OneToMany(mappedBy = "itemContextModifier")
-    private List<CatalogPrice> prices;
+    private List<Price> prices;
 
     @ManyToOne
     @JoinColumn(name = "itemId")

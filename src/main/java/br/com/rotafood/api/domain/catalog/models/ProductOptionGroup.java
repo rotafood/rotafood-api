@@ -35,13 +35,13 @@ public class ProductOptionGroup {
     private Integer index;
     private String optionGroupType;
 
-    @ManyToOne
-    @JoinColumn(name = "productId", referencedColumnName = "id")
-    private Product product;
+    // @ManyToOne
+    // @JoinColumn(name = "productId", referencedColumnName = "id")
+    // private Product product;
 
-    @ManyToOne
-    @JoinColumn(name = "itemId")
-    private Item item;
+    // @ManyToOne
+    // @JoinColumn(name = "itemId")
+    // private Item item;
     
     @OneToMany(mappedBy = "productOptionGroup")
     private List<ProductOption> options;

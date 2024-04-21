@@ -45,8 +45,8 @@ public class Item {
     private Product product;
 
     @OneToOne
-    @JoinColumn(name = "catalogPriceId")
-    private CatalogPrice price;
+    @JoinColumn(name = "priceId")
+    private Price price;
 
     @OneToMany(mappedBy = "item")
     private List<ItemShift> shifts;
