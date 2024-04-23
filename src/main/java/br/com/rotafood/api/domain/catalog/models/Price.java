@@ -43,7 +43,7 @@ public class Price {
     private Item item;
 
     @OneToOne(mappedBy = "price")
-    private ProductOption product;
+    private Option product;
 
     @ManyToOne
     @JoinColumn(name = "itemContextModifierId", referencedColumnName = "id")

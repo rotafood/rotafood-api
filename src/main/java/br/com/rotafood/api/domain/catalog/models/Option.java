@@ -1,6 +1,5 @@
-package br.com.rotafood.api.domain.order.models;
+package br.com.rotafood.api.domain.catalog.models;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
@@ -12,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -19,28 +19,34 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "order_payments")
+@Table(name = "product_options")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class OrderPaymentMethod {
+public class Option {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(length = 1024)
-    private String description;
-
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private OrderPaymentMethodOption method;
+    private Status status;
+
+    @Column(nullable = false)
+    private Integer index;
+
+    @OneToOne
+    @JoinColumn(name = "priceId")
+    private Price price;
 
     @ManyToOne
-    @JoinColumn(name = "orderPaymentId")
-    private OrderPayment payment;
+    @JoinColumn(name = "optionGroupId")  
+    private OptionGroup optionGroup;
 
-    @Column(precision = 10, scale = 2)
-    private BigDecimal value;
+    @OneToOne
+    @JoinColumn(name = "productId")
+    private Product product;
 
 }
-

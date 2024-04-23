@@ -1,4 +1,4 @@
-package br.com.rotafood.api.domain.common.models;
+package br.com.rotafood.api.domain.address.models;
 
 import java.util.UUID;
 

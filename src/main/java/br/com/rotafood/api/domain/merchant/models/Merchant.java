@@ -2,7 +2,7 @@ package br.com.rotafood.api.domain.merchant.models;
 
 import java.util.UUID;
 
-import br.com.rotafood.api.domain.common.models.Address;
+import br.com.rotafood.api.domain.address.models.Address;
 
 import java.util.Date;
 import java.util.List;

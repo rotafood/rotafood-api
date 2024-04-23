@@ -33,6 +33,7 @@ public class ProductSellingOption {
 
     private Integer averageUnit;
 
-    @OneToOne(mappedBy = "sellingOption")
+    @OneToOne
+    @JoinColumn(name = "productId")
     private Product product;
 }

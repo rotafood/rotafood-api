@@ -1,14 +1,21 @@
 package br.com.rotafood.api.domain.order.models;
 
+import java.util.Date;
 import java.util.UUID;
 
+import br.com.rotafood.api.domain.address.models.Address;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -26,8 +33,26 @@ public class OrderDelivery {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20)
+    private OrderDeliveryMode mode;
+
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20)
+    private OrderDeliveryBy deliveryBy;
+
+    @Column(length = 256)
+    private String pickupCode;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date deliveryDateTime;
+
     @OneToOne
     @JoinColumn(name = "orderId")
     private Order order;
+
+    @OneToOne
+    @JoinColumn(name = "addressId")
+    private Address address;
 
 }

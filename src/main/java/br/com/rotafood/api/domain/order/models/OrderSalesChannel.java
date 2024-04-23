@@ -7,4 +7,5 @@ public enum OrderSalesChannel {
     ROTAFOOD,
     IFOOD,
     AIQFOME,
+    RAPPI
 }

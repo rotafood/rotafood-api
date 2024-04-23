@@ -2,6 +2,7 @@ package br.com.rotafood.api.domain.order.models;
 
 import java.util.UUID;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,6 +26,21 @@ public class OrderCustomer {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    @Column
+    private int ordersCountOnMerchant;
+
+    @Column(length = 20)
+    private String segmentation;
+
+    @Column(length = 20)
+    private String name;
+
+    @Column(length = 20)
+    private String document;
+
+    @Column(length = 20)
+    private String phone;
 
     @OneToOne
     @JoinColumn(name = "orderId")

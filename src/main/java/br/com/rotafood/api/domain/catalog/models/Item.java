@@ -40,7 +40,7 @@ public class Item {
 
     private Integer index;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "productId")
     private Product product;
 
@@ -50,7 +50,7 @@ public class Item {
 
     @OneToMany(mappedBy = "item")
     private List<ItemShift> shifts;
-
+    
     @OneToMany(mappedBy = "item")
     private List<ItemContextModifier> contextModifiers;
     

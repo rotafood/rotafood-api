@@ -1,12 +1,14 @@
-package br.com.rotafood.api.domain.order.models;
+package br.com.rotafood.api.domain.payment.models;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -19,28 +21,35 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "order_payments")
+@Table(name = "payments")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class OrderPaymentMethod {
+public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(length = 1024)
-    private String description;
+    @Column(nullable = false, length = 100)
+    private String name;
+
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal price;
+
+    @Column(nullable = false)
+    private LocalDateTime paymentDate;
 
     @Enumerated(EnumType.STRING)
-    private OrderPaymentMethodOption method;
+    private PaymentStatus status;
 
-    @ManyToOne
-    @JoinColumn(name = "orderPaymentId")
-    private OrderPayment payment;
+    @Column(length = 512)
+    private String transactionId;
 
-    @Column(precision = 10, scale = 2)
-    private BigDecimal value;
+    @Column(length = 256)
+    private String mercadoPagoPaymentId; 
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "subscriptionId")
+    private Subscription subscription;
 }
-

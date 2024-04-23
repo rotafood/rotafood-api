@@ -1,8 +1,10 @@
 package br.com.rotafood.api.domain.order.models;
 
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,6 +27,19 @@ public class OrderAdditionalFee {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    @Column(length = 20)
+    private String type;
+
+    @Column(precision = 10, scale = 2)
+    private BigDecimal value;
+
+    @Column(length = 128)
+    private String name;
+
+    @Column(length = 1024)
+    private String description;
+
 
     @ManyToOne
     @JoinColumn(name = "orderId")

@@ -32,7 +32,7 @@ public class Image {
     @Column(length = 512)
     private String imagePath;
 
-    private Origin origin;
+    private ImageOrigin origin;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "merchantId")

@@ -1,7 +1,7 @@
 package br.com.rotafood.api.domain.ifoodIntegration.models;
 import java.util.UUID;
 
-import br.com.rotafood.api.domain.catalog.models.ProductOption;
+import br.com.rotafood.api.domain.catalog.models.Option;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -30,6 +30,6 @@ public class IFoodOption {
 
     @OneToOne
     @JoinColumn(name = "product_option_id")
-    private ProductOption productOption;
+    private Option productOption;
     
 }

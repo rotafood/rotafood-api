@@ -1,6 +1,6 @@
 package br.com.rotafood.api.domain.storage.models;
 
-public enum Origin {
+public enum ImageOrigin {
     ROTAFOOD,
     IFOOD,
     AIQFOME,
