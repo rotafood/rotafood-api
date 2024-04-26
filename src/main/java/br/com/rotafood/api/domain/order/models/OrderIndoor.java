@@ -36,7 +36,7 @@ public class OrderIndoor {
     @Column(length = 20)
     private OrderIndoorMode mode;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE) 
     private Date deliveryDateTime;
 
     @OneToOne

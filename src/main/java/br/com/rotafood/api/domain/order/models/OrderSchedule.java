@@ -29,10 +29,10 @@ public class OrderSchedule {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE) 
     private Date deliveryDateTimeStart;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE) 
     private Date deliveryDateTimeEnd;
 
     @OneToOne

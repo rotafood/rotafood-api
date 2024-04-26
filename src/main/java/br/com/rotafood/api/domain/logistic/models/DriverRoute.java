@@ -1,17 +1,15 @@
-package br.com.rotafood.api.domain.order.models;
+package br.com.rotafood.api.domain.logistic.models;
 
 import java.util.Date;
 import java.util.UUID;
 
-import br.com.rotafood.api.domain.address.models.Address;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
@@ -22,37 +20,28 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "order_deliveries")
+@Table(name = "driver_routes")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class OrderDelivery {
-
+public class DriverRoute {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Enumerated(EnumType.STRING)
-    @Column(length = 20)
-    private OrderDeliveryMode mode;
+    @ManyToOne
+    @JoinColumn(name = "driverId")
+    private Driver driver;
 
-    @Enumerated(EnumType.STRING)
-    @Column(length = 20)
-    private OrderDeliveryBy deliveryBy;
+    @OneToOne
+    @JoinColumn(name = "routeId")
+    private VrpRoute route;
 
-    @Column(length = 256)
-    private String pickupCode;
-
+    @Column
     @Temporal(TemporalType.DATE) 
-    private Date deliveryDateTime;
+    private Date createdAt;
 
-    @OneToOne
-    @JoinColumn(name = "orderId")
-    private Order order;
 
-    @OneToOne
-    @JoinColumn(name = "addressId")
-    private Address address;
 
 }

@@ -1,19 +1,17 @@
-package br.com.rotafood.api.domain.merchant.models;
-
+package br.com.rotafood.api.domain.logistic.models;
 
 import java.util.List;
 import java.util.UUID;
 
-import jakarta.persistence.CollectionTable;
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
+
+import br.com.rotafood.api.domain.merchant.models.Merchant;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -21,15 +19,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "merchant_users")
+@Table(name = "drivers")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class MerchantUser {
+public class Driver {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    private String name;
 
     private String email;
 
@@ -37,14 +37,11 @@ public class MerchantUser {
 
     private String phone;
 
-    private String document;
-
-    @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "merchant_user_permissions", joinColumns = @JoinColumn(name = "merchant_user_id"))
-    @Column(name = "permission", nullable = false)
-    private List<MerchantPermission> merchantPermissions;
+    @OneToMany(mappedBy = "driver")
+    private List<DriverRoute> routes;
 
     @ManyToOne
     @JoinColumn(name = "merchantId")
     private Merchant merchant;
+
 }

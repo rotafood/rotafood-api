@@ -37,17 +37,17 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE) 
     private Date modifiedAt;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE) 
     private Date createdAt;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
     private OrderType orderType;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE) 
     private Date preparationStartDateTime;
 
     @Enumerated(EnumType.STRING)

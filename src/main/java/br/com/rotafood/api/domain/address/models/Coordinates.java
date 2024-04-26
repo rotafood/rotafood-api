@@ -1,5 +1,7 @@
 package br.com.rotafood.api.domain.address.models;
 
+import java.util.UUID;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,7 +21,7 @@ import lombok.NoArgsConstructor;
 public class Coordinates {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    private UUID id;
     private float latitude;
     private float longitude;
 }

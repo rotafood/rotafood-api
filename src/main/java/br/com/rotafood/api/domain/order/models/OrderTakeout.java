@@ -32,7 +32,7 @@ public class OrderTakeout {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE) 
     private Date takeoutDateTime;
 
     @Enumerated(EnumType.STRING)

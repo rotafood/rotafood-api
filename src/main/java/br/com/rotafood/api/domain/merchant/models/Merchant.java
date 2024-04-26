@@ -17,6 +17,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -48,6 +50,7 @@ public class Merchant {
     @Column(nullable = false)
     private MerchantType merchantType;
 
+    @Temporal(TemporalType.DATE) 
     @Column(nullable = false)
     private Date createdAt;
 
