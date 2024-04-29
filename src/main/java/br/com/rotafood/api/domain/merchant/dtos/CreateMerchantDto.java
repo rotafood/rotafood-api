@@ -10,5 +10,5 @@ public record CreateMerchantDto (
     String document,
     MerchantType merchantType,
     AddressDto address,
-    CreateOnwerUser onwer
+    CreateOwnerUser owner
 ) {}

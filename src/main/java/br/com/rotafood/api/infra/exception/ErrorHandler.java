@@ -23,7 +23,7 @@ public class ErrorHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> handleError400(MethodArgumentNotValidException ex) {
         var erros = ex.getFieldErrors();
-        return ResponseEntity.badRequest().body(erros.stream().map(DadosErroValidation::new).toList());
+        return ResponseEntity.badRequest().body(erros.stream().map(DataErrorValidation::new).toList());
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
@@ -56,8 +56,9 @@ public class ErrorHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro: " + ex.getLocalizedMessage());
     }
 
-    private record DadosErroValidation(String campo, String mensagem) {
-        public DadosErroValidation(FieldError erro) {
+
+    private record DataErrorValidation(String field, String message) {
+        public DataErrorValidation(FieldError erro) {
             this(erro.getField(), erro.getDefaultMessage());
         }
     }

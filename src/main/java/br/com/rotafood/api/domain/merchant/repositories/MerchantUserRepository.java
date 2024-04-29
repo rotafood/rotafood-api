@@ -6,7 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MerchantUserRepository extends JpaRepository<MerchantUser, UUID> {
 
-    boolean existsByEmail(String emailAddress);
+    boolean existsByEmail(String email);
+
+    MerchantUser findByEmail(String email);
 
 
 }

@@ -50,11 +50,9 @@ public class Merchant {
     @Column(nullable = false)
     private MerchantType merchantType;
 
-    @Temporal(TemporalType.DATE) 
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     private Date createdAt;
-
-    
 
     @OneToOne
     @JoinColumn(name = "addressId")

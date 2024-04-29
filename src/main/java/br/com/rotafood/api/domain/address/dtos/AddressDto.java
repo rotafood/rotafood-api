@@ -1,5 +1,6 @@
 package br.com.rotafood.api.domain.address.dtos;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -13,5 +14,6 @@ public record AddressDto (
     String streetName,
     String streetNumber,
     String formattedAddress,
-    CoordinateDto coordinates
+    BigDecimal latitude,
+    BigDecimal longitude
 ) {}

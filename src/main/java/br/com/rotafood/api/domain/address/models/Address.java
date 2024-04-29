@@ -1,14 +1,14 @@
 package br.com.rotafood.api.domain.address.models;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
-import jakarta.persistence.CascadeType;
+import br.com.rotafood.api.domain.address.dtos.AddressDto;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -32,8 +32,22 @@ public class Address {
     private String streetName;
     private String streetNumber;
     private String formattedAddress;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "coordinate_id", referencedColumnName = "id")
-    private Coordinates coordinates;
+    @Column(scale = 6, precision = 9)
+    private BigDecimal latitude;
+    @Column(scale = 6, precision = 9)
+    private BigDecimal longitude;
+
+
+    public Address(AddressDto dto) {
+        this.country = dto.country();
+        this.state = dto.state();
+        this.city = dto.city();
+        this.postalCode = dto.postalCode();
+        this.streetName = dto.streetName();
+        this.streetNumber = dto.streetNumber();
+        this.formattedAddress = dto.formattedAddress();
+        this.latitude = dto.latitude();
+        this.longitude = dto.longitude();
+    }
 
 }
