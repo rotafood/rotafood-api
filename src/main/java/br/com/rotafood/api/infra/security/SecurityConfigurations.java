@@ -16,14 +16,20 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfigurations {
 
-    // @Autowired
-    // private SecurityFilter securityFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(csrf -> csrf.disable())
-                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .build();
+        .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .authorizeHttpRequests(req -> {
+            req.requestMatchers(
+                "/*/auth/**", 
+                "/*/api-docs/**", 
+                "/swagger-ui.html", 
+                "/swagger-ui/**").permitAll();
+            req.anyRequest().authenticated();
+        })
+    .build();
     }
 
     @Bean

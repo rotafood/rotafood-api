@@ -3,6 +3,7 @@ package br.com.rotafood.api.domain.merchant.dtos;
 import java.util.Date;
 import java.util.UUID;
 
+import br.com.rotafood.api.domain.address.dtos.AddressDto;
 import br.com.rotafood.api.domain.merchant.models.MerchantType;
 
 public record MerchantDto (
@@ -12,5 +13,6 @@ public record MerchantDto (
     String description,
     String document,
     MerchantType merchantType,
-    Date createdAt
+    Date createdAt,
+    AddressDto address
     ) {}

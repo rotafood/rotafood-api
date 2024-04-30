@@ -1,4 +1,4 @@
-package br.com.rotafood.api.domain.merchant.services;
+package br.com.rotafood.api.infra.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,9 +15,8 @@ public class AuthorizationService implements UserDetailsService {
     private MerchantUserRepository merchantUserRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
-        return this.merchantUserRepository.findByEmail(username);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return this.merchantUserRepository.findByEmail(email);
     }
     
 }
