@@ -24,6 +24,7 @@ public class SecurityConfigurations {
         .authorizeHttpRequests(req -> {
             req.requestMatchers(
                 "/*/auth/**", 
+                "*/logistic/routes/test/*",
                 "/*/api-docs/**", 
                 "/swagger-ui.html", 
                 "/swagger-ui/**").permitAll();

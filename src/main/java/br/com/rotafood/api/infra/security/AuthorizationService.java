@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import br.com.rotafood.api.domain.merchant.repositories.MerchantUserRepository;
+import br.com.rotafood.api.repository.MerchantUserRepository;
 
 @Service
 public class AuthorizationService implements UserDetailsService {

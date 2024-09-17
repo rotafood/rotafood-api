@@ -8,8 +8,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.com.rotafood.api.domain.merchant.dtos.MerchantUserDto;
-import br.com.rotafood.api.domain.merchant.models.MerchantUser;
+import br.com.rotafood.api.domain.merchant.MerchantUser;
+import br.com.rotafood.api.dto.merchant.MerchantUserDto;
 import br.com.rotafood.api.infra.security.dtos.TokenJwtDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,8 +44,7 @@ public class TokenService {
             .withExpiresAt(expirationTime)
             .sign(algorithm);
             
-
-            return new TokenJwtDto(tokenJwt, expirationTime.getEpochSecond());
+            return new TokenJwtDto(tokenJwt);
         } catch (JWTCreationException exception){
             throw new RuntimeException("Erro ao gerar token jwt", exception);
         }

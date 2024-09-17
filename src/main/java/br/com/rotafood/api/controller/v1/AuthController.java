@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import br.com.rotafood.api.domain.merchant.dtos.CreateMerchantDto;
-import br.com.rotafood.api.domain.merchant.models.MerchantUser;
-import br.com.rotafood.api.domain.merchant.services.MerchantService;
+import br.com.rotafood.api.domain.merchant.MerchantUser;
+import br.com.rotafood.api.dto.merchant.CreateMerchantDto;
 import br.com.rotafood.api.infra.security.TokenService;
 import br.com.rotafood.api.infra.security.dtos.LoginDto;
 import br.com.rotafood.api.infra.security.dtos.TokenJwtDto;
+import br.com.rotafood.api.service.MerchantService;
 import jakarta.validation.Valid;
 
 @RestController

@@ -10,7 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import br.com.rotafood.api.domain.merchant.repositories.MerchantUserRepository;
+import br.com.rotafood.api.repository.MerchantUserRepository;
 
 import java.io.IOException;
 
@@ -21,7 +21,7 @@ public class SecurityFilter extends OncePerRequestFilter {
     private TokenService tokenService;
 
     @Autowired
-    private MerchantUserRepository repository;
+    private MerchantUserRepository userRepository;
 
     @SuppressWarnings("null")
     @Override
@@ -30,7 +30,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         if (tokenJwt != null) {
             var subject = tokenService.getSubject(tokenJwt);
-            var user = repository.findByEmail(subject);
+            var user = userRepository.findByEmail(subject);
 
             var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
