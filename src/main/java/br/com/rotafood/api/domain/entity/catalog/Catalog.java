@@ -42,11 +42,10 @@ public class Catalog {
         name = "catalog_category",
         joinColumns = @JoinColumn(name = "catalog_id"),
         inverseJoinColumns = @JoinColumn(name = "category_id")
-        )
+    )
     private Set<Category> categories;
  
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "merchantId")
+    @JoinColumn(name = "merchant_id")
     private Merchant merchant;
-
 }
