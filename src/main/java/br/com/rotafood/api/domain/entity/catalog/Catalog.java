@@ -46,6 +46,7 @@ public class Catalog {
     private Set<Category> categories;
  
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "merchant_id")
+    @JoinColumn(name = "merchantId") 
     private Merchant merchant;
+    
 }

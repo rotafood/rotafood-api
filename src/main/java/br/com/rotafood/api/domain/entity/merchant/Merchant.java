@@ -3,8 +3,6 @@ package br.com.rotafood.api.domain.entity.merchant;
 import java.util.UUID;
 
 import br.com.rotafood.api.domain.entity.address.Address;
-import br.com.rotafood.api.domain.entity.merchant.MerchantUser;
-
 import java.util.Date;
 import java.util.List;
 
