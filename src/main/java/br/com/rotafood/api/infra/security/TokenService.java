@@ -1,27 +1,27 @@
 package br.com.rotafood.api.infra.security;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTCreationException;
-import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import br.com.rotafood.api.domain.merchant.MerchantUser;
-import br.com.rotafood.api.dto.merchant.MerchantUserDto;
-import br.com.rotafood.api.infra.security.dtos.TokenJwtDto;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Map;
 
-@Service
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTCreationException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference; 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import br.com.rotafood.api.aplication.dto.merchant.MerchantUserDto;
+import br.com.rotafood.api.domain.entity.merchant.MerchantUser;
+import br.com.rotafood.api.infra.security.dtos.TokenJwtDto;
+
+@Service 
 public class TokenService {
 
     @Value("${api.security.token.secret}")
