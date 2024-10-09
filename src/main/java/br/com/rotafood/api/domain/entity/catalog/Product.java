@@ -71,7 +71,7 @@ public class Product {
     private Item item;
 
     @OneToOne(mappedBy = "product")
-    private Option productOption;
+    private Option option;
     
     @OneToOne(mappedBy = "product")
     private ProductSellingOption sellingOption;

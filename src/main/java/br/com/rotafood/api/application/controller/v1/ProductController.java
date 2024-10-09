@@ -1,13 +1,18 @@
 package br.com.rotafood.api.application.controller.v1;
+
+import br.com.rotafood.api.application.dto.catalog.ProductDto;
+import br.com.rotafood.api.application.mappers.ProductMapper;
 import br.com.rotafood.api.application.service.ProductService;
 import br.com.rotafood.api.domain.entity.catalog.Product;
-import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping(ApiVersion.VERSION + "/products")
 public class ProductController {
@@ -20,29 +25,34 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Product>> getAllProducts() {
-        List<Product> products = productService.getAllProducts();
+    public ResponseEntity<List<ProductDto>> getAllProducts() {
+        List<ProductDto> products = productService.getAllProducts().stream()
+                .map(ProductMapper::toDto)
+                .collect(Collectors.toList());
         return ResponseEntity.ok(products);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable UUID id) {
+    public ResponseEntity<ProductDto> getProductById(@PathVariable UUID id) {
         Product product = productService.getProductById(id);
-        return ResponseEntity.ok(product);
+        ProductDto productDto = ProductMapper.toDto(product);
+        return ResponseEntity.ok(productDto);
     }
 
     @PostMapping
-    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
+    public ResponseEntity<ProductDto> createProduct(@RequestBody Product product) {
         Product createdProduct = productService.createProduct(product);
-        return ResponseEntity.ok(createdProduct);
+        ProductDto productDto = ProductMapper.toDto(createdProduct);
+        return ResponseEntity.ok(productDto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(
+    public ResponseEntity<ProductDto> updateProduct(
             @PathVariable UUID id,
             @RequestBody Product product) {
         Product updatedProduct = productService.updateProduct(id, product);
-        return ResponseEntity.ok(updatedProduct);
+        ProductDto productDto = ProductMapper.toDto(updatedProduct);
+        return ResponseEntity.ok(productDto);
     }
 
     @DeleteMapping("/{id}")

@@ -30,7 +30,7 @@ public class Image {
     private UUID id;
 
     @Column(length = 512)
-    private String imagePath;
+    private String url;
 
     private ImageOrigin origin;
 
