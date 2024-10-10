@@ -3,6 +3,7 @@ package br.com.rotafood.api.infra.security;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,13 +20,16 @@ import org.springframework.web.cors.CorsConfiguration;
 @EnableWebSecurity
 public class SecurityConfigurations {
 
+    @Value("${api.security.allowed.origin}")
+    private String allowedOrigin;
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
         .cors(cors -> cors.configurationSource(request -> {
             CorsConfiguration corsConfig = new CorsConfiguration();
-            corsConfig.setAllowedOrigins(List.of("http://localhost:4200"));
+            corsConfig.setAllowedOrigins(List.of(this.allowedOrigin));
             corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
             corsConfig.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Requested-With"));
             corsConfig.setExposedHeaders(List.of("Authorization"));
