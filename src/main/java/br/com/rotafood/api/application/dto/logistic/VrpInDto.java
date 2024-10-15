@@ -1,5 +1,6 @@
 package br.com.rotafood.api.application.dto.logistic;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -9,7 +10,8 @@ public record VrpInDto (
     VrpOriginDto origin,
     List<VrpOrderDto> orders, 
     float maxRouteVolume,
-    int maxRouteOrders 
+    int maxRouteOrders,
+    Date createdAt
 ) {
     
 }

@@ -46,11 +46,8 @@ public class VrpRoute {
     @Column(precision = 10, scale = 2)
     private BigDecimal totalVolume;
 
-    @Column(precision = 10, scale = 3)
-    private BigDecimal secondsToSolve;
-
     @Column(precision = 10, scale = 2)
-    private BigDecimal totalDistance;
+    private BigDecimal distanceMeters;
 
     @Column
     @Temporal(TemporalType.DATE) 

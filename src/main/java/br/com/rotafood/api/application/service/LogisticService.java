@@ -3,6 +3,7 @@ package br.com.rotafood.api.application.service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
@@ -68,7 +69,7 @@ public class LogisticService {
             orders.add(order);
         }
 
-        return new VrpInDto(UUID.randomUUID(), origin, orders, 40.0f, 10);
+        return new VrpInDto(UUID.randomUUID(), origin, orders, 45.0f, 10, new Date(System.currentTimeMillis()));
     }
 
     private CoordinateDto generateRandomCoordinates(BigDecimal lat, BigDecimal lng, float std) {

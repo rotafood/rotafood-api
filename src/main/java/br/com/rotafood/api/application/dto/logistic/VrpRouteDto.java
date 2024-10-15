@@ -8,7 +8,7 @@ public record VrpRouteDto (
     List<Integer> sequence,
     List<VrpOrderDto> orders,
     List<CoordinateDto> routeLine,
-    double distanceKm,
+    double distanceMeters,
     double volumeLiters,
     String linkGoogleMaps
 ) {}
