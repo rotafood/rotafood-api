@@ -32,7 +32,7 @@ public class LogisticService {
     private RestTemplate restTemplate;
 
     public VrpOutDto logisticRoutesTest(VrpOriginDto origin, Long pointsQuantity) {
-        VrpInDto vrpData = generateDataForTest(origin, pointsQuantity, 0.005f);
+        VrpInDto vrpData = generateDataForTest(origin, pointsQuantity, 0.010f);
         String url = this.logisticServiceUrl + "/logistic/cvrp/";
         ResponseEntity<VrpOutDto> response = restTemplate.postForEntity(url, vrpData, VrpOutDto.class);
         return response.getBody();
@@ -69,7 +69,7 @@ public class LogisticService {
             orders.add(order);
         }
 
-        return new VrpInDto(UUID.randomUUID(), origin, orders, 45.0f, 10, new Date(System.currentTimeMillis()));
+        return new VrpInDto(UUID.randomUUID(), origin, orders, 45.0f, new Date(System.currentTimeMillis()));
     }
 
     private CoordinateDto generateRandomCoordinates(BigDecimal lat, BigDecimal lng, float std) {

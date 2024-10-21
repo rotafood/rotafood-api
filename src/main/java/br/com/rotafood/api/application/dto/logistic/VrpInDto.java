@@ -10,7 +10,6 @@ public record VrpInDto (
     VrpOriginDto origin,
     List<VrpOrderDto> orders, 
     float maxRouteVolume,
-    int maxRouteOrders,
     Date createdAt
 ) {
     
