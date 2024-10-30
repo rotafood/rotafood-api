@@ -1,5 +1,7 @@
 package br.com.rotafood.api.infra.exception;
 
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.ValidationException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,24 +18,38 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ErrorHandler {
 
     @ExceptionHandler(EntityNotFoundException.class)
-    public  ResponseEntity<Object> handleError404() {
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<Object> handleError404() {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Recurso não encontrado.");
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> handleError400(MethodArgumentNotValidException ex) {
-        var erros = ex.getFieldErrors();
-        return ResponseEntity.badRequest().body(erros.stream().map(DataErrorValidation::new).toList());
+        var erros = ex.getFieldErrors()
+                .stream()
+                .map(error -> new DataErrorValidation(error.getField(), error.getDefaultMessage()))
+                .toList();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erros);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<Object> handleError400(HttpMessageNotReadableException ex) {
-        return ResponseEntity.badRequest().body(ex.getMessage());
+        return ResponseEntity.badRequest().body("Erro no formato da mensagem: " + ex.getMessage());
     }
 
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<Object> handleErrorRegraDeNegocio(ValidationException ex) {
-        return ResponseEntity.badRequest().body(ex.getMessage());
+        return ResponseEntity.badRequest().body("Erro de validação: " + ex.getMessage());
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException ex) {
+        var erros = ex.getConstraintViolations()
+                .stream()
+                .map(violation -> new DataErrorValidation(
+                        violation.getPropertyPath().toString(), 
+                        violation.getMessage()
+                )).toList();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erros);
     }
 
     @ExceptionHandler(BadCredentialsException.class)
@@ -53,7 +69,7 @@ public class ErrorHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleError500(Exception ex) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro: " + ex.getLocalizedMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro interno: " + ex.getLocalizedMessage());
     }
 
 

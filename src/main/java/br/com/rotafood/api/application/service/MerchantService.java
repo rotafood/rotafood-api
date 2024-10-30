@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import br.com.rotafood.api.application.dto.merchant.CreateMerchantDto;
+import br.com.rotafood.api.application.dto.merchant.MerchantOwnerCreationDto;
 import br.com.rotafood.api.domain.entity.address.Address;
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
 import br.com.rotafood.api.domain.entity.merchant.MerchantPermission;
@@ -33,21 +33,24 @@ public class MerchantService {
     private AddressRepository addressRepository;
 
     @Transactional
-    public MerchantUser createMerchant(CreateMerchantDto createMerchantDto) {
-    if (this.merchantUserRepository.existsByEmail(createMerchantDto.owner().email())) {
+    public MerchantUser createMerchant(MerchantOwnerCreationDto merchantOwnerCreationDto) {
+    var addressDto = merchantOwnerCreationDto.merchant().address();
+    var ownerDto = merchantOwnerCreationDto.owner();
+    var merchantDto = merchantOwnerCreationDto.merchant();
+    if (this.merchantUserRepository.existsByEmail(ownerDto.email())) {
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email already exists!");
     }
 
-    var address = this.addressRepository.save(new Address(createMerchantDto.address()));
+    var address = this.addressRepository.save(new Address(addressDto));
 
 
     var merchant = this.merchantRepository.save(new Merchant(
         null, 
-        createMerchantDto.name(),
-        createMerchantDto.corporateName(),
-        createMerchantDto.description(),
-        createMerchantDto.document(),
-        createMerchantDto.merchantType(),
+        merchantDto.name(),
+        merchantDto.corporateName(),
+        merchantDto.description(),
+        merchantDto.document(),
+        merchantDto.merchantType(),
         Date.from(
         LocalDateTime.now().atZone(
             ZoneId.of("America/Sao_Paulo")
@@ -60,11 +63,11 @@ public class MerchantService {
     var merchantUser = this.merchantUserRepository.save(
         new MerchantUser(
             null,
-            createMerchantDto.owner().name(),
-            createMerchantDto.owner().email(),
-            createMerchantDto.owner().password(),
-            createMerchantDto.owner().phone(),
-            createMerchantDto.owner().document(),
+            ownerDto.name(),
+            ownerDto.email(),
+            ownerDto.password(),
+            ownerDto.phone(),
+            ownerDto.document(),
             Arrays.stream(MerchantPermission.values())
             .collect(Collectors.toList()),
             merchant

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import br.com.rotafood.api.application.dto.merchant.CreateMerchantDto;
+import br.com.rotafood.api.application.dto.merchant.MerchantOwnerCreationDto;
 import br.com.rotafood.api.application.service.MerchantService;
 import br.com.rotafood.api.domain.entity.merchant.MerchantUser;
 import br.com.rotafood.api.infra.security.TokenService;
@@ -34,10 +34,10 @@ public class AuthController {
     private TokenService tokenService;
 
 
-    @PostMapping("/merchants")
+    @PostMapping("/sigin")
     @Transactional
-    public ResponseEntity<TokenJwtDto> createMerchant(@RequestBody @Valid CreateMerchantDto createMerchantDto) throws JsonProcessingException, IllegalArgumentException {
-        MerchantUser merchantUser = merchantService.createMerchant(createMerchantDto);
+    public ResponseEntity<TokenJwtDto> createMerchant(@RequestBody @Valid MerchantOwnerCreationDto merchantOwnerCreationDto) throws JsonProcessingException, IllegalArgumentException {
+        MerchantUser merchantUser = merchantService.createMerchant(merchantOwnerCreationDto);
         var tokenJwtDto = tokenService.generateToken((MerchantUser) merchantUser);
         return ResponseEntity.ok().body(tokenJwtDto);
     }
