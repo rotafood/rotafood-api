@@ -45,9 +45,6 @@ public class LogisticController {
             System.out.println(location);
         }
 
-
-        
-
         return  ResponseEntity.ok().body(vrpOutDto);
     }
     

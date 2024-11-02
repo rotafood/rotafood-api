@@ -10,26 +10,35 @@ import jakarta.validation.constraints.NotNull;
 public record AddressDto (
     UUID id,
 
-    
+    @NotBlank
     String country,
     
+    @NotBlank
     String state,
     
+    @NotBlank
     String city,
     
+    @NotBlank
     String neighborhood,
     
+    @NotBlank
     String postalCode,
     
+    @NotBlank
     String streetName,
+
     @NotNull
     String streetNumber,
     
+    @NotNull
     String formattedAddress,
     
     String complement,
+
     @NotNull
     BigDecimal latitude,
+    
     @NotNull
     BigDecimal longitude
 ) {}
