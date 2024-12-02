@@ -1,14 +1,10 @@
 package br.com.rotafood.api.domain.entity.catalog;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
-import br.com.rotafood.api.domain.entity.storage.Image;
-import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -18,17 +14,18 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "products")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
@@ -50,22 +47,11 @@ public class Product {
     @Column(nullable = false, length = 512)
     private String additionalInformation;
 
-    @Enumerated(EnumType.STRING)
-    @Column(length = 20)
-    private ProductType productType;
+    @Column(name = "dietary_restrictions", columnDefinition = "text[]")
+    private List<String> dietaryRestrictions;
 
-    @ElementCollection(targetClass = ProductDietaryRestrictions.class, fetch = FetchType.LAZY)
-    @CollectionTable(name = "product_dietary_restrictions", joinColumns = @JoinColumn(name = "productId"))
-    @Enumerated(EnumType.STRING)
-    @Column(name = "restriction", nullable = false)
-    private List<ProductDietaryRestrictions> dietaryRestrictions;
-    
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private WeightUnit weightUnit;
-    
-    @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal weightQuantity;
+    @OneToOne(mappedBy = "product")
+    private SellingOption sellingOption;
     
     @OneToOne(mappedBy = "product")
     private Item item;
@@ -73,18 +59,22 @@ public class Product {
     @OneToOne(mappedBy = "product")
     private Option option;
     
-    @OneToOne(mappedBy = "product")
-    private ProductSellingOption sellingOption;
+    @OneToOne(mappedBy = "product", fetch = FetchType.LAZY)
+    private Weight weight;
 
-    @OneToMany(mappedBy = "product")
-    private List<OptionGroup> optionGroups;
-
+    @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private Serving serving; 
+    
+    @Column(name = "tags", columnDefinition = "text[]")
+    private List<String> tags;
+    
+    private String imagePath;
+    
+    @Column(name = "multipleImages", columnDefinition = "text[]")
+    private List<String> multipleImages;
+    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "merchantId")
     private Merchant merchant;
-
-    @ManyToOne
-    @JoinColumn(name = "imageId")
-    private Image image;
-
 }

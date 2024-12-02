@@ -65,6 +65,23 @@ public class TokenService {
         }
     }
 
+    public MerchantUserDto getMerchantUser(String tokenJWT) {
+        try {
+            var algorithm = Algorithm.HMAC256(secret);
+            var merchantUserClaim =  JWT.require(algorithm)
+                    .withIssuer("API rotafood.com.br")
+                    .build()
+                    .verify(tokenJWT)
+                    .getClaim("merchantUser")
+                    .asMap();
+
+            return objectMapper.convertValue(merchantUserClaim, MerchantUserDto.class);
+        } catch (JWTVerificationException exception) {
+            throw new RuntimeException("Token JWT inválido ou expirado!");
+        }
+    }
+
+
     private Instant expiration() {
         return LocalDateTime.now().plusDays(3).toInstant(ZoneOffset.of("-03:00"));
     }

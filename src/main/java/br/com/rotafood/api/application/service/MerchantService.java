@@ -32,6 +32,9 @@ public class MerchantService {
     @Autowired
     private AddressRepository addressRepository;
 
+    @Autowired
+    private CatalogService catalogService;
+
     @Transactional
     public MerchantUser createMerchant(MerchantOwnerCreationDto merchantOwnerCreationDto) {
     var addressDto = merchantOwnerCreationDto.merchant().address();
@@ -73,6 +76,8 @@ public class MerchantService {
             merchant
         )
     );
+
+    this.catalogService.createDefaultCatalogsForMerchant(merchant);
 
     return merchantUser;
 

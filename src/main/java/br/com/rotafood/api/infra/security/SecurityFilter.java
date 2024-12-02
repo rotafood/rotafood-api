@@ -1,27 +1,30 @@
 package br.com.rotafood.api.infra.security;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import br.com.rotafood.api.domain.repository.MerchantUserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Component
+@Order(1)
 public class SecurityFilter extends OncePerRequestFilter {
 
     @Autowired
     private TokenService tokenService;
 
-    @Autowired
-    private MerchantUserRepository userRepository;
+    // @Autowired
+    // private MerchantUserRepository userRepository;
 
     @SuppressWarnings("null")
     @Override
@@ -29,10 +32,13 @@ public class SecurityFilter extends OncePerRequestFilter {
         var tokenJwt = recoveryToken(request);
 
         if (tokenJwt != null) {
-            var subject = tokenService.getSubject(tokenJwt);
-            var user = userRepository.findByEmail(subject);
+            var merchantUserDto = tokenService.getMerchantUser(tokenJwt);
+            var authentication = new UsernamePasswordAuthenticationToken(
+                        merchantUserDto, 
+                        null, 
+                        List.of(new SimpleGrantedAuthority("ROLE_USER"))
+                );
 
-            var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 

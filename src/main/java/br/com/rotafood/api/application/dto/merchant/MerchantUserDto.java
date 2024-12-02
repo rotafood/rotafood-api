@@ -9,6 +9,7 @@ import br.com.rotafood.api.domain.entity.merchant.MerchantUser;
 
 public record MerchantUserDto(
     UUID id,
+
     String name,
     String email,
     String phone,

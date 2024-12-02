@@ -1,6 +1,10 @@
 package br.com.rotafood.api.domain.entity.catalog;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,6 +17,7 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
@@ -24,6 +29,7 @@ import br.com.rotafood.api.domain.entity.merchant.Merchant;
 @Entity
 @Table(name = "items")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
@@ -32,34 +38,39 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private String type;
-
+    @Column
+    @Enumerated(EnumType.STRING)
     private Status status;
-
-    private String externalCode;
-
+    
+    @Column
     private Integer index;
-
-    @ManyToOne
-    @JoinColumn(name = "productId")
-    private Product product;
 
     @OneToOne
     @JoinColumn(name = "priceId")
     private Price price;
 
     @OneToMany(mappedBy = "item")
-    private List<ItemShift> shifts;
+    private List<Shift> shifts;
+    
     
     @OneToMany(mappedBy = "item")
-    private List<ItemContextModifier> contextModifiers;
+    private List<ContextModifier> contextModifiers;
+
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ItemOptionGroup> itemOptionGroups;
+    
+    @ManyToOne
+    @JoinColumn(name = "productId")
+    private Product product;
     
     @ManyToOne
     @JoinColumn(name = "categoryId")
     private Category category;
-
+    
+    @Column(nullable = true)
+    private UUID iFoodItemId;
+    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "merchantId")
     private Merchant merchant;
-
 }

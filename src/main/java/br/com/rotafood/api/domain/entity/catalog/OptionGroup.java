@@ -4,7 +4,11 @@ import java.util.List;
 import java.util.UUID;
 
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,11 +20,13 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "product_option_groups")
+@Table(name = "option_groups")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
@@ -30,14 +36,13 @@ public class OptionGroup {
     private UUID id;
 
     private String name;
-    private String status;
-    private String externalCode;
-    private Integer index;
-    private String optionGroupType;
+    @Column
+    @Enumerated(value = EnumType.STRING)
+    private Status status;
 
-    @ManyToOne
-    @JoinColumn(name = "productId")
-    private Product product;
+    @OneToMany(mappedBy = "optionGroup", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ItemOptionGroup> itemOptionGroups;
+
     
     @OneToMany(mappedBy = "optionGroup")
     private List<Option> options;
@@ -45,4 +50,7 @@ public class OptionGroup {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "merchantId")
     private Merchant merchant;
+
+    @Column(nullable = true)
+    private UUID iFoodOptionGroupId;
 }

@@ -9,7 +9,6 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -74,8 +73,5 @@ public class ErrorHandler {
 
 
     private record DataErrorValidation(String field, String message) {
-        public DataErrorValidation(FieldError erro) {
-            this(erro.getField(), erro.getDefaultMessage());
-        }
     }
 }

@@ -44,6 +44,7 @@ public class SecurityConfigurations {
                     "/*/auth/**", 
                     "*/logistic/routes/test/*",
                     "/*/api-docs/**", 
+                    "/*/logs/**", 
                     "/swagger-ui.html", 
                     "/swagger-ui/**").permitAll();
                 req.anyRequest().authenticated();
