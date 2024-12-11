@@ -9,7 +9,8 @@ import br.com.rotafood.api.domain.entity.catalog.OptionGroup;
 
 public interface OptionGroupRepository extends JpaRepository<OptionGroup, UUID> {
 
-    List<OptionGroup> findByMerchantId(UUID merchantId);
+    List<OptionGroup> findAllByMerchantId(UUID merchantId);
 
-    List<OptionGroup> findByNameContainingIgnoreCase(String name);
+    OptionGroup findByIdAndMerchantId(UUID id, UUID merchantId);
+
 }

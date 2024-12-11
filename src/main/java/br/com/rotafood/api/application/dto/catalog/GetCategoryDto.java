@@ -11,8 +11,7 @@ public record GetCategoryDto(
     Integer index,
     String name, 
     Status status,
-    List<ItemDto> items,
-    PizzaDto pizza
+    List<ItemDto> items
 ) {
     public GetCategoryDto(Category category) {
         this(
@@ -20,8 +19,7 @@ public record GetCategoryDto(
             category.getIndex(),
             category.getName(),
             category.getStatus(),
-            category.getItems().stream().map(ItemDto::new).toList(),
-            category.getPizza() != null ? new PizzaDto(category.getPizza()) : null
+            category.getItems().stream().map(ItemDto::new).toList()
         );
     }
 }

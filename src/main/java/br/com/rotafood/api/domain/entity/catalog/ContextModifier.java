@@ -36,13 +36,12 @@ public class ContextModifier {
     @JoinColumn(name = "priceId", nullable = true)
     private Price price;
 
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
     @ManyToOne
     @JoinColumn(name = "itemId", nullable = true)
     private Item item;
-
-    @ManyToOne
-    @JoinColumn(name = "optionId", nullable = true)
-    private Option option;
 
     @Enumerated(EnumType.STRING)
     private CatalogContext catalogContext;

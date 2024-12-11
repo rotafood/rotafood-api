@@ -45,6 +45,10 @@ public class Item {
     @Column
     private Integer index;
 
+    @Column
+    @Enumerated(EnumType.STRING)
+    private ItemType type;
+
     @OneToOne
     @JoinColumn(name = "priceId")
     private Price price;
@@ -53,7 +57,7 @@ public class Item {
     private List<Shift> shifts;
     
     
-    @OneToMany(mappedBy = "item")
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ContextModifier> contextModifiers;
 
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -73,4 +77,5 @@ public class Item {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "merchantId")
     private Merchant merchant;
+
 }

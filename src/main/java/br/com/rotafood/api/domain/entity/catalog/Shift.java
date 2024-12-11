@@ -3,6 +3,7 @@ package br.com.rotafood.api.domain.entity.catalog;
 import java.time.LocalTime;
 import java.util.UUID;
 
+import br.com.rotafood.api.domain.entity.merchant.Merchant;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -44,6 +45,6 @@ public class Shift {
     private Item item;
 
     @ManyToOne
-    @JoinColumn(name = "pizzaId", referencedColumnName = "id", nullable = true)
-    private Pizza pizza;
+    @JoinColumn(name = "merchantId", referencedColumnName = "id", nullable = true)
+    private Merchant merchant;
 }

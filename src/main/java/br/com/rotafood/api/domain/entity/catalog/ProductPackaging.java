@@ -1,5 +1,8 @@
 package br.com.rotafood.api.domain.entity.catalog;
 
+import java.util.UUID;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -7,45 +10,36 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.NoArgsConstructor;
-
-import java.util.UUID;
+import lombok.Setter;
 
 
 @Entity
-@Table(name = "pizza_crushs")
+@Table(name = "product_packagings")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class PizzaCrush {
+public class ProductPackaging {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private String name;
-
-    private Integer index;
-
-    private Status status;
-
-    @OneToOne
-    @JoinColumn(name = "priceId") 
-    private Price price;
+    @Column
+    private Integer quantityPerPackage;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "pizzaId") 
-    private Pizza pizza;
+    @JoinColumn(name = "productId") 
+    private Product product;
 
-    private UUID iFoodPizzaCrushId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "packagingId") 
+    private Packaging packaging;
 
-
-
+    
 }

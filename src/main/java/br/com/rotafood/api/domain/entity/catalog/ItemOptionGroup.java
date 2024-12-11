@@ -1,6 +1,7 @@
 package br.com.rotafood.api.domain.entity.catalog;
 import java.util.UUID;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -31,9 +32,19 @@ public class ItemOptionGroup {
     @JoinColumn(name = "itemId")
     private Item item;
 
+    @Column
+    private Integer min;
+
+    @Column 
+    Integer max;
+    
+    @Column
+    private Integer index;
+
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "optionGroupId")
     private OptionGroup optionGroup;
 
-    private Integer index;
+
 }

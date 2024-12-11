@@ -11,21 +11,23 @@ public record ItemDto(
     Status status,
     Integer index,
     PriceDto price,
+    UUID categoryId,
     List<ShiftDto> shifts,
     List<ContextModifierDto> contextModifiers,
     ProductDto product,
-    List<GetOptionGroupDto> optionGroups
+    List<ItemOptionGroupDto> optionGroups
 ) {
     public ItemDto(Item item) {
         this(
             item.getId(),
             item.getStatus(),
             item.getIndex(),
-            item.getPrice() != null ? new PriceDto(item.getPrice()) : null,
-            item.getShifts().stream().map(ShiftDto::new).toList(),
-            item.getContextModifiers().stream().map(ContextModifierDto::new).toList(),
-            item.getProduct() != null ? new ProductDto(item.getProduct()) : null,
-            item.getItemOptionGroups().stream().map(obj -> new GetOptionGroupDto(obj.getIndex(), obj.getOptionGroup())).toList()
+            new PriceDto(item.getPrice()),
+            item.getCategory().getId(),
+            item.getShifts() != null ? item.getShifts().stream().map(ShiftDto::new).toList() : null,
+            item.getContextModifiers() != null ? item.getContextModifiers().stream().map(ContextModifierDto::new).toList() : null,
+            new ProductDto(item.getProduct()),
+            item.getItemOptionGroups() != null ? item.getItemOptionGroups().stream().map(ItemOptionGroupDto::new).toList() : null
         );
     }
 }

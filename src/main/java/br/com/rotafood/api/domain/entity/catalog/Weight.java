@@ -33,7 +33,7 @@ public class Weight {
     private Integer quantity;
 
     @Column(nullable = false)
-    private WeightUnit weightUnit;
+    private WeightUnit unit;
 
 
     @OneToOne(fetch = FetchType.LAZY)

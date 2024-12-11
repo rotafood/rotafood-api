@@ -2,7 +2,6 @@ package br.com.rotafood.api.application.controller.v1;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,13 +27,10 @@ public class AuthController {
     private MerchantService merchantService;
 
     @Autowired
-    private AuthenticationManager authManager;
-
-    @Autowired
     private TokenService tokenService;
 
 
-    @PostMapping("/sigin")
+    @PostMapping("/sigin") 
     @Transactional
     public ResponseEntity<TokenJwtDto> createMerchant(@RequestBody @Valid MerchantOwnerCreationDto merchantOwnerCreationDto) throws JsonProcessingException, IllegalArgumentException {
         MerchantUser merchantUser = merchantService.createMerchant(merchantOwnerCreationDto);
@@ -44,10 +40,11 @@ public class AuthController {
 
     @PostMapping("/login")
     @Transactional
-    public ResponseEntity<Object> login(@RequestBody @Valid LoginDto loginDto) throws JsonProcessingException, IllegalArgumentException {
-        var token = new UsernamePasswordAuthenticationToken(loginDto.email(), loginDto.password());
-        var authentication = authManager.authenticate(token);
-        var tokenJwtDto = tokenService.generateToken((MerchantUser) authentication.getPrincipal());
+    public ResponseEntity<TokenJwtDto> login(@RequestBody @Valid LoginDto loginDto) throws JsonProcessingException, IllegalArgumentException {
+        new UsernamePasswordAuthenticationToken(loginDto.email(), loginDto.password());
+
+        var MerchantUser = merchantService.getMerchantUserByEmail(loginDto.email());
+        var tokenJwtDto = tokenService.generateToken(MerchantUser);
         
         return ResponseEntity.ok().body(tokenJwtDto);
     }

@@ -1,6 +1,7 @@
 package br.com.rotafood.api.domain.entity.catalog;
 
 import java.util.Date;
+import java.util.Set;
 import java.util.UUID;
 
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
@@ -13,6 +14,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -49,8 +52,16 @@ public class Catalog {
     private Merchant merchant;
 
 
+    
+    @ManyToMany
+    @JoinTable(
+        name = "catalog_categories",
+        joinColumns = @JoinColumn(name = "catalog_id"),
+        inverseJoinColumns = @JoinColumn(name = "category_id")
+        )
+    private Set<Category> categories;
+        
+        
     @Column(nullable = true)
     private UUID iFoodCatalogId;
-
-    
 }

@@ -1,5 +1,8 @@
 package br.com.rotafood.api.domain.entity.catalog;
 
+import java.util.UUID;
+
+import br.com.rotafood.api.domain.entity.merchant.Merchant;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -8,49 +11,39 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
-import java.util.UUID;
+import lombok.Setter;
 
 
 @Entity
-@Table(name = "pizza_sizes")
+@Table(name = "packagings")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class PizzaSize {
+public class Packaging {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Column(nullable = false, length = 64)
     private String name;
 
-    private Integer index;
+    @Column(nullable = false)
+    private Double lenghtCm;
 
-    private Status status;
+    @Column(nullable = false, length = 16)
+    private String widthCm;
 
-    private Integer slices;
-
-    @Column(name = "tags", columnDefinition = "integer[]")
-    private List<Integer> acceptedFractions;
-
-    @OneToOne
-    @JoinColumn(name = "priceId") 
-    private Price price;
+    @Column(nullable = false)
+    private Double thicknessCm; 
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "pizzaId") 
-    private Pizza pizza;
-
-
-
+    @JoinColumn(name = "merchantId", nullable = false)
+    private Merchant merchant;
 }

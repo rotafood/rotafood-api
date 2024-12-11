@@ -44,18 +44,6 @@ public class Price {
     private Item item;
 
     @OneToOne(mappedBy = "price")
-    private PizzaCrush pizzaCrush;
-
-    @OneToOne(mappedBy = "price")
-    private PizzaEdge pizzaEdge;
-
-    @OneToOne(mappedBy = "price")
-    private PizzaSize pizzaSize;
-
-    @OneToOne(mappedBy = "price")
-    private PizzaTopping pizzaTopping;
-
-    @OneToOne(mappedBy = "price")
     private Option option;
 
     @OneToOne(mappedBy = "price")

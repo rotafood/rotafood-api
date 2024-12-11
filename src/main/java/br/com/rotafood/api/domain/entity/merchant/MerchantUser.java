@@ -9,13 +9,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -48,19 +43,15 @@ public class MerchantUser implements UserDetails  {
 
     private String phone;
 
-    private String document;
+    private boolean hasOwner;
 
-    @ElementCollection(fetch = FetchType.EAGER, targetClass = MerchantPermission.class)
-    @CollectionTable(name = "merchant_user_permissions", joinColumns = @JoinColumn(name = "merchant_user_id"))
-    @Enumerated(EnumType.STRING)
-    @Column(name = "permission", nullable = false)
-    private List<MerchantPermission> merchantPermissions;
+
+    @Column(nullable = false, columnDefinition = "text[]")
+    private List<String> merchantPermissions;
 
     @ManyToOne
     @JoinColumn(name = "merchantId")
     private Merchant merchant;
-
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

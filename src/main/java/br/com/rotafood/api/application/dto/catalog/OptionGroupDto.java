@@ -10,14 +10,16 @@ public record OptionGroupDto(
     UUID id,
     String name,
     Status status,
-    List<OptionDto> options
+    List<OptionDto> options,
+    UUID iFoodOptionGroupId
 ) {
     public OptionGroupDto(OptionGroup optionGroup) {
         this(
             optionGroup.getId(),
             optionGroup.getName(),
             optionGroup.getStatus(),
-            optionGroup.getOptions().stream().map(OptionDto::new).toList()
+            optionGroup.getOptions().stream().map(OptionDto::new).toList(),
+            optionGroup.getIFoodOptionGroupId()
         );
     }
 }

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -14,6 +15,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -41,10 +43,10 @@ public class Product {
     @Column(nullable = false, length = 1024)
     private String description;
 
-    @Column(nullable = false, length = 256)
+    @Column(length = 256)
     private String ean;
 
-    @Column(nullable = false, length = 512)
+    @Column(length = 512)
     private String additionalInformation;
 
     @Column(name = "dietary_restrictions", columnDefinition = "text[]")
@@ -53,13 +55,13 @@ public class Product {
     @OneToOne(mappedBy = "product")
     private SellingOption sellingOption;
     
-    @OneToOne(mappedBy = "product")
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private Item item;
 
-    @OneToOne(mappedBy = "product")
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private Option option;
     
-    @OneToOne(mappedBy = "product", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private Weight weight;
 
     @Column(nullable = false)
@@ -73,8 +75,11 @@ public class Product {
     
     @Column(name = "multipleImages", columnDefinition = "text[]")
     private List<String> multipleImages;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductPackaging> productPackagings;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "merchantId")
+    @JoinColumn(name = "merchantId", nullable = false)
     private Merchant merchant;
 }

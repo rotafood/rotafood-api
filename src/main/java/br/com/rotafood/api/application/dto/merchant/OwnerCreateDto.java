@@ -15,8 +15,5 @@ public record OwnerCreateDto (
     String password,
     
     @NotBlank(message = "O campo é requerido.")
-    String phone,
-    
-    @NotBlank(message = "O campo é requerido.")
-    String document
+    String phone
 ) {}

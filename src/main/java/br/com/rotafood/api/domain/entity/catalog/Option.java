@@ -1,6 +1,5 @@
 package br.com.rotafood.api.domain.entity.catalog;
 
-import java.util.List;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
@@ -12,7 +11,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -51,11 +49,8 @@ public class Option {
     private OptionGroup optionGroup;
     
     @OneToOne
-    @JoinColumn(name = "productId")
+    @JoinColumn(name = "productId", nullable = true)
     private Product product;
-    
-    @OneToMany(mappedBy = "option")
-    private List<ContextModifier> contextModifiers;
 
     @Column(nullable = true)
     private UUID iFoodOptionId;

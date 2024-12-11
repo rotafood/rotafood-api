@@ -2,7 +2,6 @@ package br.com.rotafood.api.application.dto.catalog;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import br.com.rotafood.api.domain.entity.catalog.DietaryRestrictions;
 import br.com.rotafood.api.domain.entity.catalog.Product;
@@ -22,7 +21,8 @@ public record ProductDto(
     Serving serving,
     List<String> tags,
     String imagePath,
-    List<String> multipleImages
+    List<String> multipleImages,
+    List<ProductPackagingDto> packagings
 ) {
     public ProductDto(Product product) {
         this(
@@ -34,7 +34,7 @@ public record ProductDto(
             product.getDietaryRestrictions() != null 
                 ? product.getDietaryRestrictions().stream()
                     .map(DietaryRestrictions::valueOf)
-                    .collect(Collectors.toList())
+                    .toList()
                 : List.of(),
             product.getSellingOption() != null ? new SellingOptionDto(product.getSellingOption()) : null,
             product.getItem() != null ? product.getItem().getId() : null,
@@ -43,7 +43,8 @@ public record ProductDto(
             product.getServing(),
             product.getTags(),
             product.getImagePath(),
-            product.getMultipleImages()
+            product.getMultipleImages(),
+            product.getProductPackagings() != null ? product.getProductPackagings().stream().map(ProductPackagingDto::new).toList() : null
         );
     }
 }

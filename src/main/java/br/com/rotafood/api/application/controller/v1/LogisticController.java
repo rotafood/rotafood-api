@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.rotafood.api.application.dto.address.AddressDto;
 import br.com.rotafood.api.application.dto.logistic.VrpOriginDto;
 import br.com.rotafood.api.application.dto.logistic.VrpOutDto;
-import br.com.rotafood.api.application.service.IpLocationService;
 import br.com.rotafood.api.application.service.LogisticService;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -25,8 +24,6 @@ public class LogisticController {
     @Autowired
     private LogisticService logisticService;
 
-    @Autowired
-    private IpLocationService ipLocationService;
 
     @PostMapping("/routes/test/{pointsQuantity}")
     public ResponseEntity<VrpOutDto> routesTest(
@@ -37,14 +34,6 @@ public class LogisticController {
     ) {
         VrpOriginDto vrpOriginDto = new VrpOriginDto(UUID.randomUUID(), address);
         var vrpOutDto = this.logisticService.logisticRoutesTest(vrpOriginDto, pointsQuantity);
-
-        String clientIp = request.getRemoteAddr();
-
-        if (clientIp != null) {
-            String location = this.ipLocationService.getLocationFromIp(clientIp);
-            System.out.println(location);
-        }
-
         return  ResponseEntity.ok().body(vrpOutDto);
     }
     

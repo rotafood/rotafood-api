@@ -9,11 +9,9 @@ import br.com.rotafood.api.domain.entity.merchant.MerchantUser;
 
 public record MerchantUserDto(
     UUID id,
-
     String name,
     String email,
     String phone,
-    String document,
     List<MerchantPermission> merchantPermissions,
     MerchantDto merchant
 ) {
@@ -23,13 +21,15 @@ public record MerchantUserDto(
             merchantUser.getName(),
             merchantUser.getEmail(),
             merchantUser.getPhone(),
-            merchantUser.getDocument(),
-            merchantUser.getMerchantPermissions(),
+            merchantUser.getMerchantPermissions().stream()
+            .map(MerchantPermission::valueOf)
+            .toList(),
             new MerchantDto(
                 merchantUser.getMerchant().getId(),
                 merchantUser.getMerchant().getName(),
                 merchantUser.getMerchant().getCorporateName(),
                 merchantUser.getMerchant().getDescription(),
+                merchantUser.getMerchant().getDocumentType(),
                 merchantUser.getMerchant().getDocument(),
                 merchantUser.getMerchant().getMerchantType(),
                 merchantUser.getMerchant().getCreatedAt(),

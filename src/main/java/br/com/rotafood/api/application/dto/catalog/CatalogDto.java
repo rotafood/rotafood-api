@@ -9,10 +9,10 @@ import br.com.rotafood.api.domain.entity.catalog.Status;
 
 public record CatalogDto(
     UUID id,
-
     Date modifiedAt,
     Status status,
-    CatalogContext catalogContext
+    CatalogContext catalogContext,
+    UUID iFoodCatalofId
 ) {
     public CatalogDto(Catalog catalog) {
 
@@ -20,7 +20,8 @@ public record CatalogDto(
             catalog.getId(), 
             catalog.getModifiedAt(), 
             catalog.getStatus(), 
-            catalog.getCatalogContext()
+            catalog.getCatalogContext(),
+            catalog.getIFoodCatalogId()
             );
     }
 }

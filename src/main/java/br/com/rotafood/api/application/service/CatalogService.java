@@ -2,70 +2,90 @@ package br.com.rotafood.api.application.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.rotafood.api.application.dto.catalog.CatalogDto;
 import br.com.rotafood.api.domain.entity.catalog.Catalog;
 import br.com.rotafood.api.domain.entity.catalog.CatalogContext;
+import br.com.rotafood.api.domain.entity.catalog.Category;
 import br.com.rotafood.api.domain.entity.catalog.Status;
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
 import br.com.rotafood.api.domain.repository.CatalogRepository;
+import br.com.rotafood.api.domain.repository.CategoryRepository;
 import br.com.rotafood.api.domain.repository.MerchantRepository;
-import jakarta.transaction.Transactional;
-
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class CatalogService {
 
-    @Autowired
-    private CatalogRepository catalogRepository;
+    private final CatalogRepository catalogRepository;
+    private final CategoryRepository categoryRepository;
+    private final MerchantRepository merchantRepository;
 
-    @Autowired
-    private MerchantRepository merchantRepository;
+    public CatalogService(
+            CatalogRepository catalogRepository,
+            CategoryRepository categoryRepository,
+            MerchantRepository merchantRepository) {
+        this.catalogRepository = catalogRepository;
+        this.categoryRepository = categoryRepository;
+        this.merchantRepository = merchantRepository;
+    }
 
-    
-    
     public List<CatalogDto> getAllByMerchantId(UUID merchantId) {
         return catalogRepository.findByMerchantId(merchantId)
-            .stream()
-            .map(CatalogDto::new)
-            .toList();
-    }
-    
-    @Transactional
-    public CatalogDto getByIdAndMerchantId(UUID catalogId, UUID MerchantId) {
-        return new CatalogDto(catalogRepository.findByIdAndMerchantId(catalogId, MerchantId));
+                .stream()
+                .map(CatalogDto::new)
+                .toList();
     }
 
     @Transactional
-    public CatalogDto createCatalog(CatalogDto catalogDto, UUID merchantId) {
-        Merchant merchant = merchantRepository.getReferenceById(merchantId);
-        Catalog catalog = new Catalog(
-            null,
-            catalogDto.modifiedAt(),
-            catalogDto.status(),
-            catalogDto.catalogContext(),
-            merchant,
-            null
-        );
-        return new CatalogDto(catalogRepository.save(catalog));
+    public Catalog getByIdAndMerchantId(UUID catalogId, UUID merchantId) {
+        return catalogRepository.findByIdAndMerchantId(catalogId, merchantId);
     }
 
-    public CatalogDto updateCatalog(CatalogDto catalogDto, UUID merchantId) {
-        Catalog catalog = this.catalogRepository.findByIdAndMerchantId(catalogDto.id(), merchantId);
-        catalog.setModifiedAt(new Date());
-        catalog.setStatus(catalogDto.status());
-        catalog.setCatalogContext(catalogDto.catalogContext());
-        return new CatalogDto(catalog);
+    @Transactional
+    public Catalog updateOrCreate(CatalogDto catalogDto, UUID merchantId) {
+        Merchant merchant = merchantRepository.findById(merchantId)
+                .orElseThrow(() -> new EntityNotFoundException("Merchant não encontrado."));
+
+        Set<Category> categories = categoryRepository.findByMerchantId(merchantId)
+                .stream()
+                .collect(Collectors.toSet());
+
+        Catalog catalog;
+
+        if (catalogDto.id() != null) {
+            catalog = catalogRepository.findByIdAndMerchantId(catalogDto.id(), merchantId);
+            if (catalog == null) {
+                throw new EntityNotFoundException("Catálogo não encontrado.");
+            }
+            catalog.setModifiedAt(new Date());
+            catalog.setStatus(catalogDto.status());
+            catalog.setCatalogContext(catalogDto.catalogContext());
+        } else {
+            catalog = new Catalog(
+                    null,
+                    new Date(),
+                    catalogDto.status(),
+                    catalogDto.catalogContext(),
+                    merchant,
+                    categories,
+                    catalogDto.iFoodCatalofId()
+            );
+        }
+
+        return catalogRepository.save(catalog);
     }
 
     @Transactional
     public void createDefaultCatalogsForMerchant(Merchant merchant) {
-        createCatalog(new CatalogDto(null, new Date(), Status.AVALIABLE, CatalogContext.DELIVERY), merchant.getId());
-        createCatalog(new CatalogDto(null, new Date(), Status.AVALIABLE, CatalogContext.TABLE), merchant.getId());
-        createCatalog(new CatalogDto(null, new Date(), Status.AVALIABLE, CatalogContext.IFOOD), merchant.getId());
+        updateOrCreate(new CatalogDto(null, new Date(), Status.AVALIABLE, CatalogContext.DELIVERY, null), merchant.getId());
+        updateOrCreate(new CatalogDto(null, new Date(), Status.AVALIABLE, CatalogContext.TABLE, null), merchant.getId());
+        updateOrCreate(new CatalogDto(null, new Date(), Status.AVALIABLE, CatalogContext.IFOOD, null), merchant.getId());
     }
 }

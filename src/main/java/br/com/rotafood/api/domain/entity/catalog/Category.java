@@ -1,6 +1,7 @@
 package br.com.rotafood.api.domain.entity.catalog;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
@@ -11,9 +12,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -38,9 +39,6 @@ public class Category {
     private String name;
 
     @Column(nullable = false)
-    private String template;
-
-    @Column(nullable = false)
     private Integer index;
 
     @Column(nullable = false)
@@ -49,16 +47,13 @@ public class Category {
     @OneToMany(mappedBy = "category")
     private List<Item> items;
 
-    @OneToOne(mappedBy = "category")
-    private Pizza pizza;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "merchantId")
     private Merchant merchant;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "catalogId")
-    private Catalog catalog;
+    @ManyToMany(mappedBy = "categories")
+    private Set<Catalog> catalogs; 
+
 
     @Column(nullable = true)
     private UUID iFoodCategoryId;

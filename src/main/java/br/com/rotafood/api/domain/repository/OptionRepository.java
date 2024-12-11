@@ -9,7 +9,8 @@ import br.com.rotafood.api.domain.entity.catalog.Option;
 
 public interface OptionRepository extends JpaRepository<Option, UUID> {
 
-    List<Option> findByOptionGroupId(UUID optionGroupId);
+    List<Option> findAllByOptionGroupId(UUID optionGroupId);
 
-    List<Option> findByProductId(UUID productId);
+    Option findByIdAndOptionGroupId(UUID id, UUID optionGroupId);
+
 }

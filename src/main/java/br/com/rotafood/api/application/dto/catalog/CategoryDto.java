@@ -10,7 +10,6 @@ public record CategoryDto(
     Integer index,
     String name,
     Status status,
-    String template,
     UUID iFoodCategoryId
 ) {
     public CategoryDto(Category category) {
@@ -19,7 +18,6 @@ public record CategoryDto(
             category.getIndex(),
             category.getName(),
             category.getStatus(),
-            category.getTemplate(),
             category.getIFoodCategoryId()
         );
     }

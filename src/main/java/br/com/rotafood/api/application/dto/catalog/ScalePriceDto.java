@@ -8,7 +8,7 @@ import br.com.rotafood.api.domain.entity.catalog.ScalePrice;
 public record ScalePriceDto(
     UUID id,
     Integer minQuantity,
-    BigDecimal price
+    BigDecimal value
 ) {
     public ScalePriceDto(ScalePrice scalePrice) {
         this(

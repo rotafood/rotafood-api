@@ -43,6 +43,6 @@ public class SellingOption {
     private BigDecimal averageUnit;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "productId", nullable = false)
+    @JoinColumn(name = "productId")
     private Product product;
 }

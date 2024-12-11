@@ -1,6 +1,6 @@
 package br.com.rotafood.api.domain.entity.payment;
 
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.UUID;
 
 import br.com.rotafood.api.domain.entity.merchant.MerchantUser;
@@ -43,11 +43,12 @@ public class Subscription {
     private MerchantUser user;
 
     @Column(nullable = false)
-    private LocalDate startDate;
+    private Date startDate;
 
     @Column(nullable = false)
-    private LocalDate endDate;
+    private Date endDate;
 
     @Enumerated(EnumType.STRING)
     private SubscriptionStatus status;
 }
+

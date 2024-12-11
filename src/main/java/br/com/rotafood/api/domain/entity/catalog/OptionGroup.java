@@ -36,6 +36,11 @@ public class OptionGroup {
     private UUID id;
 
     private String name;
+
+    @Column
+    @Enumerated(value = EnumType.STRING)
+    private OptionGroupType optionGroupType;
+    
     @Column
     @Enumerated(value = EnumType.STRING)
     private Status status;

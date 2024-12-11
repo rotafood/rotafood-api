@@ -9,7 +9,8 @@ import br.com.rotafood.api.domain.entity.catalog.Product;
 
 public interface ProductRepository extends JpaRepository<Product, UUID> {
 
-    List<Product> findByMerchantId(UUID merchantId);
+    List<Product> findAllByMerchantId(UUID merchantId);
 
-    List<Product> findByNameContainingIgnoreCase(String name);
+    Product findByIdAndMerchantId(UUID id, UUID merchantId);
+
 }

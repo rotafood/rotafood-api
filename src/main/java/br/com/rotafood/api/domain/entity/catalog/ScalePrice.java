@@ -36,6 +36,6 @@ public class ScalePrice {
     private BigDecimal value;
 
     @ManyToOne
-    @JoinColumn(name = "priceId", nullable = false)
+    @JoinColumn(name = "priceId")
     private Price price;
 }

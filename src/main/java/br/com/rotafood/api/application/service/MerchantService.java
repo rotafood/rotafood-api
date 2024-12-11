@@ -11,7 +11,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import br.com.rotafood.api.application.dto.address.AddressDto;
+import br.com.rotafood.api.application.dto.merchant.MerchantCreateDto;
 import br.com.rotafood.api.application.dto.merchant.MerchantOwnerCreationDto;
+import br.com.rotafood.api.application.dto.merchant.OwnerCreateDto;
 import br.com.rotafood.api.domain.entity.address.Address;
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
 import br.com.rotafood.api.domain.entity.merchant.MerchantPermission;
@@ -23,6 +26,7 @@ import jakarta.transaction.Transactional;
 
 @Service
 public class MerchantService {
+
     @Autowired
     private MerchantRepository merchantRepository;
 
@@ -37,49 +41,66 @@ public class MerchantService {
 
     @Transactional
     public MerchantUser createMerchant(MerchantOwnerCreationDto merchantOwnerCreationDto) {
-    var addressDto = merchantOwnerCreationDto.merchant().address();
-    var ownerDto = merchantOwnerCreationDto.owner();
-    var merchantDto = merchantOwnerCreationDto.merchant();
-    if (this.merchantUserRepository.existsByEmail(ownerDto.email())) {
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email already exists!");
+        validateOwnerEmail(merchantOwnerCreationDto.owner().email());
+
+        Address address = createAddress(merchantOwnerCreationDto.merchant().address());
+        Merchant merchant = createMerchantEntity(merchantOwnerCreationDto.merchant(), address);
+        MerchantUser merchantUser = createMerchantUser(merchantOwnerCreationDto.owner(), merchant);
+
+        merchantUser.setHasOwner(true);
+
+        merchantUser = this.merchantUserRepository.save(merchantUser);
+
+        catalogService.createDefaultCatalogsForMerchant(merchant);
+
+        return merchantUser;
     }
 
-    var address = this.addressRepository.save(new Address(addressDto));
+    private void validateOwnerEmail(String email) {
+        if (merchantUserRepository.existsByEmail(email)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email already exists!");
+        }
+    }
 
+    private Address createAddress(AddressDto addressDto) {
+        return addressRepository.save(new Address(addressDto));
+    }
 
-    var merchant = this.merchantRepository.save(new Merchant(
-        null, 
-        merchantDto.name(),
-        merchantDto.corporateName(),
-        merchantDto.description(),
-        merchantDto.document(),
-        merchantDto.merchantType(),
-        Date.from(
-        LocalDateTime.now().atZone(
-            ZoneId.of("America/Sao_Paulo")
-            ).toInstant()
-        ),
-        address, 
-        null
-    ));
-
-    var merchantUser = this.merchantUserRepository.save(
-        new MerchantUser(
+    private Merchant createMerchantEntity(MerchantCreateDto merchantDto, Address address) {
+        Merchant merchant = new Merchant(
+            null, 
+            merchantDto.name(), 
+            merchantDto.corporateName(),
+            merchantDto.corporateName(), 
+            merchantDto.description(), 
+            merchantDto.documentType(),
+            merchantDto.document(), 
+            merchantDto.merchantType(), 
+            Date.from(LocalDateTime.now().atZone(ZoneId.of("America/Sao_Paulo")).toInstant()), 
             null,
-            ownerDto.name(),
-            ownerDto.email(),
-            ownerDto.password(),
-            ownerDto.phone(),
-            ownerDto.document(),
-            Arrays.stream(MerchantPermission.values())
-            .collect(Collectors.toList()),
-            merchant
-        )
-    );
-
-    this.catalogService.createDefaultCatalogsForMerchant(merchant);
-
-    return merchantUser;
-
+            address, 
+            null, 
+            null
+        );
+        return merchantRepository.save(merchant);
     }
+
+    private MerchantUser createMerchantUser(OwnerCreateDto ownerDto, Merchant merchant) {
+        MerchantUser merchantUser = new MerchantUser();
+        merchantUser.setName(ownerDto.name());
+        merchantUser.setEmail(ownerDto.email());
+        merchantUser.setPassword(ownerDto.password());
+        merchantUser.setPhone(ownerDto.phone());
+        merchantUser.setMerchantPermissions(Arrays.stream(MerchantPermission.values())
+                                                   .map(Enum::name)
+                                                   .collect(Collectors.toList()));
+        merchantUser.setMerchant(merchant);
+        return merchantUserRepository.save(merchantUser);
+    }
+
+    public MerchantUser getMerchantUserByEmail(String email) {
+        return this.merchantUserRepository.findByEmail(email);
+    }
+    
+    
 }

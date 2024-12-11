@@ -1,8 +1,11 @@
 package br.com.rotafood.api.application.dto.catalog;
 
+import java.util.UUID;
+
 import br.com.rotafood.api.domain.entity.catalog.Shift;
 
 public record ShiftDto(
+    UUID id,
     String startTime,
     String endTime,
     boolean monday,
@@ -15,6 +18,7 @@ public record ShiftDto(
 ) {
     public ShiftDto(Shift shift) {
         this(
+            shift.getId(),
             shift.getStartTime().toString(),
             shift.getEndTime().toString(),
             shift.getMonday(),
