@@ -77,7 +77,7 @@ public class Product {
     private List<String> multipleImages;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProductPackaging> productPackagings;
+    private List<ProductPackaging> packagings;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "merchantId", nullable = false)

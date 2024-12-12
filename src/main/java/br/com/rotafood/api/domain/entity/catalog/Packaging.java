@@ -1,7 +1,7 @@
 package br.com.rotafood.api.domain.entity.catalog;
 
+import java.math.BigDecimal;
 import java.util.UUID;
-
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -34,14 +34,14 @@ public class Packaging {
     @Column(nullable = false, length = 64)
     private String name;
 
-    @Column(nullable = false)
-    private Double lenghtCm;
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal lenghtCm;
 
-    @Column(nullable = false, length = 16)
-    private String widthCm;
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal widthCm;
 
-    @Column(nullable = false)
-    private Double thicknessCm; 
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal thicknessCm; 
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "merchantId", nullable = false)
