@@ -6,7 +6,9 @@ import br.com.rotafood.api.application.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.Valid;
 import java.util.List;
@@ -48,8 +50,8 @@ public class ImageController {
     @PutMapping
     public ImageDto uploadImage(
             @PathVariable UUID merchantId,
-            @RequestBody @Valid ImageUploadDto imageUploadDto) {
-        return new ImageDto(imageService.uploadImage(imageUploadDto.base64Image(), merchantId), bucketUrl, bucketName);
+            @RequestParam("image") MultipartFile imageFile) {
+        return new ImageDto(imageService.uploadImage(imageFile, merchantId), bucketUrl, bucketName);
     }
 
     @DeleteMapping("/{imageId}")

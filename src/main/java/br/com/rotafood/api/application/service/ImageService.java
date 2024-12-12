@@ -1,13 +1,18 @@
 package br.com.rotafood.api.application.service;
 
+import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
+
 import br.com.rotafood.api.domain.entity.catalog.Image;
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
 import br.com.rotafood.api.domain.repository.ImageRepository;
@@ -28,20 +33,31 @@ public class ImageService {
     private String bucketName;
 
     @Transactional
-    public Image uploadImage(String base64Image, UUID merchantId) {
-        byte[] decodedBytes = Base64.getDecoder().decode(base64Image.split(",")[1]);
-        UUID id = UUID.randomUUID();
-        String fileName = id.toString() + ".png";
-        String filePath =  "images/" + fileName;
+public Image uploadImage(MultipartFile file, UUID merchantId) {
+    String contentType = file.getContentType();
+    if (contentType == null || (!contentType.equals("image/png") && !contentType.equals("image/jpeg"))) {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Apenas arquivos PNG ou JPEG são permitidos.");
+    }
 
-        googleCloudStorage.uploadFile(bucketName, decodedBytes, filePath);
+        try {
+            UUID id = UUID.randomUUID();
+            String fileExtension = contentType.equals("image/png") ? ".png" : ".jpeg";
+            String fileName = id.toString() + fileExtension;
+            String filePath = "images/" + fileName;
 
-        Merchant merchant = this.merchantRepository.getReferenceById(merchantId);
-        Image image = new Image();
-        image.setPath(filePath);
-        image.setId(id);
-        image.setMerchant(merchant);
-        return imageRepository.save(image);
+            googleCloudStorage.uploadFile(bucketName, file.getBytes(), filePath);
+
+            Merchant merchant = this.merchantRepository.getReferenceById(merchantId);
+            Image image = new Image();
+            image.setPath(filePath);
+            image.setId(id);
+            image.setMerchant(merchant);
+
+            return imageRepository.save(image);
+
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao processar o arquivo.", e);
+        }
     }
 
     @Transactional
