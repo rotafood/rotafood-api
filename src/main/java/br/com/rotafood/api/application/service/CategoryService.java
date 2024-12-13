@@ -38,6 +38,17 @@ public class CategoryService {
         return categoryRepository.findByIdAndMerchantId(categoryId, merchantId);    
     }
 
+    @Transactional
+    public void deleteByIdAndMerchantId(UUID categoryId, UUID merchantId) {
+        Category category = categoryRepository.findByIdAndMerchantId(categoryId, merchantId);    
+        for (Catalog catalog : category.getCatalogs()) {
+            catalog.getCategories().remove(category);
+        }
+    
+        categoryRepository.delete(category);
+    }
+    
+
     public List<Category> getAllByMerchantId(UUID merchantId) {
         List<Category> categories = categoryRepository.findByMerchantId(merchantId);
         if (categories.isEmpty()) {
@@ -57,6 +68,14 @@ public class CategoryService {
 
 
         category.setName(categoryDto.name());
+
+        category.setTemplate(categoryDto.template());
+
+        category.setStatus(categoryDto.status());
+
+        category.setMerchant(merchant);
+
+        category.setIFoodCategoryId(categoryDto.iFoodCategoryId());
 
         if (categoryDto.index() != null) {
             category.setIndex(categoryDto.index());
@@ -81,9 +100,7 @@ public class CategoryService {
             category.setIndex(lastIndex + 1);
         }
     
-        category.setStatus(categoryDto.status());
-        category.setMerchant(merchant);
-        category.setIFoodCategoryId(categoryDto.iFoodCategoryId());
+
 
         Set<Catalog> catalogs = catalogRepository.findByMerchantId(merchantId)
                     .stream()

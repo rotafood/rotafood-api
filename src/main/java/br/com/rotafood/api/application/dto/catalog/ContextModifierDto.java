@@ -8,6 +8,9 @@ import br.com.rotafood.api.domain.entity.catalog.Status;
 
 public record ContextModifierDto(
     UUID id,
+    UUID itemId,
+    UUID optionId,
+    UUID parentOptionId,
     Status status,
     PriceDto price,
     CatalogContext catalogContext
@@ -15,8 +18,11 @@ public record ContextModifierDto(
     public ContextModifierDto(ContextModifier contextModifier) {
         this(
             contextModifier.getId(),
+            contextModifier.getItem().getId(),
+            contextModifier.getOption().getId(),
+            contextModifier.getParentOptionModifier().getOption().getId(),
             contextModifier.getStatus(),
-            contextModifier.getPrice() != null ? new PriceDto(contextModifier.getPrice()) : null,
+            new PriceDto(contextModifier.getPrice()),
             contextModifier.getCatalogContext()
         );
     }

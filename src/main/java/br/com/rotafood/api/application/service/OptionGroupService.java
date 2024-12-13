@@ -7,11 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.rotafood.api.application.dto.catalog.OptionGroupDto;
-import br.com.rotafood.api.domain.entity.catalog.ItemOptionGroup;
+import br.com.rotafood.api.domain.entity.catalog.ProductOptionGroup;
 import br.com.rotafood.api.domain.entity.catalog.OptionGroup;
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
-import br.com.rotafood.api.domain.repository.ItemOptionGroupRepository;
-import br.com.rotafood.api.domain.repository.ItemRepository;
+import br.com.rotafood.api.domain.repository.ProductOptionGroupRepository;
+import br.com.rotafood.api.domain.repository.ProductRepository;
 import br.com.rotafood.api.domain.repository.MerchantRepository;
 import br.com.rotafood.api.domain.repository.OptionGroupRepository;
 import jakarta.transaction.Transactional;
@@ -23,10 +23,10 @@ public class OptionGroupService {
     private OptionGroupRepository optionGroupRepository;
 
     @Autowired
-    private ItemOptionGroupRepository itemOptionGroupRepository;
+    private ProductOptionGroupRepository productOptionGroupRepository;
 
     @Autowired
-    private ItemRepository itemRepository;
+    private ProductRepository productRepository;
 
     @Autowired
     private MerchantRepository merchantRepository;
@@ -70,24 +70,24 @@ public class OptionGroupService {
     }
 
     @Transactional
-    public void linkOptionGroupToItem(UUID itemId, UUID optionGroupId, Integer index, UUID merchantId) {
-        var item = itemRepository.findByIdAndMerchantId(itemId, merchantId);
+    public void linkOptionGroupToProduct(UUID productId, UUID optionGroupId, Integer index, UUID merchantId) {
+        var product = productRepository.findByIdAndMerchantId(productId, merchantId);
         var optionGroup = optionGroupRepository.getReferenceById(optionGroupId);
 
-        var itemOptionGroup = new ItemOptionGroup();
-        itemOptionGroup.setItem(item);
-        itemOptionGroup.setOptionGroup(optionGroup);
-        itemOptionGroup.setIndex(index);
+        var productOptionGroup = new ProductOptionGroup();
+        productOptionGroup.setProduct(product);
+        productOptionGroup.setOptionGroup(optionGroup);
+        productOptionGroup.setIndex(index);
 
-        itemOptionGroupRepository.save(itemOptionGroup);
+        productOptionGroupRepository.save(productOptionGroup);
     }
 
     @Transactional
-    public void unlinkOptionGroupFromItem(UUID itemId, UUID optionGroupId, UUID merchantId) {
-        var item = itemRepository.findByIdAndMerchantId(itemId, merchantId);
-        var itemOptionGroup = itemOptionGroupRepository.findByIdAndOptionGroupId(item.getId(), optionGroupId);
+    public void unlinkOptionGroupFromItem(UUID productId, UUID optionGroupId, UUID merchantId) {
+        var product = productRepository.findByIdAndMerchantId(productId, merchantId);
+        var productOptionGroup = productOptionGroupRepository.findByIdAndOptionGroupId(product.getId(), optionGroupId);
 
-        itemOptionGroupRepository.delete(itemOptionGroup);
+        productOptionGroupRepository.delete(productOptionGroup);
     }
 
     @Transactional

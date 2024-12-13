@@ -17,20 +17,20 @@ import lombok.Setter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "item_option_group")
+@Table(name = "product_option_group")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class ItemOptionGroup {
+public class ProductOptionGroup {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "itemId")
-    private Item item;
+    @JoinColumn(name = "productId")
+    private Product product;
 
     @Column
     private Integer min;

@@ -17,19 +17,22 @@ public class OptionService {
     private OptionRepository optionRepository;
 
     @Autowired
-    private PriceService priceService;
+    private ContextModifierService contextModifierService;
 
     @Transactional
     public Option updateOrCreate(OptionDto optionDto, OptionGroup optionGroup) {
         Option option = optionDto.id() != null
-            ? optionRepository.findByIdAndOptionGroupId(optionDto.id(), optionGroup.getId()) : new Option();
+            ? optionRepository.findByIdAndOptionGroupId(optionDto.id(), optionGroup.getId())
+            : new Option();
 
         option.setStatus(optionDto.status());
         option.setIndex(optionDto.index());
         option.setOptionGroup(optionGroup);
 
-        if (optionDto.price() != null) {
-            option.setPrice(priceService.updateOrCreate(optionDto.price()));
+        if (optionDto.contextModifiers() != null) {
+            option.setContextModifiers(
+                contextModifierService.updateOrCreateAll(optionDto.contextModifiers())
+            );
         }
 
         return optionRepository.save(option);

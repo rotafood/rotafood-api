@@ -2,7 +2,6 @@ package br.com.rotafood.api.application.service;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,7 @@ import br.com.rotafood.api.domain.repository.SellingOptionRepository;
 import br.com.rotafood.api.domain.repository.WeightRepository;
 
 @Service
-public class ProductService {
+public class ProductService { 
 
     @Autowired
     private ProductRepository productRepository;
@@ -53,7 +52,7 @@ public class ProductService {
         product.setServing(productDto.serving());
 
         if (productDto.dietaryRestrictions() != null) {
-            product.setDietaryRestrictions(productDto.dietaryRestrictions().stream().map(DietaryRestrictions::name).collect(Collectors.toList()));
+            product.setDietaryRestrictions(productDto.dietaryRestrictions().stream().map(DietaryRestrictions::name).toList());
         }
 
         SellingOption sellingOption = productDto.sellingOption().id() != null ? sellingOptionRepository.findById(productDto.sellingOption().id())
@@ -69,7 +68,7 @@ public class ProductService {
         
 
         Weight weight = productDto.weight() != null ? weightRepository.findById(productDto.weight().id())
-                    .orElseGet(() -> new Weight()) : new Weight();
+                    .orElseGet(Weight::new) : new Weight();
         weight.setQuantity(productDto.weight().quantity());
         weight.setUnit(productDto.weight().unit());
 

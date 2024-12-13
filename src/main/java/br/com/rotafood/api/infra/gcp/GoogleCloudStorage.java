@@ -43,20 +43,15 @@ public class GoogleCloudStorage {
         BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
         
         storage.create(blobInfo, fileBytes);
-        System.out.println("Arquivo " + blobName + " enviado para o bucket " + bucketName);
 
     }
 
     public void deleteFile(String bucketName, String filePath) {
         try {
             BlobId blobId = BlobId.of(bucketName, filePath);
-            boolean deleted = storage.delete(blobId);
+            storage.delete(blobId);
     
-            if (deleted) {
-                System.out.println("Arquivo " + filePath + " removido do bucket " + bucketName);
-            } else {
-                System.err.println("Erro: Arquivo " + filePath + " não encontrado no bucket " + bucketName);
-            }
+
         } catch (Exception e) {
             System.err.println("Erro ao tentar remover o arquivo " + filePath + ": " + e.getMessage());
             e.printStackTrace();
@@ -64,16 +59,13 @@ public class GoogleCloudStorage {
     }
 
     public void listBuckets() {
-        // Usando StreamSupport para converter Iterable em Stream
         List<String> bucketNames = StreamSupport.stream(storage.list().iterateAll().spliterator(), false)
-                .map(bucket -> bucket.getName())
+                .map(BucketInfo::getName)
                 .collect(Collectors.toList());
 
-        // Exibir os nomes dos buckets
         System.out.println("Buckets encontrados:");
         bucketNames.forEach(System.out::println);
 
-        // Exibir como lista
         System.out.println("Lista de buckets: " + bucketNames);
     }
     

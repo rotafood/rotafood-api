@@ -7,7 +7,7 @@ import br.com.rotafood.api.domain.entity.catalog.DietaryRestrictions;
 import br.com.rotafood.api.domain.entity.catalog.Product;
 import br.com.rotafood.api.domain.entity.catalog.Serving;
 
-public record ProductDto(
+public record ProductItemDto(
     UUID id,
     String name,
     String description,
@@ -16,7 +16,6 @@ public record ProductDto(
     List<DietaryRestrictions> dietaryRestrictions,
     SellingOptionDto sellingOption,
     UUID itemId,
-    UUID optionId,
     WeightDto weight,
     Serving serving,
     List<String> tags,
@@ -25,7 +24,7 @@ public record ProductDto(
     List<ProductOptionGroupDto> optionGroups,
     List<ProductPackagingDto> packagings
 ) {
-    public ProductDto(Product product) {
+    public ProductItemDto(Product product) {
         this(
             product.getId(),
             product.getName(),
@@ -39,7 +38,6 @@ public record ProductDto(
                 : List.of(),
             product.getSellingOption() != null ? new SellingOptionDto(product.getSellingOption()) : null,
             product.getItem() != null ? product.getItem().getId() : null,
-            product.getOption() != null ? product.getOption().getId() : null,
             product.getWeight() != null ? new WeightDto(product.getWeight()) : null,
             product.getServing(),
             product.getTags(),

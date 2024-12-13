@@ -14,8 +14,7 @@ public record ItemDto(
     UUID categoryId,
     List<ShiftDto> shifts,
     List<ContextModifierDto> contextModifiers,
-    ProductDto product,
-    List<ItemOptionGroupDto> optionGroups
+    ProductDto product
 ) {
     public ItemDto(Item item) {
         this(
@@ -26,8 +25,7 @@ public record ItemDto(
             item.getCategory().getId(),
             item.getShifts() != null ? item.getShifts().stream().map(ShiftDto::new).toList() : null,
             item.getContextModifiers() != null ? item.getContextModifiers().stream().map(ContextModifierDto::new).toList() : null,
-            new ProductDto(item.getProduct()),
-            item.getItemOptionGroups() != null ? item.getItemOptionGroups().stream().map(ItemOptionGroupDto::new).toList() : null
+            new ProductDto(item.getProduct())
         );
     }
 }

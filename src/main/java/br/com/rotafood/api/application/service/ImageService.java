@@ -1,7 +1,6 @@
 package br.com.rotafood.api.application.service;
 
 import java.io.IOException;
-import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,8 +31,11 @@ public class ImageService {
     @Value("${gcp.bucket.name}")
     private String bucketName;
 
+    @Value("${gcp.bucket.url}")
+    private String bucketUrl;
+
     @Transactional
-public Image uploadImage(MultipartFile file, UUID merchantId) {
+    public Image uploadImage(MultipartFile file, UUID merchantId) {
     String contentType = file.getContentType();
     if (contentType == null || (!contentType.equals("image/png") && !contentType.equals("image/jpeg"))) {
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Apenas arquivos PNG ou JPEG são permitidos.");
@@ -49,7 +51,7 @@ public Image uploadImage(MultipartFile file, UUID merchantId) {
 
             Merchant merchant = this.merchantRepository.getReferenceById(merchantId);
             Image image = new Image();
-            image.setPath(filePath);
+            image.setPath(this.bucketUrl + "/" + this.bucketName + "/" + filePath);
             image.setId(id);
             image.setMerchant(merchant);
 
@@ -69,12 +71,15 @@ public Image uploadImage(MultipartFile file, UUID merchantId) {
         }
     
         String imagePath = image.getPath();
-    
+        String basePath = "rotafood-api/";
+        int startIndex = imagePath.indexOf(basePath);
+        String result = imagePath.substring(startIndex + basePath.length());
+     
         if (imagePath == null) {
-            throw new RuntimeException("Caminho relativo não encontrado na URL: " + imagePath);
+            throw new IllegalArgumentException("Caminho relativo não encontrado na URL: " + result);
         }
     
-        googleCloudStorage.deleteFile(bucketName, imagePath);
+        googleCloudStorage.deleteFile(bucketName, result);
     
         imageRepository.delete(image);
     }

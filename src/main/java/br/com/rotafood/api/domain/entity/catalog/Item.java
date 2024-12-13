@@ -47,7 +47,7 @@ public class Item {
 
     @Column
     @Enumerated(EnumType.STRING)
-    private ItemType type;
+    private TemplateType type;
 
     @OneToOne
     @JoinColumn(name = "priceId")
@@ -59,9 +59,6 @@ public class Item {
     
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ContextModifier> contextModifiers;
-
-    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ItemOptionGroup> itemOptionGroups;
     
     @ManyToOne
     @JoinColumn(name = "productId")

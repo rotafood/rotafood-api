@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.rotafood.api.application.dto.catalog.CategoryDto;
-import br.com.rotafood.api.application.dto.catalog.GetCategoryDto;
+import br.com.rotafood.api.application.dto.catalog.FullCategoryDto;
 import br.com.rotafood.api.application.service.CategoryService;
 import jakarta.validation.Valid;
 
@@ -27,13 +28,12 @@ public class CategoryController {
 
     @PreAuthorize("hasAuthority('CATEGORY')")
     @GetMapping
-    public List<GetCategoryDto> getAll(
+    public List<FullCategoryDto> getAll(
         @PathVariable UUID merchantId
     ) {
-        var categories = categoryService.getAllByMerchantId(merchantId).stream()
-            .map(GetCategoryDto::new)
+        return  categoryService.getAllByMerchantId(merchantId).stream()
+            .map(FullCategoryDto::new)
             .toList();
-        return categories;
     }
 
     @PreAuthorize("hasAuthority('CATEGORY')")
@@ -41,21 +41,29 @@ public class CategoryController {
     public List<CategoryDto> getAllSimplied(
         @PathVariable UUID merchantId
     ) {
-        var categories = categoryService.getAllByMerchantId(merchantId).stream()
+        return categoryService.getAllByMerchantId(merchantId).stream()
             .map(CategoryDto::new)
             .toList();
-        return categories;
     }
 
     @PreAuthorize("hasAuthority('CATEGORY')")
     @GetMapping("/{categoryId}")
-    public GetCategoryDto getById(
+    public FullCategoryDto getById(
         @PathVariable UUID merchantId,
         @PathVariable UUID categoryId
     ) {
-        return new GetCategoryDto(
+        return new FullCategoryDto(
             categoryService.getByIdAndMerchantId(categoryId, merchantId)
             );
+    }
+
+    @PreAuthorize("hasAuthority('CATEGORY')")
+    @DeleteMapping("/{categoryId}")
+    public void deleteById(
+        @PathVariable UUID merchantId,
+        @PathVariable UUID categoryId
+    ) {
+        categoryService.deleteByIdAndMerchantId(categoryId, merchantId);
     }
 
     @PreAuthorize("hasAuthority('CATEGORY')")

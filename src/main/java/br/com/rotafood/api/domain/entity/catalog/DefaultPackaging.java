@@ -7,7 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
-public class DefaultPackage {
+public class DefaultPackaging {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;

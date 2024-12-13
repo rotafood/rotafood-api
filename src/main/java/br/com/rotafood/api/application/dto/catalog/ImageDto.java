@@ -11,16 +11,14 @@ public record ImageDto(
     String iFoodImagePath
 ) {
 
-    public ImageDto(Image image, String bucketUrl, String bucketName) {
+    public ImageDto(Image image) {
         this(
             image.getId(),
-            generateFullUrl(image.getPath(), bucketUrl, bucketName),
+            image.getPath(),
             image.getIFoodImageId(),
             image.getIFoodImagePath()
         );
     }
-
-    private static String generateFullUrl(String path, String bucketUrl, String bucketName) {
-        return bucketUrl + "/" + bucketName + "/" + path;
-    }
 }
+
+

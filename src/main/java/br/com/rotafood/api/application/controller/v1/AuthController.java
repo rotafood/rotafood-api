@@ -34,7 +34,7 @@ public class AuthController {
     @Transactional
     public ResponseEntity<TokenJwtDto> createMerchant(@RequestBody @Valid MerchantOwnerCreationDto merchantOwnerCreationDto) throws JsonProcessingException, IllegalArgumentException {
         MerchantUser merchantUser = merchantService.createMerchant(merchantOwnerCreationDto);
-        var tokenJwtDto = tokenService.generateToken((MerchantUser) merchantUser);
+        var tokenJwtDto = tokenService.generateToken(merchantUser);
         return ResponseEntity.ok().body(tokenJwtDto);
     }
 
@@ -43,8 +43,8 @@ public class AuthController {
     public ResponseEntity<TokenJwtDto> login(@RequestBody @Valid LoginDto loginDto) throws JsonProcessingException, IllegalArgumentException {
         new UsernamePasswordAuthenticationToken(loginDto.email(), loginDto.password());
 
-        var MerchantUser = merchantService.getMerchantUserByEmail(loginDto.email());
-        var tokenJwtDto = tokenService.generateToken(MerchantUser);
+        var merchantUser = merchantService.getMerchantUserByEmail(loginDto.email());
+        var tokenJwtDto = tokenService.generateToken(merchantUser);
         
         return ResponseEntity.ok().body(tokenJwtDto);
     }

@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.rotafood.api.application.dto.catalog.ContextModifierDto;
-import br.com.rotafood.api.application.dto.catalog.PriceDto;
 import br.com.rotafood.api.domain.entity.catalog.CatalogContext;
 import br.com.rotafood.api.domain.entity.catalog.ContextModifier;
 import br.com.rotafood.api.domain.entity.catalog.Item;
@@ -30,7 +29,7 @@ public class ContextModifierService {
     private PriceService priceService;
 
     @Transactional
-    public List<ContextModifier> updateOrCreateAll(PriceDto defaultPrice, List<ContextModifierDto> contextModifierDtos) {
+    public List<ContextModifier> updateOrCreateAll(List<ContextModifierDto> contextModifierDtos) {
 
     
         return List.of(CatalogContext.values()).stream().map(catalogContext -> {
@@ -39,16 +38,14 @@ public class ContextModifierService {
                     .findFirst()
                     .orElse(null);
     
-            ContextModifier contextModifier = contextModifierDto != null && contextModifierDto.id() != null
+            ContextModifier contextModifier = contextModifierDto.id() != null
                     ? contextModifierRepository.findById(contextModifierDto.id())
                         .orElse(new ContextModifier())
                     : new ContextModifier();
-    
-            Price price = contextModifierDto != null && contextModifierDto.price() != null
-                    ? priceService.updateOrCreate(contextModifierDto.price())
-                    : priceService.updateOrCreate(defaultPrice);
+
+            Price price = priceService.updateOrCreate(contextModifierDto.price());
             contextModifier.setPrice(price);
-    
+            
             return contextModifier;
         }).collect(Collectors.toList());
     }

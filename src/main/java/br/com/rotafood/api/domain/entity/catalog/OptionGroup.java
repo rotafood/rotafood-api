@@ -46,7 +46,7 @@ public class OptionGroup {
     private Status status;
 
     @OneToMany(mappedBy = "optionGroup", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ItemOptionGroup> itemOptionGroups;
+    private List<ProductOptionGroup> productOptionGroups;
 
     
     @OneToMany(mappedBy = "optionGroup")

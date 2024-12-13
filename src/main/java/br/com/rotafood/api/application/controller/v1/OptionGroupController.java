@@ -33,8 +33,8 @@ public class OptionGroupController {
     @PutMapping
     public OptionGroupDto updateOrCreate(
             @PathVariable UUID merchantId,
-            @RequestBody @Valid OptionGroupDto OptionGroupDto) {
-        return new OptionGroupDto(optionGroupService.updateOrCreate(OptionGroupDto, merchantId));
+            @RequestBody @Valid OptionGroupDto optionGroupDto) {
+        return new OptionGroupDto(optionGroupService.updateOrCreate(optionGroupDto, merchantId));
     }
 
     @DeleteMapping("/{optionGroupId}")

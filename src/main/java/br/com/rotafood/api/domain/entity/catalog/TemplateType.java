@@ -1,6 +1,6 @@
 package br.com.rotafood.api.domain.entity.catalog;
 
-public enum ItemType {
+public enum TemplateType {
     DEFAULT,
     PIZZA
 }

@@ -1,0 +1,2012 @@
+[
+    {
+        "id": "ccd4d80c-cd45-4a8a-931c-0860a94d2bbb",
+        "name": "Coca-Cola",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202410251738_gacxmhpa7dk.jpeg"
+        },
+        "productEan": "5449000000996"
+    },
+    {
+        "id": "768da340-64e5-426c-a0d5-111015001355",
+        "name": "Coca-Cola 1l",
+        "description": "Garrafa 1l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202309181529_wxjo3wn9qpf.jpg"
+        },
+        "productEan": "721864879907"
+    },
+    {
+        "id": "542b9449-34a9-405e-9766-a8cc32b972c3",
+        "name": "Coca-Cola 220ml",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210182204_rtkgdizz84.jpg"
+        },
+        "productEan": "7894900011203"
+    },
+    {
+        "id": "e3bed997-2b01-498a-bc68-f719cfbef4c0",
+        "name": "Coca Cola Pet",
+        "description": "Garrafa 2,0l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202309281549_i3f9sewwkt.jpg"
+        },
+        "productEan": "17894900014218"
+    },
+    {
+        "id": "db7fae51-2529-4525-9603-03836d382768",
+        "name": "Kit Refrigerante 2 Litros Coca Cola E Coca Cola Zero",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202403181410_5tl2kdst4wc.png"
+        },
+        "productEan": "17894900708971"
+    },
+    {
+        "id": "aeff8748-0fba-4b7c-9e0d-cbdd531897de",
+        "name": "Coca-Cola Original 250ml",
+        "description": "Garrafa 250ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210182253_t97i9wjw8n.jpg"
+        },
+        "productEan": "7894900013511"
+    },
+    {
+        "id": "9b75b503-b318-4edb-a1c2-48a3355c55f8",
+        "name": "Coca-Cola Original 2l",
+        "description": "Garrafa 2l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210180403_7z21qphifpm.jpg"
+        },
+        "productEan": "7894900019926"
+    },
+    {
+        "id": "517b8bcf-b188-4186-a918-c5c13593083d",
+        "name": "Coca-Cola Original 310ml",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202410021501_608nw0x48jk.jpeg"
+        },
+        "productEan": "7894900011159"
+    },
+    {
+        "id": "69b71f48-d1af-404f-a48e-1c1d49f4a51f",
+        "name": "Coca-Cola Original 350ml",
+        "description": "Lata 350ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210180010_cazgjkdma3s.jpg"
+        },
+        "productEan": "7777771686209"
+    },
+    {
+        "id": "5f054e86-a4b9-4fa9-81ad-b9809c62c8a4",
+        "name": "Coca-Cola Original 3l",
+        "description": "Garrafa 3l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210190419_tcmakessfz8.jpg"
+        },
+        "productEan": "7894900011178"
+    },
+    {
+        "id": "2ee30f0c-970f-479d-853a-2cdf447310b5",
+        "name": "Coca-Cola Original 2l",
+        "description": "Garrafa 2l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210190608_vcsidjq7saa.jpg"
+        },
+        "productEan": "7894900027174"
+    },
+    {
+        "id": "ba8367c2-a6c5-4350-8f0b-3345e91799be",
+        "name": "Coca-Cola Original 310ml",
+        "description": "Lata 310ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210202324_yarqy82mshq.jpg"
+        },
+        "productEan": "7894900011333"
+    },
+    {
+        "id": "f2f955b5-4c57-41d5-affa-182ef8bea8fc",
+        "name": "Coca-Cola Original 1,750ml",
+        "description": "Garrafa 1,750ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210180058_xrig78ye93.jpg"
+        },
+        "productEan": "7894900012057"
+    },
+    {
+        "id": "60be60ec-7fe3-4550-be33-fbb0fb0ea4af",
+        "name": "Mini Engradados Coca-Cola",
+        "description": "Unidade 1un",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210192310_dqdtwq6e5be.jpg"
+        },
+        "productEan": "7898355980787"
+    },
+    {
+        "id": "192e10ea-e945-4925-8368-83ddede229cc",
+        "name": "Coca-Cola Original 200ml",
+        "description": "Garrafa 200ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210192316_ipms8idpgl.jpg"
+        },
+        "productEan": "178908901"
+    },
+    {
+        "id": "f75922f1-a34f-423b-8877-0789eecbb962",
+        "name": "Coca-Cola Lata 350ml",
+        "description": "Embalagem 1un",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202301270958_qauo2ozmt0s.jpg"
+        },
+        "productEan": "7894900010305"
+    },
+    {
+        "id": "769ef6d3-a99a-4ed0-a4a3-3f225e31a090",
+        "name": "Coca-Cola Original 1l",
+        "description": "Garrafa 1l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210180558_bwj95500uwg.jpg"
+        },
+        "productEan": "5998015520086"
+    },
+    {
+        "id": "5553fc62-6dbe-4689-8c2f-21f2019528c1",
+        "name": "Coca-Cola Original 200ml",
+        "description": "Garrafa 200ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210192326_z246o49b45.jpg"
+        },
+        "productEan": "7894900015010"
+    },
+    {
+        "id": "7fa595b5-6c69-4322-bfd1-0e66bb9bb345",
+        "name": "Coca-Cola Original 1l",
+        "description": "Garrafa 1l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210190019_2k5lpt4vc5c.jpg"
+        },
+        "productEan": "99999110143"
+    },
+    {
+        "id": "0dc9aecc-4a89-49b6-9d1a-e118a88c4b85",
+        "name": "Coca-Cola Original 500ml",
+        "description": "Garrafa 500ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210180748_8l68a314qg3.jpg"
+        },
+        "productEan": "7894900011548"
+    },
+    {
+        "id": "60b42f03-c6be-4cb1-9ea0-2236e7e87b1c",
+        "name": "Coca-Cola Original 350ml",
+        "description": "Lata 350ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210192204_i5fenezt6r.jpg"
+        },
+        "productEan": "7894900010152"
+    },
+    {
+        "id": "6e6fd4d0-3551-46a3-bf72-07f11644acf0",
+        "name": "Coca-Cola Original 350ml",
+        "description": "Lata 350ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210190015_mao7kn3v4u.jpg"
+        },
+        "productEan": "7894900010343"
+    },
+    {
+        "id": "47e7dfc6-3a25-4728-a058-2236b78cda2a",
+        "name": "Coca-Cola Original 1l",
+        "description": "Garrafa 1l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210182323_o7a7ba0bq2r.jpg"
+        },
+        "productEan": "7894900011739"
+    },
+    {
+        "id": "a979857d-a5c9-4558-afe4-0123d7130e81",
+        "name": "Coca-Cola Original 220ml",
+        "description": "Lata 220ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210180957_jtcnng6ju6f.jpg"
+        },
+        "productEan": "7894900010404"
+    },
+    {
+        "id": "f46eb97b-e75d-412c-8e8c-b579972d82bc",
+        "name": "Coca Cola Zero 600ml",
+        "description": "Unidade 1un",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210200323_n3x4i2ox7m.jpg"
+        },
+        "productEan": "47894900701607"
+    },
+    {
+        "id": "07510c60-3e94-48b7-9380-aaa415d784a1",
+        "name": "Refrigerante Coca Cola Zero Açúcar",
+        "description": "Garrafa 2l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202410251815_44oalafr0n2.jpeg"
+        },
+        "productEan": "5900273001986"
+    },
+    {
+        "id": "c9c23141-f6ce-4934-a89a-8d58e26b79d3",
+        "name": "Refrigerante Coca Cola Lata Zero",
+        "description": "Lata 350ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202306271636_0l49q8eqdxpf.jpg"
+        },
+        "productEan": "7894900708370"
+    },
+    {
+        "id": "fc872af6-839f-4dfa-9380-f9035c8f5197",
+        "name": "Vasilhame Coca Cola Zero 2l",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202402091544_lyp0vfc7kf.png"
+        },
+        "productEan": "SM00200027031"
+    },
+    {
+        "id": "e89e3e34-82f1-4acf-b27d-cc7b7207187b",
+        "name": "Coca-Cola Energy Zero 250ml",
+        "description": "Lata 250ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210180858_f0fzktz738o.jpg"
+        },
+        "productEan": "5000112641523"
+    },
+    {
+        "id": "26d0a346-db13-4bc9-9c89-6de831bbad01",
+        "name": "Coca-Cola Zero Açúcar 290ml",
+        "description": "Garrafa 290ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210190209_p7yw57s3jr.jpg"
+        },
+        "productEan": "9990000115570"
+    },
+    {
+        "id": "eaf0c87e-ebd6-4e0c-929f-d3edc10493f0",
+        "name": "Kit Ref Coca Cola + Coca Zero Un",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202411051841_vpadqkdd9as.jpeg"
+        },
+        "productEan": "794900709063"
+    },
+    {
+        "id": "091a6180-607b-4453-a714-13597b460b58",
+        "name": "Refrigerante Coca Cola Lata 350ml Zero",
+        "description": "Lata 350ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202310111854_zamu74bmje.jpg"
+        },
+        "productEan": "7894900700220"
+    },
+    {
+        "id": "c6056867-4db0-453d-90fc-19593cbd9de7",
+        "name": "Refrigerante Coca Cola Zero 350ml",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202312231648_fq7yr0w1p6d.jpg"
+        },
+        "productEan": "7777775322240"
+    },
+    {
+        "id": "f42298fa-4071-42b2-88df-65622dcf1e06",
+        "name": "Coca Cola Zero Lata 350ml",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202410091134_4f07pcy90a.jpeg"
+        },
+        "productEan": "789490070006"
+    },
+    {
+        "id": "c7d984a3-0f4d-4d46-ba4e-0579a41e3848",
+        "name": "Refrigerante Zero Coca Cola 220ml",
+        "description": "Lata 220ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210200348_5vmrdl4nz6x.jpg"
+        },
+        "productEan": "7894900070033"
+    },
+    {
+        "id": "e17d2195-ccda-4a29-9a7f-fed4ecf27946",
+        "name": "Coca-Cola Zero Energy 250ml",
+        "description": "Lata 250ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210190238_8r6lmatxz9a.jpg"
+        },
+        "productEan": "5449000265104"
+    },
+    {
+        "id": "85b17cc5-d10b-4309-9dde-11eb55e87bc7",
+        "name": "Refrigerante Coca-Cola Zero 250ml",
+        "description": "Coca-Cola Zero 250ml  1 Unidade",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210192313_41q795kwqdv.jpg"
+        },
+        "productEan": "SM00200104567"
+    },
+    {
+        "id": "d3eb5106-6198-4442-af9d-559602aef6e8",
+        "name": "Refrigerante Coca Cola Zero 250ml",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202410021957_34nea9opwpe.jpeg"
+        },
+        "productEan": "7777725434566"
+    },
+    {
+        "id": "db7fae51-2529-4525-9603-03836d382768",
+        "name": "Kit Refrigerante 2 Litros Coca Cola E Coca Cola Zero",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202403181410_5tl2kdst4wc.png"
+        },
+        "productEan": "17894900708971"
+    },
+    {
+        "id": "c6391051-41d6-47ad-b6c2-d314b4e52eda",
+        "name": "Refrigerante Zero Coca Cola 250ml",
+        "description": "Embalagem 250ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202309221502_c6kcs029pho.jpg"
+        },
+        "productEan": "7896371002094"
+    },
+    {
+        "id": "5c68930e-659d-412a-83fe-028b183c0704",
+        "name": "Vasilhame Coca-Cola Zero 2l",
+        "description": "Compra por unidade",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202401131332_96fwj1md3bi.jpeg"
+        },
+        "productEan": "SM00201002309"
+    },
+    {
+        "id": "ccd4d80c-cd45-4a8a-931c-0860a94d2bbb",
+        "name": "Coca-Cola",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202410251738_gacxmhpa7dk.jpeg"
+        },
+        "productEan": "5449000000996"
+    },
+    {
+        "id": "d5f9cb08-e7ea-45b9-a080-5aa233ab405f",
+        "name": "Energético Crosby Zero Açúcar Coca-Cola 2l",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202406130942_wgza9gav4u.png"
+        },
+        "productEan": "7898973536014"
+    },
+    {
+        "id": "30640cf5-7979-44ee-86a2-feab78520602",
+        "name": "Refrigerante Zero Açúcar Coca Cola 220ml",
+        "description": "Lata 220ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210200241_aw5r2et11sv.jpg"
+        },
+        "productEan": "7894900700395"
+    },
+    {
+        "id": "457c72cb-02c2-4049-b2f2-30ef275d1b77",
+        "name": "Refrigerante Zero Coca Cola 1,5l 6un",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202412031055_m4msmugw5m.png"
+        },
+        "productEan": "SM00201027378"
+    },
+    {
+        "id": "09ab232b-7f30-4e82-b74a-6b33c32db1dd",
+        "name": "Coca Cola Zero Lata 350ml C12",
+        "description": "Lata 350ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210182256_z5wpdgncho.jpg"
+        },
+        "productEan": "7894900700046"
+    },
+    {
+        "id": "7226df66-d64c-48e3-8490-aba71641491d",
+        "name": "Refrigerante 1,5lts Coca Cola Zero Gelado",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202412092030_e9zjywyqivf.jpeg"
+        },
+        "productEan": "1000000217650"
+    },
+    {
+        "id": "04bc0d31-2351-48c0-ab43-90648a4896a8",
+        "name": "Coca Cola Zero Açúcar Lata 310ml",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202412051551_rmvdqfntw5.png"
+        },
+        "productEan": "17894900028000"
+    },
+    {
+        "id": "0037e856-43ff-4aab-bf30-c1a0a287d1cd",
+        "name": "Guarana Antartica Lata",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202408311701_nifp3g1i11.jpeg"
+        },
+        "productEan": "84244321"
+    },
+    {
+        "id": "b6bd050b-c1f5-4ee0-8ec0-e833499e1e95",
+        "name": "Guaraná Antarctica 1l",
+        "description": "Embalagem 1l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210190235_7yak7flqtt9.jpg"
+        },
+        "productEan": "5999047931277"
+    },
+    {
+        "id": "1b62136f-0e8f-4b53-80ca-15dca81007a9",
+        "name": "Refrigerante Guarana Antarctica 355ml",
+        "description": "Embalagem 350ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210181754_3akgbd3d515.jpg"
+        },
+        "productEan": "7891149108978"
+    },
+    {
+        "id": "2b721765-abd0-4dac-817a-d46161c428b4",
+        "name": "Refrigerante Guarana Antarctica 269ml",
+        "description": "Lata 269ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210202329_c8639xuuzxm.jpg"
+        },
+        "productEan": "97891991012867"
+    },
+    {
+        "id": "9d69b547-80dd-42a0-a39d-b5e3a63c09a1",
+        "name": "Refrigerante Antartica Guarana 310ml Lata",
+        "description": "Lata 310ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202402031125_e8sd06854qh.png"
+        },
+        "productEan": "7891991301282"
+    },
+    {
+        "id": "2cb01e94-bc6e-48d4-a437-94b0459da409",
+        "name": "Refr. Guarana Antarctica 2l",
+        "description": "Unidade 2l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202310041150_tlkvf39az9.jpg"
+        },
+        "productEan": "3654556234456"
+    },
+    {
+        "id": "b6e6eb6a-7333-446e-9a8c-92e531b5f991",
+        "name": "Refrigerante Guaraná Antarctica 200ml",
+        "description": "Embalagem 200ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202408301212_r4tx1h63gk.png"
+        },
+        "productEan": "SM00201014350"
+    },
+    {
+        "id": "39de8a95-6dbf-4ecf-be96-e542a4d97015",
+        "name": "Refrigerante Guaraná Antarctica 350ml",
+        "description": "Lata 350ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202301241124_hwij98upoto.jpg"
+        },
+        "productEan": "7891997000127"
+    },
+    {
+        "id": "a24a3aee-c9ec-48c9-a213-5aa37e13b14a",
+        "name": "Refrigerante Guaraná Antarctica 350ml",
+        "description": "Lata 350ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202301241124_bfl7b3tbeck.jpg"
+        },
+        "productEan": "7891991100427"
+    },
+    {
+        "id": "73c0f1da-a9e3-4f6f-9024-9656694058ff",
+        "name": "Refrigerante Guaraná Antarctica 350ml",
+        "description": "Lata 350ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202301241119_8ko7t9c9a5p.jpg"
+        },
+        "productEan": "789199100826"
+    },
+    {
+        "id": "cc09fd94-7755-4f0d-b9cc-1bb9b7233d08",
+        "name": "Refrigerante Guaraná Antarctica 350ml",
+        "description": "Embalagem 350 Ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202310041124_i3hh9ks5rim.jpg"
+        },
+        "productEan": "7891991015103"
+    },
+    {
+        "id": "decdeddc-50c3-4dc3-87d1-fe0a3bb03235",
+        "name": "Refrigerante Guaraná Antarctica 600ml",
+        "description": "Garrafa 600ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210181754_16qdp36omor.jpg"
+        },
+        "productEan": "7891991013956"
+    },
+    {
+        "id": "60dc378a-e278-4a92-a108-8c017b1e45da",
+        "name": "Refrigerante Antarctica Guaraná 237ml",
+        "description": "Garrafa 237ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210181755_qvxwn4drei.jpg"
+        },
+        "productEan": "7895564596235"
+    },
+    {
+        "id": "b6025596-545f-48bc-baa8-736b4e40b251",
+        "name": "Refrigerante Guaraná Antarctica 1,5l",
+        "description": "Garrafa 1,51l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202305020910_zf9p8fo5bo.jpg"
+        },
+        "productEan": "7891991008778"
+    },
+    {
+        "id": "148dcb57-14b5-418a-b54e-5b2c1ef89d84",
+        "name": "Refrigerante Guaraná Antarctica 350ml",
+        "description": "Lata 350ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202301241118_8j4rz3pv6a7.jpg"
+        },
+        "productEan": "7891991294218"
+    },
+    {
+        "id": "bd30021f-5434-45d2-b677-02755efbebb2",
+        "name": "Refrigerante Antarctica Guaraná 290ml",
+        "description": "Vidro 290ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210181756_18pzvv1w3lx.jpg"
+        },
+        "productEan": "3087184882100"
+    },
+    {
+        "id": "5bb6256a-8bcb-4df4-ab20-f776e7686c7d",
+        "name": "Refrigerante Guaraná Antarctica 350ml",
+        "description": "Lata 350ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202301241119_l98dnsfd43.jpg"
+        },
+        "productEan": "7896495600826"
+    },
+    {
+        "id": "ade44538-070a-4cde-8af9-a2a16a609175",
+        "name": "Refrigerante Guaraná Antarctica 350ml",
+        "description": "Lata 350ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202301241118_h18oxp9jp9i.jpg"
+        },
+        "productEan": "7891991005005"
+    },
+    {
+        "id": "d90ea418-4207-40b2-ad72-c59fb2bfe5e1",
+        "name": "Refrigerante Antarctica Guaraná 500ml",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202312261811_kbrfb2mo61e.jpg"
+        },
+        "productEan": "7891991305587"
+    },
+    {
+        "id": "27a64999-3b79-40f7-a61d-37f2aa895ccd",
+        "name": "Refrigerante Guaraná Antarctica 2,5litros",
+        "description": "Embalagem 2,5l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210181754_67wlqdmu243.jpg"
+        },
+        "productEan": "7891591008648"
+    },
+    {
+        "id": "e50983ae-b0ce-46a7-9e50-cb7c79673eda",
+        "name": "Refrigerante Guaraná Antarctica 2,25l",
+        "description": "Garrafa 2,25l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210181754_3ppu8feuce6.jpg"
+        },
+        "productEan": "7891991303736"
+    },
+    {
+        "id": "af8e3e79-9fce-4d2b-bbd5-c77008cbef05",
+        "name": "Refrigerante Guaraná Antarctica 350ml",
+        "description": "Lata 350ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202301241123_d91dzmtl6ns.jpg"
+        },
+        "productEan": "4047921001019"
+    },
+    {
+        "id": "62e161a0-e4b9-4354-99c2-ec091270ad86",
+        "name": "Refrigerante Guaraná Antarctica 350ml",
+        "description": "Lata 350ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202301241123_4uu57b5w8wb.jpg"
+        },
+        "productEan": "7891991001427"
+    },
+    {
+        "id": "811ef5d2-98c0-455c-b055-1d6e5b09e2b0",
+        "name": "Refr Guarana Antarctica Zero 2l",
+        "description": "Garrafa 2l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210181754_065dtkhlj0vk.jpg"
+        },
+        "productEan": "781991001373"
+    },
+    {
+        "id": "a8322260-b922-4c46-870d-2230dbc81cf7",
+        "name": "Refrigerante Guaraná 350ml Zero  Antarctica",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202405211430_lt9cflqbbd.png"
+        },
+        "productEan": "90352966"
+    },
+    {
+        "id": "ba15b91b-ff4e-4af8-b8af-8a6fc7bd55a6",
+        "name": "Refrigerante Antarctica Guaraná Zero 600ml",
+        "description": "Unidade 600ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210181755_zid8nb35vwj.jpg"
+        },
+        "productEan": "7891991010276"
+    },
+    {
+        "id": "9ed63500-c9d5-4134-bf7c-08760744d334",
+        "name": "Refrigerante Guaraná Zero Antarctica 2l",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202412101339_bwjaq38o50l.png"
+        },
+        "productEan": "SM00201028850"
+    },
+    {
+        "id": "0c6dd2a8-6962-4b59-ad62-539a7a862c22",
+        "name": "Refrigerante Guaraná Zero Antarctica 350ml",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202412111039_4osf4mpe01.png"
+        },
+        "productEan": "SM00201029099"
+    },
+    {
+        "id": "94fcd77a-f051-4c90-b25c-41858ad23d4e",
+        "name": "Refrigerante Guaraná Zero Antarctica 350ml",
+        "description": "Lata 350ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202408231713_ymiixs7phop.jpeg"
+        },
+        "productEan": "7891991004282"
+    },
+    {
+        "id": "21bce64e-b7a5-4694-bd35-5b570bf030e4",
+        "name": "Refrigerante Guaraná Antarctica Zero 2l",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202402271248_qi8jtexc1dp.png"
+        },
+        "productEan": "7891991001373"
+    },
+    {
+        "id": "6f842b09-03bf-4dd6-a396-80ee69ff7976",
+        "name": "Refrigerante Guaraná Zero Açúcar Guaraná  Antarctica 750ml",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202401100328_tjeaix5kyc.jpg"
+        },
+        "productEan": "7891991014007"
+    },
+    {
+        "id": "d857df07-973a-457e-8480-706bb4c7e24c",
+        "name": "Refrigerante Antarctica Guarana Zero Lt 269ml",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202412091955_fveqphl3crc.jpeg"
+        },
+        "productEan": "7891991011235"
+    },
+    {
+        "id": "811ad90c-0036-4343-a112-fe1ed008a466",
+        "name": "Refrigerante Guaraná Antárctica Zero 1,5l",
+        "description": "Garrafa 1,5l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210181754_g2kgdasvcse.jpg"
+        },
+        "productEan": "789199100878"
+    },
+    {
+        "id": "49ba9fd3-c732-4e88-9cc1-23d18737ec9f",
+        "name": "Refrigerante Zero Açúcar Guaraná Antarctica 200ml",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202410080824_y1ik3xe8ak8.jpeg"
+        },
+        "productEan": "7891991016124"
+    },
+    {
+        "id": "e63d7751-76f5-4b75-ab58-db081ffb0fa9",
+        "name": "Refrigerante Antarctica Guaraná Zero 600 Ml",
+        "description": "Garrafa Z600 Ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210181755_2bdapbabxh6.jpg"
+        },
+        "productEan": "SM00200059844"
+    },
+    {
+        "id": "db6159d8-a73c-4916-8751-0d7525fe0b41",
+        "name": "Refrigerante Guaraná Antarctica Zero Gelado 350ml",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202409051816_xyw1pos5w2e.png"
+        },
+        "productEan": "SM00201014942"
+    },
+    {
+        "id": "4fa4a510-fbb4-4b9a-9ce0-06ef654040d7",
+        "name": "Refrigerante Guaraná Antarctica Black Zero 2l",
+        "description": "Garrafa 2l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210241553_pvrlqrwdr8.jpg"
+        },
+        "productEan": "7891991012492"
+    },
+    {
+        "id": "65969082-57be-4eea-af65-cfc172606456",
+        "name": "Refrigerante Guaraná Zero Antarctica 600 ml",
+        "description": "Garrafa 600ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202309201459_xynhbjgvlc.jpg"
+        },
+        "productEan": "7891991002684"
+    },
+    {
+        "id": "0037e856-43ff-4aab-bf30-c1a0a287d1cd",
+        "name": "Guarana Antartica Lata",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202408311701_nifp3g1i11.jpeg"
+        },
+        "productEan": "84244321"
+    },
+    {
+        "id": "c5f63287-ae11-4af8-a14a-ef295f58e0e6",
+        "name": "Refrigerante Zero Guaraná Antarctica 2l 6un",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202412031118_vqvj6kauh.png"
+        },
+        "productEan": "SM00201027384"
+    },
+    {
+        "id": "b898f6c0-863d-4470-b852-85b60770a306",
+        "name": "Refrigerante Zero Açúcar Guaraná Antártica 600ml",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202403271616_70dp36iph0u.png"
+        },
+        "productEan": "1000000006056"
+    },
+    {
+        "id": "f98aa593-18e3-49ca-b37f-6086339ee739",
+        "name": "Refrigerante Guaraná Zero Açúcar Antarctica 1l",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202404041358_vli7czbzmj.png"
+        },
+        "productEan": "7891991009379"
+    },
+    {
+        "id": "920a1409-2bc6-49e3-ab30-55c78a1ef106",
+        "name": "Refrigerante Antarctica Guaraná Zero 2.5 Litros",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202409042255_i4p2qif0i7.jpeg"
+        },
+        "productEan": "7891149103140"
+    },
+    {
+        "id": "b171dbbe-88ee-4597-a344-76d573e187c7",
+        "name": "Refrigerante Guaraná Antarctica Black Zero 350ml",
+        "description": "Lata 350ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210241553_fq02xpe950v.jpg"
+        },
+        "productEan": "7891991012478"
+    },
+    {
+        "id": "5eaa79d9-5659-4a57-814b-fbe947c035b3",
+        "name": "Refrigerante Guaraná Zero Açúcar Antarctica 2l",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202404011216_z4793g8agy.png"
+        },
+        "productEan": "10042809"
+    },
+    {
+        "id": "b7470c17-7d86-4ae8-93d5-7405453343b1",
+        "name": "Refrigerante Zero Guaraná Antárctica 350ml 12un",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202412031103_2uxtcx76k3l.png"
+        },
+        "productEan": "SM00201027381"
+    },
+    {
+        "id": "7d5ce652-8956-48b0-8eaa-a69f79da1b72",
+        "name": "Refrigerante Guaraná Antarctica Zero 350ml com 12un",
+        "description": "Pack 12un",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202310101311_niikw7j2kmn.jpg"
+        },
+        "productEan": "7891991002288"
+    },
+    {
+        "id": "86961bdb-628b-4db3-a428-17e5fb238aa9",
+        "name": "Suco Dell Vale Mais Laranja 1l",
+        "description": "Caixa 1l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210192212_lkrf6k72d8.jpg"
+        },
+        "productEan": "7898341431651"
+    },
+    {
+        "id": "b303a44f-044c-46a4-8fa4-247994d84458",
+        "name": "Suco Del Valle Laranja 900ml",
+        "description": "Garrafa 900ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210180728_htyuhl661q6.jpg"
+        },
+        "productEan": "7894900661064"
+    },
+    {
+        "id": "718d5a64-1854-4f6c-887c-0d45428ab213",
+        "name": "Suco Del Valle Laranja 1l",
+        "description": "Embalagem 1l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210180845_qwp6exhi39s.jpg"
+        },
+        "productEan": "2202990030111"
+    },
+    {
+        "id": "0b3e824c-eddb-4641-9cb3-53dcbe94b718",
+        "name": "Suco Del Valle Sabor Laranja",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202410291843_k1m2r0yt2m.jpeg"
+        },
+        "productEan": "789490066047"
+    },
+    {
+        "id": "8fea74d7-3b84-4219-aae7-1ffa3beaf29f",
+        "name": "Suco Del Valle Laranja 1,5l",
+        "description": "Garrafa 1,5l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210180503_paqyv1x6r8.jpg"
+        },
+        "productEan": "17894900558026"
+    },
+    {
+        "id": "fe4dd1b5-aa54-4537-89c8-9d63db14555a",
+        "name": "Suco Del Valle Frut Laranja",
+        "description": "250ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202310051325_9ytuxak209w.jpg"
+        },
+        "productEan": "7894900556094"
+    },
+    {
+        "id": "2f8309e2-0865-43c6-b2f9-950ec5c1033f",
+        "name": "Suco Del Valle Laranja 200ml",
+        "description": "Embalagem 200ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210180559_1p3mm8o5q24.jpg"
+        },
+        "productEan": "7898164663147"
+    },
+    {
+        "id": "c707ab2b-af7b-4d2d-a2a6-95b6cfc56239",
+        "name": "Suco Dell Valle Fresh Laranja Pet 200ml",
+        "description": "Embalagem 200ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210190133_2c7n0ppc87u.jpg"
+        },
+        "productEan": "7894900558037"
+    },
+    {
+        "id": "f143a735-4f88-42bb-82d6-6af9dc751311",
+        "name": "Suco Del Valle 100% Laranja 1l",
+        "description": "Embalagem 1l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210200025_uihmo1dlzl.jpg"
+        },
+        "productEan": "4675017001034"
+    },
+    {
+        "id": "ec7e68fa-e19a-4f76-be55-db4775052b60",
+        "name": "Suco Del Valle Fresh Laranja 400ml",
+        "description": "Garrafa 400ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210180449_ff1rduhh36o.jpg"
+        },
+        "productEan": "7894900558012"
+    },
+    {
+        "id": "abc7af71-55d9-41d5-80b1-d0df77f90eb9",
+        "name": "Suco Del Valle 100% Laranja 300ml",
+        "description": "Garrafa 300ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210180331_fasuuzp42f8.jpg"
+        },
+        "productEan": "7894940610022"
+    },
+    {
+        "id": "9b6c9fca-8593-4a77-add2-8dc2099f9735",
+        "name": "Suco Del Valle 100% Laranja 300ml",
+        "description": "Embalagem 300ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210180846_t0np5sm3mro.jpg"
+        },
+        "productEan": "7894900610021"
+    },
+    {
+        "id": "362cf95f-9ff1-4542-ab8f-619a19ceaaf6",
+        "name": "Suco Del Valle Mais Laranja 1l",
+        "description": "Caixa 1l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210180425_y77t2cf28s.jpg"
+        },
+        "productEan": "7898341432602"
+    },
+    {
+        "id": "a0d98e13-6750-4d22-bd88-2c8f5f44ed57",
+        "name": "Suco Del Valle Frut Laranja 1,5l",
+        "description": "Garrafa 1,5l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210180846_2gkulvi5eel.jpg"
+        },
+        "productEan": "17894900556063"
+    },
+    {
+        "id": "3a4a7333-fbb6-445f-851c-d094b70e1917",
+        "name": "Suco Del Valle Fresh Laranja 200ml",
+        "description": "Garrafa 200ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210180845_7evhzd5gqdf.jpg"
+        },
+        "productEan": "178938977"
+    },
+    {
+        "id": "b2021f2e-bfab-4b5a-987a-c2f6d571daf0",
+        "name": "Suco Del Valle Laranja Caseira 300ml",
+        "description": "Embalagem 300ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210180559_5ll1r7yh56y.jpg"
+        },
+        "productEan": "17894900618003"
+    },
+    {
+        "id": "d28c0dd0-e189-43a7-b364-43ba48e60316",
+        "name": "Suco de Laranja Del Valle 200ml",
+        "description": "Embalagem 200ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202307171646_1qvttw9efp.jpg"
+        },
+        "productEan": "78938595"
+    },
+    {
+        "id": "fef3690a-1eb4-4624-ac73-f97800c13141",
+        "name": "Suco Del Valle Fresh Laranja 250ml",
+        "description": "Garrafa 250ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210180748_qgsmn8qo0mq.jpg"
+        },
+        "productEan": "17894900558002"
+    },
+    {
+        "id": "3ea9156f-ecc1-4b6c-9cfc-4a0d60bdb873",
+        "name": "Suco Del Valle Frut Laranja 1,5l",
+        "description": "Garrafa 1,5l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202310051316_yiuu8csi038.jpg"
+        },
+        "productEan": "7894900556063"
+    },
+    {
+        "id": "287ab6e4-5c90-4946-b2fe-8c6297955563",
+        "name": "Suco Del Valle Néctar Laranja 200ml",
+        "description": "Embalagem 200ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210202335_8ghkxrnn4wx.jpg"
+        },
+        "productEan": "7894900660418"
+    },
+    {
+        "id": "01a358c7-a157-4792-90c2-6694a575eebf",
+        "name": "Suco Del Valle 100% Laranja 250ml",
+        "description": "Caixa 250ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210182342_vq8f8knymz.jpg"
+        },
+        "productEan": "7894900610000"
+    },
+    {
+        "id": "05e06f57-172a-4442-a66f-cedba3fc722e",
+        "name": "Suco Del Valle Néctar Laranja 1l",
+        "description": "Caixa 1l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210182344_ziuyn06ihnt.jpg"
+        },
+        "productEan": "7898341431658"
+    },
+    {
+        "id": "e3628cd7-5669-4fb3-ae2b-6f448e83a5ac",
+        "name": "Suco Fresh Laranja Del Valle 1,5l",
+        "description": "Garrafa 1,5l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202211231217_7ziebb0vi1s.jpg"
+        },
+        "productEan": "7894900558852"
+    },
+    {
+        "id": "88332a6b-aadb-485e-a3e2-06781668884b",
+        "name": "Suco Del Valle 100% Laranja 300ml",
+        "description": "Embalagem 300ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210180203_4zcl6kewo9t.jpg"
+        },
+        "productEan": "7894900610024"
+    },
+    {
+        "id": "ed68bfba-f96a-48a1-86da-f6ff6d698ed1",
+        "name": "Suco Del Valle Laranja Caseira 1l",
+        "description": "Embalagem 1l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210180559_aou1hbv98rj.jpg"
+        },
+        "productEan": "17898341432600"
+    },
+    {
+        "id": "ff508b40-4a8f-4dc0-a84b-a8897e2b28ce",
+        "name": "Suco Del Valle Néctar Laranja 1,5l",
+        "description": "Caixa 1,5l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210182234_1kcgxxj8ls1.jpg"
+        },
+        "productEan": "7898341432702"
+    },
+    {
+        "id": "6e836707-9583-428c-8516-2e96143e4b8c",
+        "name": "Sprite 220ml",
+        "description": "Lata 220ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210202115_ut7q3lox7o.jpg"
+        },
+        "productEan": "9874900681178"
+    },
+    {
+        "id": "51de5a95-afe2-488a-9fa1-342d248364f5",
+        "name": "Sprite 310ml",
+        "description": "Lata 310ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210190227_ec7c3v70b7.jpg"
+        },
+        "productEan": "2900001989367"
+    },
+    {
+        "id": "6264c1df-cce6-431e-8623-5f2353ec28ce",
+        "name": "Sprite 350ml",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202410311755_hjai1srmymn.jpeg"
+        },
+        "productEan": "4789490006001"
+    },
+    {
+        "id": "bf14cf12-73fd-4d13-aae8-7e2c445e1f91",
+        "name": "Sprite 1,75l",
+        "description": "Garrafa 1,75l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210180101_pu8s6tuf6v.jpg"
+        },
+        "productEan": "7894900062052"
+    },
+    {
+        "id": "19f7d861-cf25-43dd-8aa9-7de87c4693f2",
+        "name": "Sprite 1,5l",
+        "description": "Garrafa 1,5l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210192214_kxa3oygdv78.jpg"
+        },
+        "productEan": "7894900061802"
+    },
+    {
+        "id": "2f56ec3b-0206-41f8-aa38-8e668d0a71b3",
+        "name": "Refrigerante Sprite 2l",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202412111151_sqjw01u2lc8.png"
+        },
+        "productEan": "SM00201029166"
+    },
+    {
+        "id": "a92dcb87-90a8-4b93-8968-6b9b601ebeab",
+        "name": "Sprite Original 2l",
+        "description": "Garrafa 2l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210182341_wavdi61629o.jpg"
+        },
+        "productEan": "7894900068399"
+    },
+    {
+        "id": "3872dc65-2f9a-4aa3-8a22-05dacf87b8c1",
+        "name": "Sprite Original 350ml",
+        "description": "Lata 350ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210190220_zsrenuvyf2.jpg"
+        },
+        "productEan": "894900681017"
+    },
+    {
+        "id": "b4ef4672-7c15-488c-9bd4-cccf1ea98071",
+        "name": "Sprite Original 350ml",
+        "description": "Lata 350ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210192208_8uoawvxjosp.jpg"
+        },
+        "productEan": "7894900060249"
+    },
+    {
+        "id": "6ce1b19b-c618-4cbe-964d-4c5c11c0a162",
+        "name": "Sprite Original 350ml",
+        "description": "Lata 350ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202306211318_1r6ihp594ql.jpg"
+        },
+        "productEan": "7894900681048"
+    },
+    {
+        "id": "b8fc0f78-a172-454c-af3a-0245560311c6",
+        "name": "Sprite Original 2l",
+        "description": "Garrafa 2l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210180558_ugxu2uinexl.jpg"
+        },
+        "productEan": "17894900681069"
+    },
+    {
+        "id": "626384b3-749a-4980-9ae7-381d632877b2",
+        "name": "Sprite Original 350ml",
+        "description": "Lata 350ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210180011_xl7lzd6j8xf.jpg"
+        },
+        "productEan": "69803253"
+    },
+    {
+        "id": "2c2cad10-e3a4-467d-a59a-3cda4b16c70e",
+        "name": "Refrigerante Sprite 600ml",
+        "description": "Garrafa 600ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202212221202_peiyzz4zt9.jpg"
+        },
+        "productEan": "7894900069891"
+    },
+    {
+        "id": "30643fdd-761d-4cad-bc0c-ee27547d436a",
+        "name": "Sprite Original 220ml",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202310051145_xgkc2yzcrd.jpg"
+        },
+        "productEan": "7894900681178"
+    },
+    {
+        "id": "5b78da28-5d0a-4cd3-83da-f3ed36969b02",
+        "name": "Sprite Original 600ml",
+        "description": "Garrafa 600ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210200025_1noq5hx80tw.jpg"
+        },
+        "productEan": "7894900069907"
+    },
+    {
+        "id": "fb63baf5-ffc3-4396-931a-f4ee1085aa3a",
+        "name": "Refrigerante Sprite 1l",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202403190938_7bo70tmv22d.png"
+        },
+        "productEan": "7894900621266"
+    },
+    {
+        "id": "56a00bee-2653-47ae-adde-acb1f076a20b",
+        "name": "Sprite Original 2l",
+        "description": "Garrafa 2l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210190158_t424kh6mpqe.jpg"
+        },
+        "productEan": "789900681000"
+    },
+    {
+        "id": "cf790441-261e-4b66-b8c6-32bcf4ca17c1",
+        "name": "Sprite Original 1,5l",
+        "description": "Garrafa 1,5l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210180718_6gkf3i6lhk7.jpg"
+        },
+        "productEan": "7894900681277"
+    },
+    {
+        "id": "4193f83f-3a2b-4a30-ad27-485ff91fe7db",
+        "name": "Sprite Limão 250ml",
+        "description": "Garrafa 250ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210180558_dnijdah9xug.jpg"
+        },
+        "productEan": "17894900061960"
+    },
+    {
+        "id": "db7a2ae9-0857-4962-826a-0cc641f0aa81",
+        "name": "Sprite Original 310ml",
+        "description": "Lata 310ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210190419_5fzjyoovcs6.jpg"
+        },
+        "productEan": "7894900681154"
+    },
+    {
+        "id": "ea433805-d538-4de9-8378-9e8d377ff26e",
+        "name": "Sprite Original 2l",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202309201226_brt9yma4rtl.jpg"
+        },
+        "productEan": "7894900681000"
+    },
+    {
+        "id": "0cd647f4-bfc2-4416-b9e1-6fa73f88651f",
+        "name": "Sprite Original 2l",
+        "description": "Garrafa 2l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210180033_xqman975qpc.jpg"
+        },
+        "productEan": "7894900061529"
+    },
+    {
+        "id": "4ae4c89b-5a48-4c45-aaef-86d6f572d9d6",
+        "name": "Sprite Original 200ml",
+        "description": "Garrafa 200ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210190027_hxz54maa4q.jpg"
+        },
+        "productEan": "178939745"
+    },
+    {
+        "id": "162bdddd-56b6-4204-a24f-e920ca17a5d5",
+        "name": "Sprite Limão 1,5l",
+        "description": "Garrafa 1,5l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210180013_wo6fmm0rqaf.jpg"
+        },
+        "productEan": "7894900061758"
+    },
+    {
+        "id": "c3f6b3f5-5c93-4c2f-9efb-2e384af707ae",
+        "name": "Sprite Fresh 510ml",
+        "description": "Unidade 510ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210192307_ajgawd7hr0g.jpg"
+        },
+        "productEan": "7894900680546"
+    },
+    {
+        "id": "f2ab1b9e-36cf-4373-b768-702e51e94a35",
+        "name": "Sprite Original 2l",
+        "description": "Garrafa 2l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210182323_q4vko36cgb8.jpg"
+        },
+        "productEan": "7894900061567"
+    },
+    {
+        "id": "25556ec3-288c-4139-8538-56e947feb44b",
+        "name": "Sprite Limão 250ml",
+        "description": "Garrafa 250ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210180734_m18vht3ph7o.jpg"
+        },
+        "productEan": "78939738"
+    },
+    {
+        "id": "d49aab61-ecb6-4bdd-891f-5602b8d787c6",
+        "name": "Sprite Limão Zero 600ml",
+        "description": "Garrafa 600ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210190121_3b1lyl2sv9b.jpg"
+        },
+        "productEan": "7894900071603"
+    },
+    {
+        "id": "30ed1eb4-4edb-4676-87ea-9357b3e40f9f",
+        "name": "Sprite Limão Zero 350ml",
+        "description": "Lata 350ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210180404_ov63hsir4ek.jpg"
+        },
+        "productEan": "7891488870"
+    },
+    {
+        "id": "56bc730f-3a21-4581-8b14-f7d3e52b2ac7",
+        "name": "Refrigerante Sprite Zero Pet 2l",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202412111710_z58bcl4aouq.png"
+        },
+        "productEan": "SM00201029391"
+    },
+    {
+        "id": "61390b3e-78c9-486e-85ab-ba9930750834",
+        "name": "Sprite Limão Ice Mint Zero 310ml",
+        "description": "Lata 310ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210180417_02lwitf057cx.jpg"
+        },
+        "productEan": "7894900680034"
+    },
+    {
+        "id": "8a8e5749-0cb8-4711-982a-c534dbfb1b1d",
+        "name": "Refrigerante de Limão Zero Sprite 2l",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202305021359_am9hqvorz3.jpg"
+        },
+        "productEan": "7894900071511"
+    },
+    {
+        "id": "89532fcb-eed8-4ef7-8e8e-212f775afb6b",
+        "name": "Refrigerante Sprite Zero Lata 350ml 12.0 Unidades",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202409271512_yd7z8qu2buf.jpeg"
+        },
+        "productEan": "7894900070071"
+    },
+    {
+        "id": "640ad431-34a4-4fe1-9880-f37b7bbd42b8",
+        "name": "Sprite Lemon Fresh Zero Açúcar 310 ml",
+        "description": "Lata 310ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210200007_c58qvsobf48.jpg"
+        },
+        "productEan": "7894900680614"
+    },
+    {
+        "id": "aa20d2a3-4477-416a-be8b-ba45dbc9ad35",
+        "name": "Refrigerante Limão Zero Sprite 2l Fardo 6 Unidades",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202406211056_j4x3t0an2x.png"
+        },
+        "productEan": "27894900061516"
+    },
+    {
+        "id": "3de45c1f-8eeb-4372-a98e-0b3df7831fae",
+        "name": "Figo Calda Zero Açúcar Vero 400g",
+        "description": "Embalagem 400g",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202202100947_v6rxm7ejb8.jpg"
+        },
+        "productEan": "7898613840327"
+    },
+    {
+        "id": "f1c21c25-5e80-4c29-812f-8f9e09a303d6",
+        "name": "Batata Palha Fina Zero Sal Strike 80g",
+        "description": "Pacote 80g",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210192311_0mp25uted3d9.jpg"
+        },
+        "productEan": "7898679270113"
+    },
+    {
+        "id": "39f9b642-6c84-4b93-8ca1-6fb63ec2b8e1",
+        "name": "Batata Palha Strike Fina Zero Sal 80g",
+        "description": "Embalagem 80g",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210190115_utn6q91x83k.jpg"
+        },
+        "productEan": "7898679270144"
+    },
+    {
+        "id": "14b6c79f-73eb-466f-9ebf-2d83e405f639",
+        "name": "Cerveja Cero Sunbrew Zero Álcool Corona 330ml",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202404151618_ixuklb5wm5e.png"
+        },
+        "productEan": "7891991304207"
+    },
+    {
+        "id": "6264c1df-cce6-431e-8623-5f2353ec28ce",
+        "name": "Sprite 350ml",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202410311755_hjai1srmymn.jpeg"
+        },
+        "productEan": "4789490006001"
+    },
+    {
+        "id": "51de5a95-afe2-488a-9fa1-342d248364f5",
+        "name": "Sprite 310ml",
+        "description": "Lata 310ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210190227_ec7c3v70b7.jpg"
+        },
+        "productEan": "2900001989367"
+    },
+    {
+        "id": "6e836707-9583-428c-8516-2e96143e4b8c",
+        "name": "Sprite 220ml",
+        "description": "Lata 220ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210202115_ut7q3lox7o.jpg"
+        },
+        "productEan": "9874900681178"
+    },
+    {
+        "id": "bf14cf12-73fd-4d13-aae8-7e2c445e1f91",
+        "name": "Sprite 1,75l",
+        "description": "Garrafa 1,75l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210180101_pu8s6tuf6v.jpg"
+        },
+        "productEan": "7894900062052"
+    },
+    {
+        "id": "19f7d861-cf25-43dd-8aa9-7de87c4693f2",
+        "name": "Sprite 1,5l",
+        "description": "Garrafa 1,5l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210192214_kxa3oygdv78.jpg"
+        },
+        "productEan": "7894900061802"
+    },
+    {
+        "id": "82798991-19d3-42b7-beac-5c6bbf35eac6",
+        "name": "Álcool Líquido Zero Bactéria 46% Eucalipto Spring 500ml",
+        "description": "Embalagem 500ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210200425_hvd8419lb8o.jpg"
+        },
+        "productEan": "7896318101293"
+    },
+    {
+        "id": "f5810795-f0f5-44a0-8a17-c3a0dd22bf2b",
+        "name": "Abacaxi com Calda em Rodelas Zero Vero 400g",
+        "description": "Embalagem 400g",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210202124_n4ufz3qz0f.jpg"
+        },
+        "productEan": "7898613840020"
+    },
+    {
+        "id": "ea433805-d538-4de9-8378-9e8d377ff26e",
+        "name": "Sprite Original 2l",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202309201226_brt9yma4rtl.jpg"
+        },
+        "productEan": "7894900681000"
+    },
+    {
+        "id": "db7a2ae9-0857-4962-826a-0cc641f0aa81",
+        "name": "Sprite Original 310ml",
+        "description": "Lata 310ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210190419_5fzjyoovcs6.jpg"
+        },
+        "productEan": "7894900681154"
+    },
+    {
+        "id": "cf790441-261e-4b66-b8c6-32bcf4ca17c1",
+        "name": "Sprite Original 1,5l",
+        "description": "Garrafa 1,5l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210180718_6gkf3i6lhk7.jpg"
+        },
+        "productEan": "7894900681277"
+    },
+    {
+        "id": "2c89ac0e-774b-4dcf-897e-97d49907d5dd",
+        "name": "Suco de Laranja Laranjoca Vitasuco 5l",
+        "description": "Garrafa 5l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202307241455_x37y8p778ba.jpg"
+        },
+        "productEan": "7896895103727"
+    },
+    {
+        "id": "c4bd4760-9f78-4e70-91cf-cd996ea705ea",
+        "name": "Suco Laranjada Laranja & Cia 300ml",
+        "description": "Embalagem 300ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210190338_0u3wcxs8yrgi.jpg"
+        },
+        "productEan": "7898962571484"
+    },
+    {
+        "id": "e028042f-9cbd-4f3c-84ec-d90cc3bab479",
+        "name": "Suco de Laranja",
+        "description": "Compra por peso",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202309081143_m25i72q8dxo.jpg"
+        },
+        "productEan": "SM00200021249"
+    },
+    {
+        "id": "37aa0aa3-cfb6-4c23-a832-6632d202d97a",
+        "name": "Suco de Laranja Pró Laranja 1l",
+        "description": "Garrafa 1l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210200456_5u4u8c40v3b.jpg"
+        },
+        "productEan": "7897841970776"
+    },
+    {
+        "id": "baa23083-0834-48f5-8149-3632ecf6fd5b",
+        "name": "Suco de Laranja Senhora Laranja 1,5l",
+        "description": "Embalagem 1,5l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210190454_l42rf194lw.jpg"
+        },
+        "productEan": "7897026001226"
+    },
+    {
+        "id": "4106a5d7-935a-4fd7-975b-8fd32842fd21",
+        "name": "Laranja Suco",
+        "description": "Compra por peso",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210180755_axbe2bir1zq.jpg"
+        },
+        "productEan": "SM00200023363"
+    },
+    {
+        "id": "a5536de6-0113-4171-9a86-21ad379e2f43",
+        "name": "Laranja Suco",
+        "description": "Compra por peso",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210180829_1qkxikmqqqq.jpg"
+        },
+        "productEan": "SM00200024994"
+    },
+    {
+        "id": "d39ef1f7-2956-4e06-b609-7b7a5af11702",
+        "name": "Bolo Suco de Laranja",
+        "description": "Compra por peso",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202203141120_b1q17htl2n.jpg"
+        },
+        "productEan": "SM00200161220"
+    },
+    {
+        "id": "46c4a23e-5fa3-43de-ae51-e30952885194",
+        "name": "Suco de Laranja 500ml",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202408151158_n5njli0wle.png"
+        },
+        "productEan": "SM00200329986"
+    },
+    {
+        "id": "0be19c56-5151-479b-bf16-10c0e4b94654",
+        "name": "Suco de Laranja 500ml",
+        "description": "Unidade 500ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202307281354_dipt9zagilc.jpg"
+        },
+        "productEan": "SM00200363542"
+    },
+    {
+        "id": "8ed79c17-dfdb-4671-8acf-19fabf03ec0d",
+        "name": "Suco de Laranja 1l",
+        "description": "Garrafa 1l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210200140_wq47x8xpwn.jpg"
+        },
+        "productEan": "SM00200335591"
+    },
+    {
+        "id": "88febd54-4db5-4800-aeab-2c6fad570678",
+        "name": "Suco de Laranja 300ml",
+        "description": "Garrafa 300ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210200313_8g4z3bwgir4.jpg"
+        },
+        "productEan": "SM00200344795"
+    },
+    {
+        "id": "0d98e3be-b0be-473c-a903-3383f544c2af",
+        "name": "Suco De Laranja Fruitz",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202408200028_qi8jme0fh7.jpeg"
+        },
+        "productEan": "7898953148787"
+    },
+    {
+        "id": "30465c08-ed0e-4358-b22e-28fd1c0c94c1",
+        "name": "Suco de Laranja Natural",
+        "description": "Garrafa 500ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202401230854_sy0dwil8lzm.jpeg"
+        },
+        "productEan": "2900002495980"
+    },
+    {
+        "id": "a9ce26e6-4017-4418-80f0-12eecf95b289",
+        "name": "Cuca de Uva Gula",
+        "description": "Compra por peso",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210200216_ifvuvurxvv.jpg"
+        },
+        "productEan": "SM00200338532"
+    },
+    {
+        "id": "7bdbbf6c-b046-4f58-b2b6-ca7e83a12413",
+        "name": "Suco de Uva Copo",
+        "description": "Unidade 1un",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202309081316_xvo2s44yavl.jpg"
+        },
+        "productEan": "SM00200328835"
+    },
+    {
+        "id": "a591fdfc-55bb-412b-ac36-f129a0c66925",
+        "name": "Suco De Uva Taky",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202410022004_vvhdlft1xt.jpeg"
+        },
+        "productEan": "7898950317070"
+    },
+    {
+        "id": "19e9d9bd-8edd-471a-b811-a68de951eecc",
+        "name": "Cuca de Uva Kg",
+        "description": "Kg Kg",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210190405_cjminmxlog6.jpg"
+        },
+        "productEan": "SM00200203587"
+    },
+    {
+        "id": "0891acf0-e914-49ff-946c-028ee0ac1a29",
+        "name": "Suco De Uva Lindoya",
+        "description": "",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202408041725_fk00qcx3v0k.jpeg"
+        },
+        "productEan": "7896275400200"
+    },
+    {
+        "id": "38ab530a-2a1d-4e7a-ab6f-688be70bf9ec",
+        "name": "Cuca Recheada de Uva",
+        "description": "Compra por peso",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210190530_z1d195qn89.jpg"
+        },
+        "productEan": "SM00200241228"
+    },
+    {
+        "id": "073e08cf-3706-4973-9b65-414b2486d29b",
+        "name": "Bolo Cuca de Uva",
+        "description": "Compra por peso",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202203141016_5ausxa74bmq.jpg"
+        },
+        "productEan": "SM00200100697"
+    },
+    {
+        "id": "29bbc2a4-b592-4fce-9b46-de2d5fb9ed36",
+        "name": "Cuca de Uva Kg",
+        "description": "Compra por peso",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210190519_qmoov5rj0q.jpg"
+        },
+        "productEan": "SM00200232356"
+    },
+    {
+        "id": "7849c3bd-17ca-4d20-b96d-f1027ebfdec4",
+        "name": "Cuca Sovada de Uva",
+        "description": "Compra por peso",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202303311151_yxk5s87porh.jpg"
+        },
+        "productEan": "SM00200364136"
+    },
+    {
+        "id": "80cca182-ddae-4da8-9cb7-6c8ed015be29",
+        "name": "Suco de Uva 5l",
+        "description": "Unidade 5l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210192128_a3uqrpe91zd.jpg"
+        },
+        "productEan": "7897270132042"
+    },
+    {
+        "id": "6539d94c-6bcf-454c-b615-2729a3280613",
+        "name": "Suco de Uva Super Suco 1,7l",
+        "description": "Garrafa 1,7l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210190148_2d38tgettzs.jpg"
+        },
+        "productEan": "7899767407800"
+    },
+    {
+        "id": "5efcff23-7371-484d-98de-3b5d81eff94d",
+        "name": "Suco de Uva Tinto Sabor Uva 1,4l",
+        "description": "Garrafa 1,4l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210200231_x1jki46m61d.jpg"
+        },
+        "productEan": "7896267781812"
+    },
+    {
+        "id": "2e396ae1-d36e-4353-9e78-5c25c317e20a",
+        "name": "Suco Pronto de Uva New Suco! 200ml",
+        "description": "Embalagem 200ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202211241016_ay8av6wiejv.jpg"
+        },
+        "productEan": "7898344176245"
+    },
+    {
+        "id": "ec9ec979-80b0-4121-a860-bc9596810ef1",
+        "name": "Suco Pronto de Uva New Suco! 1l",
+        "description": "Embalagem 1l",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202211241016_kv8hhjwnwdh.jpg"
+        },
+        "productEan": "7898344176238"
+    },
+    {
+        "id": "854a9c8f-c9bd-4d3e-86ab-4721535213ac",
+        "name": "Suco de Uva Tampico 250ml",
+        "description": "Embalagem 250ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210200304_tlgkmp4lmg.jpg"
+        },
+        "productEan": "7898007220667"
+    },
+    {
+        "id": "e73d5777-fb1a-404b-8bda-98e5979e4170",
+        "name": "Suco de Uva Nutrigood 335ml",
+        "description": "Unidade 335ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210190143_vtkfvaz1y9j.jpg"
+        },
+        "productEan": "7896186303966"
+    },
+    {
+        "id": "4554cbb5-14cb-432c-966d-f02cd68fb0c5",
+        "name": "Suco de Uva Xtapa 330ml",
+        "description": "Garrafa 330ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210200006_bdxyiq919rv.jpg"
+        },
+        "productEan": "7898274990850"
+    }
+]

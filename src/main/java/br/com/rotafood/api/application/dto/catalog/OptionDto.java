@@ -1,5 +1,6 @@
 package br.com.rotafood.api.application.dto.catalog;
 
+import java.util.List;
 import java.util.UUID;
 
 import br.com.rotafood.api.domain.entity.catalog.Option;
@@ -10,7 +11,9 @@ public record OptionDto (
     Status status,
     Integer index,
     PriceDto price,
-    ProductDto product
+    List<ContextModifierDto> contextModifiers,
+    List<Integer> fractions,
+    ProductOptionDto product
 ) {
     public OptionDto(Option option) {
         this(
@@ -18,7 +21,9 @@ public record OptionDto (
             option.getStatus(),
             option.getIndex(),
             option.getPrice() != null ? new PriceDto(option.getPrice()) : null,
-            option.getProduct() != null ? new ProductDto(option.getProduct()) : null
+            option.getContextModifiers() != null ? option.getContextModifiers().stream().map(ContextModifierDto::new).toList() : null,
+            option.getFractions() != null ? option.getFractions() : null,
+            option.getProduct() != null ? new ProductOptionDto(option.getProduct()) : null
         );
     }
 }

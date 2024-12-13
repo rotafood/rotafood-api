@@ -2,7 +2,6 @@ package br.com.rotafood.api.application.service;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,8 +27,7 @@ public class PackagingService {
     public List<PackagingDto> getAllByMerchantId(UUID merchantId) {
         return packagingRepository.findByMerchantId(merchantId)
                 .stream()
-                .map(PackagingDto::new)
-                .collect(Collectors.toList());
+                .map(PackagingDto::new).toList();
     }
 
     @Transactional
