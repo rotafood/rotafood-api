@@ -14,14 +14,12 @@ public record ProductDto(
     String ean,
     String additionalInformation,
     List<DietaryRestrictions> dietaryRestrictions,
-    SellingOptionDto sellingOption,
     UUID itemId,
     UUID optionId,
     WeightDto weight,
     Serving serving,
     List<String> tags,
     String imagePath,
-    List<String> multipleImages,
     List<ProductOptionGroupDto> optionGroups,
     List<ProductPackagingDto> packagings
 ) {
@@ -37,14 +35,12 @@ public record ProductDto(
                     .map(DietaryRestrictions::valueOf)
                     .toList()
                 : List.of(),
-            product.getSellingOption() != null ? new SellingOptionDto(product.getSellingOption()) : null,
             product.getItem() != null ? product.getItem().getId() : null,
             product.getOption() != null ? product.getOption().getId() : null,
             product.getWeight() != null ? new WeightDto(product.getWeight()) : null,
             product.getServing(),
             product.getTags(),
             product.getImagePath(),
-            product.getMultipleImages(),
             product.getProductOptionGroups() != null ? product.getProductOptionGroups().stream().map(ProductOptionGroupDto::new).toList() : null,
             product.getPackagings() != null ? product.getPackagings().stream().map(ProductPackagingDto::new).toList() : null
         );

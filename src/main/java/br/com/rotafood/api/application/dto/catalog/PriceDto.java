@@ -17,7 +17,7 @@ public record PriceDto(
             price.getId(),
             price.getValue(),
             price.getOriginalValue(),
-            price.getScalePrices().stream().map(ScalePriceDto::new).toList()
+            price.getScalePrices() != null ? price.getScalePrices().stream().map(ScalePriceDto::new).toList() : null
         );
     }
 }

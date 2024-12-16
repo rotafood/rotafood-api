@@ -76,3 +76,15 @@
         name varchar(128) not null,
         primary key (id)
     );
+
+    alter table if exists packagings 
+       add column image_path varchar(255);
+
+    alter table if exists packagings 
+       add column image_path varchar(255);
+
+    alter table if exists packagings 
+       add column image_path varchar(255);
+
+    alter table if exists packagings 
+       add column image_path varchar(255);

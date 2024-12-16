@@ -19,6 +19,9 @@ public class OptionService {
     @Autowired
     private ContextModifierService contextModifierService;
 
+    @Autowired
+    private ProductService productService;
+
     @Transactional
     public Option updateOrCreate(OptionDto optionDto, OptionGroup optionGroup) {
         Option option = optionDto.id() != null
@@ -28,13 +31,25 @@ public class OptionService {
         option.setStatus(optionDto.status());
         option.setIndex(optionDto.index());
         option.setOptionGroup(optionGroup);
-
-        if (optionDto.contextModifiers() != null) {
-            option.setContextModifiers(
-                contextModifierService.updateOrCreateAll(optionDto.contextModifiers())
+        
+        optionRepository.save(option);
+        
+        if (optionDto.product() != null) {
+            var product = productService.updateOrCreateProductOption(
+                optionDto.product(), 
+                optionGroup.getMerchant().getId()
             );
+            product.setOption(option);
+            option.setProduct(product);
         }
 
+        if (optionDto.contextModifiers() != null) {
+            var contextModifiers = contextModifierService.updateOrCreateAll(optionDto.contextModifiers());
+        
+            contextModifiers.forEach(contextModifier -> contextModifier.setOption(option));
+            option.setContextModifiers(contextModifiers);
+        }
+        
         return optionRepository.save(option);
     }
 }

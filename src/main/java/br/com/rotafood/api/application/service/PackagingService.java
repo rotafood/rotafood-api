@@ -47,6 +47,7 @@ public class PackagingService {
             packaging = packagingRepository.findByIdAndMerchantId(packagingDto.id(), merchantId)
                     .orElseThrow(() -> new EntityNotFoundException("Packaging not found."));
             packaging.setName(packagingDto.name());
+            packaging.setImagePath(packagingDto.imagePath());
             packaging.setLenghtCm(packagingDto.lenghtCm());
             packaging.setWidthCm(packagingDto.widthCm());
             packaging.setThicknessCm(packagingDto.thicknessCm());
@@ -54,6 +55,7 @@ public class PackagingService {
             packaging = new Packaging(
                     null,
                     packagingDto.name(),
+                    packagingDto.imagePath(),
                     packagingDto.lenghtCm(),
                     packagingDto.widthCm(),
                     packagingDto.thicknessCm(),

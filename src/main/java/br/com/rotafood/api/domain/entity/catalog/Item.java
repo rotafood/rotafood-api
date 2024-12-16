@@ -49,10 +49,6 @@ public class Item {
     @Enumerated(EnumType.STRING)
     private TemplateType type;
 
-    @OneToOne
-    @JoinColumn(name = "priceId")
-    private Price price;
-
     @OneToMany(mappedBy = "item")
     private List<Shift> shifts;
     

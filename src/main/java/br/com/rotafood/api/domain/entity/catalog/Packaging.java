@@ -34,6 +34,9 @@ public class Packaging {
     @Column(nullable = false, length = 64)
     private String name;
 
+    @Column
+    private String imagePath;
+
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal lenghtCm;
 

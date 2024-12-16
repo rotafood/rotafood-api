@@ -43,6 +43,8 @@ public class ContextModifierService {
                         .orElse(new ContextModifier())
                     : new ContextModifier();
 
+            contextModifier.setCatalogContext(contextModifierDto.catalogContext());
+
             Price price = priceService.updateOrCreate(contextModifierDto.price());
             contextModifier.setPrice(price);
             

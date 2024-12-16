@@ -64,7 +64,6 @@ public class ItemService {
         item.setStatus(itemDto.status());
         item.setIndex(itemDto.index());
         item.setCategory(category);
-        item.setPrice(priceService.updateOrCreate(itemDto.price()));
 
         List<ContextModifier> contextModifiers = contextModifierService.updateOrCreateAll(
             itemDto.contextModifiers()

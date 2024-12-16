@@ -10,7 +10,6 @@ public record OptionDto (
     UUID id,
     Status status,
     Integer index,
-    PriceDto price,
     List<ContextModifierDto> contextModifiers,
     List<Integer> fractions,
     ProductOptionDto product
@@ -20,7 +19,6 @@ public record OptionDto (
             option.getId(),
             option.getStatus(),
             option.getIndex(),
-            option.getPrice() != null ? new PriceDto(option.getPrice()) : null,
             option.getContextModifiers() != null ? option.getContextModifiers().stream().map(ContextModifierDto::new).toList() : null,
             option.getFractions() != null ? option.getFractions() : null,
             option.getProduct() != null ? new ProductOptionDto(option.getProduct()) : null

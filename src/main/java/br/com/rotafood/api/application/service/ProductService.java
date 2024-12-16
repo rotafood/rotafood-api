@@ -8,9 +8,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.rotafood.api.application.dto.catalog.ProductDto;
+import br.com.rotafood.api.application.dto.catalog.ProductOptionDto;
 import br.com.rotafood.api.domain.entity.catalog.DietaryRestrictions;
 import br.com.rotafood.api.domain.entity.catalog.Product;
 import br.com.rotafood.api.domain.entity.catalog.SellingOption;
+import br.com.rotafood.api.domain.entity.catalog.Serving;
 import br.com.rotafood.api.domain.entity.catalog.Weight;
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
 import br.com.rotafood.api.domain.repository.MerchantRepository;
@@ -48,22 +50,21 @@ public class ProductService {
         product.setAdditionalInformation(productDto.additionalInformation());
         product.setTags(productDto.tags());
         product.setImagePath(productDto.imagePath());
-        product.setMultipleImages(productDto.multipleImages());
         product.setServing(productDto.serving());
 
         if (productDto.dietaryRestrictions() != null) {
             product.setDietaryRestrictions(productDto.dietaryRestrictions().stream().map(DietaryRestrictions::name).toList());
         }
 
-        SellingOption sellingOption = productDto.sellingOption().id() != null ? sellingOptionRepository.findById(productDto.sellingOption().id())
-                                                                                                        .orElse(new SellingOption())
-                                                                                                : new SellingOption();
-        sellingOption.setAvailableUnits(productDto.sellingOption().availableUnits());
-        sellingOption.setIncremental(productDto.sellingOption().incremental());
-        sellingOption.setAverageUnit(productDto.sellingOption().averageUnit());
-        sellingOption.setMinimum(productDto.sellingOption().minimum());
+        // SellingOption sellingOption = productDto.sellingOption().id() != null ? sellingOptionRepository.findById(productDto.sellingOption().id())
+        //                                                                                                 .orElse(new SellingOption())
+        //                                                                                         : new SellingOption();
+        // sellingOption.setAvailableUnits(productDto.sellingOption().availableUnits());
+        // sellingOption.setIncremental(productDto.sellingOption().incremental());
+        // sellingOption.setAverageUnit(productDto.sellingOption().averageUnit());
+        // sellingOption.setMinimum(productDto.sellingOption().minimum());
 
-        sellingOption = sellingOptionRepository.save(sellingOption);
+        // sellingOption = sellingOptionRepository.save(sellingOption);
 
         
 
@@ -74,12 +75,31 @@ public class ProductService {
 
         weight = this.weightRepository.save(weight);
 
-        product.setSellingOption(sellingOption);
         product.setMerchant(merchant);
         product.setWeight(weightRepository.save(weight));
 
         return productRepository.save(product);
     }
+
+    @Transactional
+    public Product updateOrCreateProductOption(ProductOptionDto productDto, UUID merchantId) {
+        Merchant merchant = this.merchantRepository.getReferenceById(merchantId);
+
+        Product product = productDto.id() != null
+                ? productRepository.findById(productDto.id())
+                        .orElse(new Product())
+                : new Product();
+
+        product.setName(productDto.name());
+        product.setDescription(productDto.description());
+        product.setServing(productDto.serving());
+        product.setImagePath(productDto.imagePath());
+
+        product.setMerchant(merchant);
+
+        return productRepository.save(product);
+    }
+
 
     @Transactional
     public void deleteById(UUID productId, UUID merchantId) {

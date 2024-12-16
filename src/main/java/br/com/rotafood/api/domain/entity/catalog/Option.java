@@ -42,10 +42,6 @@ public class Option {
     @Column(nullable = false)
     private Integer index;
 
-    @OneToOne
-    @JoinColumn(name = "priceId")
-    private Price price;
-
     @OneToMany(mappedBy = "option", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ContextModifier> contextModifiers;
 

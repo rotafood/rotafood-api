@@ -12,15 +12,9 @@ public record ProductOptionDto(
     String name,
     String description,
     String ean,
-    String additionalInformation,
-    List<DietaryRestrictions> dietaryRestrictions,
-    SellingOptionDto sellingOption,
     UUID optionId,
-    WeightDto weight,
     Serving serving,
-    List<String> tags,
-    String imagePath,
-    List<String> multipleImages
+    String imagePath
 ) {
     public ProductOptionDto(Product product) {
         this(
@@ -28,19 +22,9 @@ public record ProductOptionDto(
             product.getName(),
             product.getDescription(),
             product.getEan(),
-            product.getAdditionalInformation(),
-            product.getDietaryRestrictions() != null 
-                ? product.getDietaryRestrictions().stream()
-                    .map(DietaryRestrictions::valueOf)
-                    .toList()
-                : List.of(),
-            product.getSellingOption() != null ? new SellingOptionDto(product.getSellingOption()) : null,
             product.getOption() != null ? product.getOption().getId() : null,
-            product.getWeight() != null ? new WeightDto(product.getWeight()) : null,
             product.getServing(),
-            product.getTags(),
-            product.getImagePath(),
-            product.getMultipleImages()
+            product.getImagePath()
         );
     }
 }

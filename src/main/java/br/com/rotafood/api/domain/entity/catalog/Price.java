@@ -41,11 +41,5 @@ public class Price {
     private List<ScalePrice> scalePrices;
 
     @OneToOne(mappedBy = "price")
-    private Item item;
-
-    @OneToOne(mappedBy = "price")
-    private Option option;
-
-    @OneToOne(mappedBy = "price")
     private ContextModifier contextModifier;
 }

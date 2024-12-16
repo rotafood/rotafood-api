@@ -18,9 +18,9 @@ public record ContextModifierDto(
     public ContextModifierDto(ContextModifier contextModifier) {
         this(
             contextModifier.getId(),
-            contextModifier.getItem().getId(),
-            contextModifier.getOption().getId(),
-            contextModifier.getParentOptionModifier().getOption().getId(),
+            contextModifier.getItem() != null ? contextModifier.getItem().getId(): null,
+            contextModifier.getOption() != null ? contextModifier.getOption().getId(): null,
+            contextModifier.getParentOptionModifier() != null? contextModifier.getParentOptionModifier().getOption().getId() : null,
             contextModifier.getStatus(),
             new PriceDto(contextModifier.getPrice()),
             contextModifier.getCatalogContext()

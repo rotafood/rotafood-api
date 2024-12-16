@@ -4,12 +4,14 @@ import java.util.List;
 import java.util.UUID;
 
 import br.com.rotafood.api.domain.entity.catalog.OptionGroup;
+import br.com.rotafood.api.domain.entity.catalog.OptionGroupType;
 import br.com.rotafood.api.domain.entity.catalog.Status;
 
 public record OptionGroupDto(
     UUID id,
     String name,
     Status status,
+    OptionGroupType optionGroupType,
     List<OptionDto> options,
     UUID iFoodOptionGroupId
 ) {
@@ -18,6 +20,7 @@ public record OptionGroupDto(
             optionGroup.getId(),
             optionGroup.getName(),
             optionGroup.getStatus(),
+            optionGroup.getOptionGroupType(),
             optionGroup.getOptions().stream().map(OptionDto::new).toList(),
             optionGroup.getIFoodOptionGroupId()
         );
