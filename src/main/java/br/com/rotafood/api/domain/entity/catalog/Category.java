@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -50,15 +51,16 @@ public class Category {
     @Enumerated(EnumType.STRING)
     private TemplateType template;
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Item> items;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "merchantId")
     private Merchant merchant;
 
-    @ManyToMany(mappedBy = "categories")
-    private Set<Catalog> catalogs; 
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<CatalogCategory> catalogCategories;
+
 
 
     @Column(nullable = true)

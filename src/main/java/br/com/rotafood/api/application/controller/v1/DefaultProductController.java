@@ -1,7 +1,6 @@
 package br.com.rotafood.api.application.controller.v1;
 
 import br.com.rotafood.api.application.dto.catalog.DefaultProductDto;
-import br.com.rotafood.api.domain.entity.catalog.DefaultProduct;
 import br.com.rotafood.api.domain.repository.DefaultProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;

@@ -1,9 +1,7 @@
 package br.com.rotafood.api.application.dto.catalog;
 
-import java.util.List;
 import java.util.UUID;
 
-import br.com.rotafood.api.domain.entity.catalog.DietaryRestrictions;
 import br.com.rotafood.api.domain.entity.catalog.Product;
 import br.com.rotafood.api.domain.entity.catalog.Serving;
 

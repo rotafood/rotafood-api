@@ -6,13 +6,16 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.rotafood.api.application.dto.catalog.CategoryDto;
 import br.com.rotafood.api.domain.entity.catalog.Catalog;
+import br.com.rotafood.api.domain.entity.catalog.CatalogCategory;
 import br.com.rotafood.api.domain.entity.catalog.Category;
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
+import br.com.rotafood.api.domain.repository.CatalogCategoryRepository;
 import br.com.rotafood.api.domain.repository.CatalogRepository;
 import br.com.rotafood.api.domain.repository.CategoryRepository;
 import br.com.rotafood.api.domain.repository.MerchantRepository;
@@ -21,40 +24,32 @@ import jakarta.persistence.EntityNotFoundException;
 @Service
 public class CategoryService {
 
-    private final CatalogRepository catalogRepository;
-    private final MerchantRepository merchantRepository;
-    private final CategoryRepository categoryRepository;
-
-    public CategoryService(
-            CatalogRepository catalogRepository,
-            MerchantRepository merchantRepository,
-            CategoryRepository categoryRepository) {
-        this.catalogRepository = catalogRepository;
-        this.merchantRepository = merchantRepository;
-        this.categoryRepository = categoryRepository;
-    }
+    @Autowired private CatalogRepository catalogRepository;
+    @Autowired private CategoryRepository categoryRepository;
+    @Autowired private MerchantRepository merchantRepository;
+    @Autowired private CatalogCategoryRepository catalogCategoryRepository;
 
     public Category getByIdAndMerchantId(UUID categoryId, UUID merchantId) {
-        return categoryRepository.findByIdAndMerchantId(categoryId, merchantId);    
+        return categoryRepository.findByIdAndMerchantId(categoryId, merchantId);
     }
 
     @Transactional
     public void deleteByIdAndMerchantId(UUID categoryId, UUID merchantId) {
-        Category category = categoryRepository.findByIdAndMerchantId(categoryId, merchantId);    
-        for (Catalog catalog : category.getCatalogs()) {
-            catalog.getCategories().remove(category);
+        Category category = categoryRepository.findByIdAndMerchantId(categoryId, merchantId);
+
+        if (category == null) {
+            throw new EntityNotFoundException("Categoria não encontrada.");
         }
-    
+
+        // Remover associações na tabela intermediária
+        catalogCategoryRepository.deleteByCategoryId(category.getId());
+
+        // Excluir a categoria
         categoryRepository.delete(category);
     }
-    
 
     public List<Category> getAllByMerchantId(UUID merchantId) {
-        List<Category> categories = categoryRepository.findByMerchantId(merchantId);
-        if (categories.isEmpty()) {
-            throw new EntityNotFoundException("Categorias não encontradas.");
-        }
-        return categories;
+        return categoryRepository.findByMerchantId(merchantId);
     }
 
     @Transactional
@@ -66,32 +61,14 @@ public class CategoryService {
                 ? categoryRepository.findByIdAndMerchantId(categoryDto.id(), merchantId)
                 : new Category();
 
-
         category.setName(categoryDto.name());
-
         category.setTemplate(categoryDto.template());
-
         category.setStatus(categoryDto.status());
-
         category.setMerchant(merchant);
-
         category.setIFoodCategoryId(categoryDto.iFoodCategoryId());
 
         if (categoryDto.index() != null) {
-            category.setIndex(categoryDto.index());
-    
-            List<Category> categories = categoryRepository.findByMerchantId(merchantId);
-    
-            categories.stream()
-                .filter(c -> !c.getId().equals(category.getId()))
-                .sorted(Comparator.comparingInt(Category::getIndex))
-                .forEachOrdered(c -> {
-                    if (c.getIndex() >= categoryDto.index()) {
-                        c.setIndex(c.getIndex() + 1);
-                    }
-                });
-    
-            categoryRepository.saveAll(categories); 
+            adjustIndexesForUpdate(categoryDto.index(), category, merchantId);
         } else {
             Integer lastIndex = categoryRepository.findByMerchantId(merchantId).stream()
                     .map(Category::getIndex)
@@ -99,33 +76,53 @@ public class CategoryService {
                     .orElse(0);
             category.setIndex(lastIndex + 1);
         }
-    
 
+        Category savedCategory = categoryRepository.save(category);
 
-        Set<Catalog> catalogs = catalogRepository.findByMerchantId(merchantId)
-                    .stream()
-                    .peek(catalog -> {
-                        catalog.getCategories().add(category);
-                    })
-                    .collect(Collectors.toSet());
+        // Garantir que a categoria esteja associada a todos os catálogos do merchant
+        associateCategoryWithAllCatalogs(savedCategory, merchantId);
 
-        category.setCatalogs(catalogs); 
+        return savedCategory;
+    }
 
-        return categoryRepository.save(category);
+    private void adjustIndexesForUpdate(Integer newIndex, Category category, UUID merchantId) {
+        List<Category> categories = categoryRepository.findByMerchantId(merchantId);
+
+        categories.stream()
+                .filter(c -> !c.getId().equals(category.getId()))
+                .sorted(Comparator.comparingInt(Category::getIndex))
+                .forEachOrdered(c -> {
+                    if (c.getIndex() >= newIndex) {
+                        c.setIndex(c.getIndex() + 1);
+                    }
+                });
+
+        categoryRepository.saveAll(categories);
+        category.setIndex(newIndex);
+    }
+
+    private void associateCategoryWithAllCatalogs(Category category, UUID merchantId) {
+        List<Catalog> catalogs = catalogRepository.findByMerchantId(merchantId);
+
+        catalogCategoryRepository.deleteByCategoryId(category.getId());
+
+        Set<CatalogCategory> catalogCategories = catalogs.stream()
+                .map(catalog -> new CatalogCategory(null, catalog, category))
+                .collect(Collectors.toSet());
+
+        catalogCategoryRepository.saveAll(catalogCategories);
     }
 
     @Transactional
     public void updateIndexes(List<CategoryDto> categoryDtos, UUID merchantId) {
         List<Category> categoriesToUpdate = categoryDtos.stream()
-            .map(dto -> {
-                Category category = categoryRepository.findByIdAndMerchantId(dto.id(), merchantId);
-                category.setIndex(dto.index());
-                return category;
-            })
-            .toList();
+                .map(dto -> {
+                    Category category = categoryRepository.findByIdAndMerchantId(dto.id(), merchantId);
+                    category.setIndex(dto.index());
+                    return category;
+                })
+                .toList();
 
         categoryRepository.saveAll(categoriesToUpdate);
     }
-
-
 }

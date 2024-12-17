@@ -62,6 +62,7 @@ public class ImageService {
         }
     }
 
+    @SuppressWarnings("unused")
     @Transactional
     public void deleteByIdAndMerchantId(UUID imageId, UUID merchantId) {
         Image image = imageRepository.findByIdAndMerchantId(imageId, merchantId);

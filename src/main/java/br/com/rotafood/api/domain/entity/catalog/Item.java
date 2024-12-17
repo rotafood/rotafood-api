@@ -56,9 +56,10 @@ public class Item {
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ContextModifier> contextModifiers;
     
-    @ManyToOne
-    @JoinColumn(name = "productId")
+    @OneToOne
+    @JoinColumn(name = "productId", nullable = false)    
     private Product product;
+    
     
     @ManyToOne
     @JoinColumn(name = "categoryId")

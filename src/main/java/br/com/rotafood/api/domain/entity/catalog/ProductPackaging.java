@@ -33,9 +33,6 @@ public class ProductPackaging {
     @Column
     private Integer quantityPerPackage;
 
-    @Column
-    private boolean useLateralBag;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "productId") 
     private Product product;

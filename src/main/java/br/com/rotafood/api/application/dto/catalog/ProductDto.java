@@ -21,7 +21,8 @@ public record ProductDto(
     List<String> tags,
     String imagePath,
     List<ProductOptionGroupDto> optionGroups,
-    List<ProductPackagingDto> packagings
+    List<ProductPackagingDto> packagings,
+    boolean useLateralBag
 ) {
     public ProductDto(Product product) {
         this(
@@ -42,7 +43,8 @@ public record ProductDto(
             product.getTags(),
             product.getImagePath(),
             product.getProductOptionGroups() != null ? product.getProductOptionGroups().stream().map(ProductOptionGroupDto::new).toList() : null,
-            product.getPackagings() != null ? product.getPackagings().stream().map(ProductPackagingDto::new).toList() : null
+            product.getPackagings() != null ? product.getPackagings().stream().map(ProductPackagingDto::new).toList() : null,
+            product.isUseSideBag()
         );
     }
 }

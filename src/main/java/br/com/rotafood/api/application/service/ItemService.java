@@ -53,6 +53,7 @@ public class ItemService {
 
     @Transactional
     public Item updateOrCreate(ItemDto itemDto, UUID merchantId) {
+        // Buscar ou criar um novo Item
         Item item = itemDto.id() != null
             ? itemRepository.findByIdAndMerchantId(itemDto.id(), merchantId)
             : new Item();
@@ -61,13 +62,12 @@ public class ItemService {
         Category category = categoryRepository.findByIdAndMerchantId(itemDto.categoryId(), merchantId);
 
         item.setMerchant(merchant);
+        item.setCategory(category);
         item.setStatus(itemDto.status());
         item.setIndex(itemDto.index());
-        item.setCategory(category);
 
-        List<ContextModifier> contextModifiers = contextModifierService.updateOrCreateAll(
-            itemDto.contextModifiers()
-        );
+        List<ContextModifier> contextModifiers = contextModifierService.updateOrCreateAll(itemDto.contextModifiers());
+        contextModifiers.forEach(contextModifier -> contextModifier.setItem(item));
         item.setContextModifiers(contextModifiers);
 
         Product product = productService.updateOrCreate(itemDto.product(), merchantId);
@@ -80,17 +80,13 @@ public class ItemService {
                 itemDto.product().optionGroups(),
                 merchantId
             );
-            item.getProduct().setProductOptionGroups(productOptionGroups);
-        } else {
-            if (item.getProduct().getProductOptionGroups() != null && !item.getProduct().getProductOptionGroups().isEmpty()) {
-                productOptionGroupService.createOrUpdate(item.getProduct().getId(), List.of(), merchantId);
-            }
-            item.getProduct().setProductOptionGroups(List.of());
+            product.setProductOptionGroups(productOptionGroups);
         }
 
         return itemRepository.save(item);
     }
 
+    
     
 
 
