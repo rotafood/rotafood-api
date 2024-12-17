@@ -30,16 +30,21 @@ public class ProductService {
     @Autowired
     private MerchantRepository merchantRepository;
 
+    @Autowired
+    private ProductPackagingService productPackagingService;
+
     @Transactional
     public Product updateOrCreate(ProductDto productDto, UUID merchantId) {
         Merchant merchant = this.merchantRepository.getReferenceById(merchantId);
 
-        Product product = productDto.id() != null
+        final Product product = productDto.id() != null
                 ? productRepository.findById(productDto.id())
                         .orElse(new Product())
                 : new Product();
 
+        
                 
+        product.setMerchant(merchant);
         product.setName(productDto.name());
         product.setDescription(productDto.description());
         product.setEan(productDto.ean());
@@ -48,11 +53,13 @@ public class ProductService {
         product.setImagePath(productDto.imagePath());
         product.setServing(productDto.serving());
         product.setServing(productDto.serving());
+        product.setPackagingType(productDto.packagingType());
+
+
                 
         if (productDto.dietaryRestrictions() != null) {
             product.setDietaryRestrictions(productDto.dietaryRestrictions().stream().map(DietaryRestrictions::name).toList());
         }
-
         
         if (productDto.weight() != null) {
             
@@ -66,8 +73,18 @@ public class ProductService {
             product.setWeight(weight);
             weight.setProduct(product);
         }
+
+        if (productDto.packagings() != null) {
         
-        product.setMerchant(merchant);
+            productDto.packagings().stream().forEach(obj -> {
+                   var producPackaging = productPackagingService.updateOrCreate(obj, productDto.id());
+                   producPackaging.setProduct(product);
+                });
+            
+        }
+        
+        
+        
 
         return productRepository.save(product);
     }

@@ -33,11 +33,11 @@ public class ProductPackaging {
     @Column
     private Integer quantityPerPackage;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "productId") 
     private Product product;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "packagingId") 
     private Packaging packaging;
 

@@ -53,7 +53,6 @@ public class ItemService {
 
     @Transactional
     public Item updateOrCreate(ItemDto itemDto, UUID merchantId) {
-        // Buscar ou criar um novo Item
         Item item = itemDto.id() != null
             ? itemRepository.findByIdAndMerchantId(itemDto.id(), merchantId)
             : new Item();
@@ -68,8 +67,12 @@ public class ItemService {
 
         List<ContextModifier> contextModifiers = contextModifierService.updateOrCreateAll(itemDto.contextModifiers());
         contextModifiers.forEach(contextModifier -> contextModifier.setItem(item));
-        item.setContextModifiers(contextModifiers);
+        boolean allNew = itemDto.contextModifiers().stream().allMatch(dto -> dto.id() == null);
 
+        if (allNew) {
+            item.setContextModifiers(contextModifiers);
+        }
+        
         Product product = productService.updateOrCreate(itemDto.product(), merchantId);
         item.setProduct(product);
         product.setItem(item);
@@ -85,10 +88,6 @@ public class ItemService {
 
         return itemRepository.save(item);
     }
-
-    
-    
-
 
     public void deleteByIdAndMerchantId(UUID productId, UUID merchantId) {
         productService.deleteById(productId, merchantId);

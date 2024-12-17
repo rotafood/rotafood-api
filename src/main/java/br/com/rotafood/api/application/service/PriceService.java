@@ -40,7 +40,7 @@ public class PriceService {
         if (price.getScalePrices() != null) {
             scalePriceRepository.deleteAll(price.getScalePrices());
             price.getScalePrices().clear();
-        }
+        } 
     
         if (priceDto.scalePrices() != null) {
             List<ScalePrice> scalePrices = priceDto.scalePrices().stream()

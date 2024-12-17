@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import br.com.rotafood.api.domain.entity.catalog.DietaryRestrictions;
+import br.com.rotafood.api.domain.entity.catalog.PackagingType;
 import br.com.rotafood.api.domain.entity.catalog.Product;
 import br.com.rotafood.api.domain.entity.catalog.Serving;
 
@@ -22,7 +23,7 @@ public record ProductDto(
     String imagePath,
     List<ProductOptionGroupDto> optionGroups,
     List<ProductPackagingDto> packagings,
-    boolean useLateralBag
+    PackagingType packagingType
 ) {
     public ProductDto(Product product) {
         this(
@@ -44,7 +45,7 @@ public record ProductDto(
             product.getImagePath(),
             product.getProductOptionGroups() != null ? product.getProductOptionGroups().stream().map(ProductOptionGroupDto::new).toList() : null,
             product.getPackagings() != null ? product.getPackagings().stream().map(ProductPackagingDto::new).toList() : null,
-            product.isUseSideBag()
+            product.getPackagingType()
         );
     }
 }

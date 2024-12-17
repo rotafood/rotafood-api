@@ -37,12 +37,13 @@ public class ContextModifierService {
                     .filter(dto -> dto.catalogContext() == catalogContext)
                     .findFirst()
                     .orElse(null);
-    
+
             ContextModifier contextModifier = contextModifierDto.id() != null
                     ? contextModifierRepository.findById(contextModifierDto.id())
                         .orElse(new ContextModifier())
                     : new ContextModifier();
 
+            
             contextModifier.setCatalogContext(contextModifierDto.catalogContext());
 
             Price price = priceService.updateOrCreate(contextModifierDto.price());

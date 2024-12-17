@@ -92,8 +92,8 @@ public class CatalogService {
     @Transactional
     public void createDefaultCatalogsForMerchant(Merchant merchant) {
         List<CatalogDto> defaultCatalogs = List.of(
+            new CatalogDto(null, new Date(), Status.AVALIABLE, CatalogContext.TABLE, null),
                 new CatalogDto(null, new Date(), Status.AVALIABLE, CatalogContext.DELIVERY, null),
-                new CatalogDto(null, new Date(), Status.AVALIABLE, CatalogContext.TABLE, null),
                 new CatalogDto(null, new Date(), Status.AVALIABLE, CatalogContext.IFOOD, null)
         );
 
