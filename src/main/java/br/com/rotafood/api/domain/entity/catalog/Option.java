@@ -1,5 +1,6 @@
 package br.com.rotafood.api.domain.entity.catalog;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -43,7 +44,7 @@ public class Option {
     private Integer index;
 
     @OneToMany(mappedBy = "option", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ContextModifier> contextModifiers;
+    private List<ContextModifier> contextModifiers = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "optionGroupId")  

@@ -23,7 +23,8 @@ public record ProductDto(
     String imagePath,
     List<ProductOptionGroupDto> optionGroups,
     List<ProductPackagingDto> packagings,
-    PackagingType packagingType
+    PackagingType packagingType,
+    Integer quantity
 ) {
     public ProductDto(Product product) {
         this(
@@ -44,8 +45,9 @@ public record ProductDto(
             product.getTags(),
             product.getImagePath(),
             product.getProductOptionGroups() != null ? product.getProductOptionGroups().stream().map(ProductOptionGroupDto::new).toList() : null,
-            product.getPackagings() != null ? product.getPackagings().stream().map(ProductPackagingDto::new).toList() : null,
-            product.getPackagingType()
+            product.getProductPackagings() != null ? product.getProductPackagings().stream().map(ProductPackagingDto::new).toList() : null,
+            product.getPackagingType(),
+            product.getQuantity()
         );
     }
 }

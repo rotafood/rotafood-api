@@ -63,7 +63,7 @@ public class Order {
     @Column(columnDefinition = "TEXT")
     private String extraInfo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "merchantId")
     private Merchant merchant;
 

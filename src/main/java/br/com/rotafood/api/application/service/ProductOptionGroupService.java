@@ -6,9 +6,7 @@ import org.springframework.stereotype.Service;
 import br.com.rotafood.api.application.dto.catalog.ProductOptionGroupDto;
 import br.com.rotafood.api.domain.entity.catalog.ProductOptionGroup;
 import br.com.rotafood.api.domain.entity.catalog.OptionGroup;
-import br.com.rotafood.api.domain.entity.catalog.Product;
 import br.com.rotafood.api.domain.repository.ProductOptionGroupRepository;
-import br.com.rotafood.api.domain.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 
 import java.util.List;
@@ -21,25 +19,36 @@ public class ProductOptionGroupService {
     private ProductOptionGroupRepository productOptionGroupRepository;
 
     @Autowired
-    private ProductRepository productRepository;
-
-    @Autowired
     private OptionGroupService optionGroupService;
 
 
     @Transactional
-    public List<ProductOptionGroup> createOrUpdate(UUID productId, List<ProductOptionGroupDto> productOptionGroupDtos, UUID merchantId) {
-        Product product = productRepository.getReferenceById(productId);
+    public List<ProductOptionGroup> createOrUpdateAll(List<ProductOptionGroupDto> productOptionGroupDtos, UUID productId, UUID merchantId) {
+        List<ProductOptionGroup> existingProductOptionGroups = productOptionGroupRepository.findAllByProductId(productId);
 
-        if (product != null && product.getProductOptionGroups() != null && !product.getProductOptionGroups().isEmpty()) {
-            this.productOptionGroupRepository.deleteAll(product.getProductOptionGroups());
+        List<UUID> incomingIds = productOptionGroupDtos.stream()
+            .map(ProductOptionGroupDto::id)
+            .filter(id -> id != null)
+            .toList();
+
+        List<ProductOptionGroup> toRemove = existingProductOptionGroups.stream()
+            .filter(pog -> !incomingIds.contains(pog.getId()))
+            .toList();
+
+        if (!toRemove.isEmpty()) {
+            productOptionGroupRepository.deleteAll(toRemove);
         }
 
         return productOptionGroupDtos.stream().map(productOptionGroupDto -> {
             OptionGroup optionGroup = optionGroupService.updateOrCreate(productOptionGroupDto.optionGroup(), merchantId);
-            
-            var productOptionGroup = new ProductOptionGroup();
-            productOptionGroup.setProduct(product);
+
+            ProductOptionGroup productOptionGroup = productOptionGroupDto.id() != null
+                ? existingProductOptionGroups.stream()
+                    .filter(pog -> pog.getId().equals(productOptionGroupDto.id()))
+                    .findFirst()
+                    .orElse(new ProductOptionGroup())
+                : new ProductOptionGroup();
+
             productOptionGroup.setOptionGroup(optionGroup);
             productOptionGroup.setIndex(productOptionGroupDto.index());
             productOptionGroup.setMin(productOptionGroupDto.min());
@@ -56,5 +65,9 @@ public class ProductOptionGroupService {
 
     public List<ProductOptionGroup> getAllByProductId(UUID productId) {
         return productOptionGroupRepository.findAllByProductId(productId);
+    }
+
+    public void deleteAll(List<ProductOptionGroup> productOptionGroups) {
+        productOptionGroupRepository.deleteAll(productOptionGroups);
     }
 }

@@ -36,8 +36,8 @@ public class ContextModifier {
     @Enumerated(EnumType.STRING)
     private Status status;
     
-    @OneToOne
-    @JoinColumn(name = "priceId", nullable = true)
+    @ManyToOne
+    @JoinColumn(name = "priceId", nullable = false)
     private Price price;
 
     @ManyToOne

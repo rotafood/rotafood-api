@@ -5,6 +5,7 @@ import java.util.UUID;
 import br.com.rotafood.api.domain.entity.address.Address;
 import br.com.rotafood.api.domain.entity.catalog.Shift;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -75,5 +76,5 @@ public class Merchant {
     private List<MerchantUser> merchantUsers;
 
     @OneToMany(mappedBy = "merchant", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Shift> openingHours;
+    private List<Shift> openingHours = new ArrayList<>();
 }

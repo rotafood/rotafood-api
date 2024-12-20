@@ -33,6 +33,7 @@ public class ContextModifierService {
 
     
         return List.of(CatalogContext.values()).stream().map(catalogContext -> {
+
             ContextModifierDto contextModifierDto = contextModifierDtos.stream()
                     .filter(dto -> dto.catalogContext() == catalogContext)
                     .findFirst()
@@ -45,11 +46,14 @@ public class ContextModifierService {
 
             
             contextModifier.setCatalogContext(contextModifierDto.catalogContext());
+            contextModifier.setStatus(contextModifierDto.status());
 
-            Price price = priceService.updateOrCreate(contextModifierDto.price());
-            contextModifier.setPrice(price);
-            
-            return contextModifier;
+            if (contextModifierDto.price() != null) {                
+                Price price = priceService.updateOrCreate(contextModifierDto.price());
+                contextModifier.setPrice(price);
+            }
+
+            return contextModifierRepository.save(contextModifier);
         }).collect(Collectors.toList());
     }
     
@@ -66,4 +70,12 @@ public class ContextModifierService {
             throw new IllegalArgumentException("Invalid relatedType: Must be 'Item' or 'Option'.");
         }
     }
+
+    @Transactional
+    public void deleteAll(List<ContextModifier> contextModifiers) {
+        contextModifierRepository.deleteAll(contextModifiers);
+        System.err.println(contextModifiers.size() + "DELETOOOOOOOOOOOOOOOOOOOOOo");
+
+    }
+    
 }

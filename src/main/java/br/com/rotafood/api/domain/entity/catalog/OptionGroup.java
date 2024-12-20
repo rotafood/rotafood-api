@@ -1,5 +1,6 @@
 package br.com.rotafood.api.domain.entity.catalog;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -44,15 +45,11 @@ public class OptionGroup {
     @Column
     @Enumerated(value = EnumType.STRING)
     private Status status;
-
-    @OneToMany(mappedBy = "optionGroup", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProductOptionGroup> productOptionGroups;
-
     
-    @OneToMany(mappedBy = "optionGroup")
-    private List<Option> options;
+    @OneToMany(mappedBy = "optionGroup", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Option> options = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "merchantId")
     private Merchant merchant;
 

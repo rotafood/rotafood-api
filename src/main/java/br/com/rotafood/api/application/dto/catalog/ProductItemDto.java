@@ -44,7 +44,7 @@ public record ProductItemDto(
             product.getImagePath(),
             product.getMultipleImages(),
             product.getProductOptionGroups() != null ? product.getProductOptionGroups().stream().map(ProductOptionGroupDto::new).toList() : null,
-            product.getPackagings() != null ? product.getPackagings().stream().map(ProductPackagingDto::new).toList() : null
+            product.getProductPackagings() != null ? product.getProductPackagings().stream().map(ProductPackagingDto::new).toList() : null
         );
     }
 }

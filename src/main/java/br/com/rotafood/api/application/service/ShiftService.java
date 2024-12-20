@@ -2,8 +2,6 @@ package br.com.rotafood.api.application.service;
 
 import br.com.rotafood.api.application.dto.catalog.ShiftDto;
 import br.com.rotafood.api.domain.entity.catalog.Shift;
-import br.com.rotafood.api.domain.repository.ItemRepository;
-import br.com.rotafood.api.domain.repository.MerchantRepository;
 import br.com.rotafood.api.domain.repository.ShiftRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -20,12 +18,6 @@ public class ShiftService {
     @Autowired
     private ShiftRepository shiftRepository;
 
-    @Autowired
-    private ItemRepository itemRepository;
-
-    @Autowired
-    private MerchantRepository merchantRepository;
-
     @Transactional
     public List<Shift> getShiftsByItem(UUID itemId) {
         return shiftRepository.findByItemId(itemId);
@@ -37,41 +29,35 @@ public class ShiftService {
     }
 
     @Transactional
-public Shift updateOrCreate(ShiftDto shiftDto, UUID relatedId, String relatedType) {
-    Shift shift = shiftDto.id() != null
-            ? shiftRepository.findById(shiftDto.id())
-                .orElseThrow(() -> new EntityNotFoundException("Shift não encontrado."))
-            : new Shift();
+    public Shift updateOrCreate(ShiftDto shiftDto) {
+        Shift shift = shiftDto.id() != null
+                ? shiftRepository.findById(shiftDto.id())
+                  .orElse(new Shift())
+                : new Shift();
 
-    shift.setStartTime(LocalTime.parse(shiftDto.startTime()));
-    shift.setEndTime(LocalTime.parse(shiftDto.endTime()));
-    shift.setMonday(shiftDto.monday());
-    shift.setTuesday(shiftDto.tuesday());
-    shift.setWednesday(shiftDto.wednesday());
-    shift.setThursday(shiftDto.thursday());
-    shift.setFriday(shiftDto.friday());
-    shift.setSaturday(shiftDto.saturday());
-    shift.setSunday(shiftDto.sunday());
+        shift.setStartTime(LocalTime.parse(shiftDto.startTime()));
+        shift.setEndTime(LocalTime.parse(shiftDto.endTime()));
+        shift.setMonday(shiftDto.monday());
+        shift.setTuesday(shiftDto.tuesday());
+        shift.setWednesday(shiftDto.wednesday());
+        shift.setThursday(shiftDto.thursday());
+        shift.setFriday(shiftDto.friday());
+        shift.setSaturday(shiftDto.saturday());
+        shift.setSunday(shiftDto.sunday());
 
-    switch (relatedType.toLowerCase()) {
-        case "item" -> {
-            var item = itemRepository.findById(relatedId)
-                    .orElseThrow(() -> new EntityNotFoundException("Item não encontrado."));
-            shift.setItem(item);
-            shift.setMerchant(null);
-        }
-        case "merchant" -> {
-            var merchant = merchantRepository.findById(relatedId)
-                    .orElseThrow(() -> new EntityNotFoundException("Merchant não encontrado."));
-            shift.setMerchant(merchant);
-            shift.setItem(null);
-        }
-        default -> throw new IllegalArgumentException("Tipo de entidade relacionado inválido.");
+        return shiftRepository.save(shift); 
     }
 
-    return shiftRepository.save(shift); 
-    }
+    @Transactional
+    public List<Shift> updateOrCreateAll(List<ShiftDto> shiftDtos) {
+        if (shiftDtos == null || shiftDtos.isEmpty()) {
+            return List.of();
+        }
 
+        return shiftDtos.stream()
+                .map(this::updateOrCreate)
+                .toList();
+    }
 
     @Transactional
     public void deleteShift(UUID shiftId) {
@@ -88,4 +74,11 @@ public Shift updateOrCreate(ShiftDto shiftDto, UUID relatedId, String relatedTyp
             default -> throw new IllegalArgumentException("Tipo de entidade relacionado inválido.");
         }
     }
+
+
+    @Transactional
+    public void deleteAll(List<Shift> shifts) {
+        this.shiftRepository.deleteAll(shifts);
+    }
 }
+

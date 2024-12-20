@@ -20,6 +20,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -49,27 +50,25 @@ public class Item {
     @Enumerated(EnumType.STRING)
     private TemplateType type;
 
-    @OneToMany(mappedBy = "item")
-    private List<Shift> shifts;
+    @Column(nullable = true)
+    private UUID iFoodItemId;
     
-    
-    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ContextModifier> contextModifiers;
-    
+    @ManyToOne
+    @JoinColumn(name = "merchantId")
+    private Merchant merchant;
+
     @OneToOne
-    @JoinColumn(name = "productId", nullable = false)    
+    @JoinColumn(name = "productId")    
     private Product product;
-    
     
     @ManyToOne
     @JoinColumn(name = "categoryId")
     private Category category;
-    
-    @Column(nullable = true)
-    private UUID iFoodItemId;
-    
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "merchantId")
-    private Merchant merchant;
+
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ContextModifier> contextModifiers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Shift> shifts = new ArrayList<>();
 
 }

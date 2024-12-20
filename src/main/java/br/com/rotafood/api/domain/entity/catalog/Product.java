@@ -1,5 +1,6 @@
 package br.com.rotafood.api.domain.entity.catalog;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,7 +41,7 @@ public class Product {
     @Column(nullable = false, length = 128)
     private String name;
 
-    @Column(nullable = false, length = 1024)
+    @Column(nullable = true, length = 1024)
     private String description;
 
     @Column(length = 256)
@@ -51,18 +52,6 @@ public class Product {
 
     @Column(name = "dietary_restrictions", columnDefinition = "text[]")
     private List<String> dietaryRestrictions;
-
-    @OneToOne(mappedBy = "product")
-    private SellingOption sellingOption;
-    
-    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Item item;
-
-    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Option option;
-    
-    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Weight weight;
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
@@ -76,17 +65,35 @@ public class Product {
     @Column(name = "multipleImages", columnDefinition = "text[]")
     private List<String> multipleImages;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProductPackaging> packagings;
-
     @Column
     @Enumerated(value = EnumType.STRING)
     private PackagingType packagingType;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProductOptionGroup> productOptionGroups;
+    @Column
+    private Integer quantity;
+
+
+    @OneToOne(mappedBy = "product")
+    private SellingOption sellingOption;
     
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Item item;
+
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Option option;
+    
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Weight weight;
+
+    @OneToMany(mappedBy = "product")
+    private List<ProductPackaging> productPackagings = new ArrayList<>();
+
+    @OneToMany(mappedBy = "product")
+    private List<ProductOptionGroup> productOptionGroups = new ArrayList<>();
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "merchantId", nullable = false)
     private Merchant merchant;
+    
+
 }

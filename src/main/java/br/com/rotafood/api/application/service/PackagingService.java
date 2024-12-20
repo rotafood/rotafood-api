@@ -41,27 +41,17 @@ public class PackagingService {
         Merchant merchant = merchantRepository.findById(merchantId)
                 .orElseThrow(() -> new EntityNotFoundException("Merchant not found."));
 
-        Packaging packaging;
+        Packaging packaging = packagingDto.id() != null ? 
+            packagingRepository.findByIdAndMerchantId(packagingDto.id(), merchantId).orElse(new Packaging()) : new Packaging();
+        
+        packaging.setName(packagingDto.name());
+        packaging.setImagePath(packagingDto.imagePath());
+        packaging.setLenghtCm(packagingDto.lenghtCm());
+        packaging.setWidthCm(packagingDto.widthCm());
+        packaging.setThicknessCm(packagingDto.thicknessCm());
+        packaging.setVolumeMl(packagingDto.volumeMl());
 
-        if (packagingDto.id() != null) {
-            packaging = packagingRepository.findByIdAndMerchantId(packagingDto.id(), merchantId)
-                    .orElseThrow(() -> new EntityNotFoundException("Packaging not found."));
-            packaging.setName(packagingDto.name());
-            packaging.setImagePath(packagingDto.imagePath());
-            packaging.setLenghtCm(packagingDto.lenghtCm());
-            packaging.setWidthCm(packagingDto.widthCm());
-            packaging.setThicknessCm(packagingDto.thicknessCm());
-        } else {
-            packaging = new Packaging(
-                    null,
-                    packagingDto.name(),
-                    packagingDto.imagePath(),
-                    packagingDto.lenghtCm(),
-                    packagingDto.widthCm(),
-                    packagingDto.thicknessCm(),
-                    merchant
-            );
-        }
+        packaging.setMerchant(merchant);
 
         return packagingRepository.save(packaging);
     }

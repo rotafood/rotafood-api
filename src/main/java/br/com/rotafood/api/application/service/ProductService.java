@@ -8,10 +8,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.rotafood.api.application.dto.catalog.ProductDto;
-import br.com.rotafood.api.application.dto.catalog.ProductOptionDto;
 import br.com.rotafood.api.domain.entity.catalog.DietaryRestrictions;
 import br.com.rotafood.api.domain.entity.catalog.Product;
-
+import br.com.rotafood.api.domain.entity.catalog.ProductOptionGroup;
+import br.com.rotafood.api.domain.entity.catalog.ProductPackaging;
 import br.com.rotafood.api.domain.entity.catalog.Weight;
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
 import br.com.rotafood.api.domain.repository.MerchantRepository;
@@ -33,17 +33,17 @@ public class ProductService {
     @Autowired
     private ProductPackagingService productPackagingService;
 
+    @Autowired
+    private ProductOptionGroupService productOptionGroupService;
+
     @Transactional
     public Product updateOrCreate(ProductDto productDto, UUID merchantId) {
         Merchant merchant = this.merchantRepository.getReferenceById(merchantId);
-
-        final Product product = productDto.id() != null
-                ? productRepository.findById(productDto.id())
-                        .orElse(new Product())
+    
+        Product product = productDto.id() != null
+                ? productRepository.findById(productDto.id()).orElse(new Product())
                 : new Product();
-
-        
-                
+    
         product.setMerchant(merchant);
         product.setName(productDto.name());
         product.setDescription(productDto.description());
@@ -52,61 +52,56 @@ public class ProductService {
         product.setTags(productDto.tags());
         product.setImagePath(productDto.imagePath());
         product.setServing(productDto.serving());
-        product.setServing(productDto.serving());
         product.setPackagingType(productDto.packagingType());
+        product.setDietaryRestrictions(productDto.dietaryRestrictions().stream().map(DietaryRestrictions::name).toList());
+        product.setQuantity(productDto.quantity());
+
+        productRepository.save(product);
 
 
-                
-        if (productDto.dietaryRestrictions() != null) {
-            product.setDietaryRestrictions(productDto.dietaryRestrictions().stream().map(DietaryRestrictions::name).toList());
-        }
-        
+    
         if (productDto.weight() != null) {
-            
-            Weight weight = productDto.weight().id() != null ? weightRepository.findById(productDto.weight().id())
-            .orElseGet(Weight::new) : new Weight();
+            Weight weight = productDto.weight().id() != null 
+                ? weightRepository.findById(productDto.weight().id()).orElseGet(Weight::new) 
+                : new Weight();
             weight.setQuantity(productDto.weight().quantity());
             weight.setUnit(productDto.weight().unit());
-            
-            
             weight = this.weightRepository.save(weight);
-            product.setWeight(weight);
+
             weight.setProduct(product);
+            product.setWeight(weight);
         }
-
+    
+    
         if (productDto.packagings() != null) {
-        
-            productDto.packagings().stream().forEach(obj -> {
-                   var producPackaging = productPackagingService.updateOrCreate(obj, productDto.id());
-                   producPackaging.setProduct(product);
-                });
-            
+            product.getProductPackagings().clear();
+    
+            List<ProductPackaging> productPackagings = productPackagingService.createOrUpdateAll(
+                productDto.packagings(),
+                product.getId(),
+                merchantId
+            );
+    
+            productPackagings.forEach(cm -> cm.setProduct(product));
+            product.getProductPackagings().addAll(productPackagings);
         }
-        
-        
-        
-
-        return productRepository.save(product);
+    
+        if (productDto.optionGroups() != null) {
+            product.getProductOptionGroups().clear();
+    
+            List<ProductOptionGroup> productOptionGroups = productOptionGroupService.createOrUpdateAll(
+                productDto.optionGroups(),
+                product.getId(),
+                merchantId
+            );
+    
+            productOptionGroups.forEach(cm -> cm.setProduct(product));
+            product.getProductOptionGroups().addAll(productOptionGroups);
+        }
+    
+        return product;
     }
-
-    @Transactional
-    public Product updateOrCreateProductOption(ProductOptionDto productDto, UUID merchantId) {
-        Merchant merchant = this.merchantRepository.getReferenceById(merchantId);
-
-        Product product = productDto.id() != null
-                ? productRepository.findById(productDto.id())
-                        .orElse(new Product())
-                : new Product();
-
-        product.setName(productDto.name());
-        product.setDescription(productDto.description());
-        product.setServing(productDto.serving());
-        product.setImagePath(productDto.imagePath());
-
-        product.setMerchant(merchant);
-
-        return productRepository.save(product);
-    }
+    
 
 
     @Transactional

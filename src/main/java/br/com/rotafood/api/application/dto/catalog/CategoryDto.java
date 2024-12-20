@@ -21,7 +21,7 @@ public record CategoryDto(
             category.getName(),
             category.getTemplate(),
             category.getStatus(),
-            category.getIFoodCategoryId()
+            category.getIFoodCategoryId() 
         );
     }
 }

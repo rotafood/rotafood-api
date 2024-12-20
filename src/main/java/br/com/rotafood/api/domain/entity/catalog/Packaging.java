@@ -46,6 +46,9 @@ public class Packaging {
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal thicknessCm; 
 
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal volumeMl; 
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "merchantId", nullable = false)
     private Merchant merchant;

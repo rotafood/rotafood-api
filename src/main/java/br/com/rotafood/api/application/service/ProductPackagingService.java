@@ -8,20 +8,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.rotafood.api.application.dto.catalog.ProductPackagingDto;
-import br.com.rotafood.api.domain.entity.catalog.Product;
 import br.com.rotafood.api.domain.entity.catalog.ProductPackaging;
 import br.com.rotafood.api.domain.entity.catalog.Packaging;
-import br.com.rotafood.api.domain.repository.ProductRepository;
 import br.com.rotafood.api.domain.repository.ProductPackagingRepository;
-import br.com.rotafood.api.domain.repository.PackagingRepository;
 import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class ProductPackagingService {
 
-    @Autowired private ProductRepository productRepository;
-    @Autowired private PackagingRepository packagingRepository;
-    @Autowired private ProductPackagingRepository productPackagingRepository;
+
+    @Autowired 
+    private PackagingService packagingService;
+    @Autowired 
+    private ProductPackagingRepository productPackagingRepository;
 
 
     public List<ProductPackagingDto> getAllByProductId(UUID productId) {
@@ -32,26 +31,42 @@ public class ProductPackagingService {
     }
 
     @Transactional
-    public ProductPackaging updateOrCreate(ProductPackagingDto productPackagingDto, UUID productId) {
+    public List<ProductPackaging> createOrUpdateAll(List<ProductPackagingDto> productPackagingDtos, UUID productId, UUID merchantId) {
+        // Obter as ProductPackaging existentes no banco relacionadas ao produto
+        List<ProductPackaging> existingProductPackagings = productPackagingRepository.findByProductId(productId);
 
-        Packaging packaging = packagingRepository.findById(productPackagingDto.packaging().id())
-                .orElseThrow(() -> new EntityNotFoundException("Embalagem não encontrada."));
+        // Obter os IDs das ProductPackaging recebidas nos DTOs
+        List<UUID> incomingIds = productPackagingDtos.stream()
+            .map(ProductPackagingDto::id)
+            .filter(id -> id != null)
+            .toList();
 
+        // Identificar as ProductPackaging que precisam ser removidas
+        List<ProductPackaging> toRemove = existingProductPackagings.stream()
+            .filter(pp -> !incomingIds.contains(pp.getId()))
+            .toList();
 
-        ProductPackaging productPackaging = productPackagingDto.id() != null
-            ? productPackagingRepository.findById(productPackagingDto.id())
-                .orElseThrow(() -> new EntityNotFoundException("Relação Produto-Embalagem não encontrada."))
-            : new ProductPackaging(null, productPackagingDto.quantityPerPackage(), null, packaging);
-        
-        productPackaging.setQuantityPerPackage(productPackagingDto.quantityPerPackage());
-        
-        if (productId != null) {
-            Product product = productRepository.findById(productId)
-                    .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado."));
-            productPackaging.setProduct(product);
+        // Remover as ProductPackaging que não estão mais nos DTOs
+        if (!toRemove.isEmpty()) {
+            productPackagingRepository.deleteAll(toRemove);
         }
 
-        return productPackagingRepository.save(productPackaging);
+        // Atualizar ou criar as ProductPackaging recebidas nos DTOs
+        return productPackagingDtos.stream().map(productPackagingDto -> {
+            Packaging packaging = packagingService.updateOrCreate(productPackagingDto.packaging(), merchantId);
+
+            ProductPackaging productPackaging = productPackagingDto.id() != null
+                ? existingProductPackagings.stream()
+                    .filter(pp -> pp.getId().equals(productPackagingDto.id()))
+                    .findFirst()
+                    .orElse(new ProductPackaging())
+                : new ProductPackaging();
+
+            productPackaging.setPackaging(packaging);
+            productPackaging.setQuantityPerPackage(productPackagingDto.quantityPerPackage());
+
+            return productPackagingRepository.save(productPackaging);
+        }).toList();
     }
 
     @Transactional
@@ -59,5 +74,11 @@ public class ProductPackagingService {
         ProductPackaging productPackaging = productPackagingRepository.findById(productPackagingId)
                 .orElseThrow(() -> new EntityNotFoundException("Relação Produto-Embalagem não encontrada."));
         productPackagingRepository.delete(productPackaging);
+    }
+
+    @Transactional
+    public void deleteAll(List<ProductPackaging> productPackagings) {
+
+        productPackagingRepository.deleteAll(productPackagings);
     }
 }
