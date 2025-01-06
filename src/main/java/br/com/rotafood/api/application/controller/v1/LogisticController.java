@@ -18,7 +18,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 
 @RestController
-@RequestMapping("/v1/logistic")
+@RequestMapping( ApiVersion.VERSION + "/logistic")
 public class LogisticController {
 
     @Autowired

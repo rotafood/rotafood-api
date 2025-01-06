@@ -20,7 +20,7 @@ import br.com.rotafood.api.infra.security.dtos.TokenJwtDto;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/v1/auth")
+@RequestMapping( ApiVersion.VERSION + "/auth")
 public class AuthController {
 
     @Autowired

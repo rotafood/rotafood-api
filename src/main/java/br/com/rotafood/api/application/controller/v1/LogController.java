@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.rotafood.api.application.dto.LogDto;
 
 @RestController
-@RequestMapping("/v1/logs")
+@RequestMapping( ApiVersion.VERSION + "/logs")
 public class LogController {
 
     @PostMapping

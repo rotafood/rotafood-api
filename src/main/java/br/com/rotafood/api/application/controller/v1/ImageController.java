@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
-@RequestMapping("/v1/merchants/{merchantId}/images")
+@RequestMapping( ApiVersion.VERSION + "/merchants/{merchantId}/images")
 public class ImageController {
 
     @Autowired

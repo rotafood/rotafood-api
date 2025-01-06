@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/v1/merchants/{merchantId}/items")
+@RequestMapping( ApiVersion.VERSION + "/merchants/{merchantId}/items")
 public class ItemController {
 
     @Autowired
@@ -36,7 +36,7 @@ public class ItemController {
         return new ItemDto(itemService.updateOrCreate(itemDto, merchantId));
     }
 
-    @DeleteMapping("/{itemId}")
+    @DeleteMapping("/{itemId}") 
     public void deleteItem(@PathVariable UUID merchantId, @PathVariable UUID itemId) {
         itemService.deleteByIdAndMerchantId(itemId, merchantId);
     }

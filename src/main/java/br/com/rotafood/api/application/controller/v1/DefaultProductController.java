@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/v1/default-products")
+@RequestMapping( ApiVersion.VERSION + "/default-products")
 public class DefaultProductController {
 
     @Autowired

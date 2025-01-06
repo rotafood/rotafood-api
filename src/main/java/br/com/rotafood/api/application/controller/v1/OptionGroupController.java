@@ -2,6 +2,7 @@ package br.com.rotafood.api.application.controller.v1;
 
 import br.com.rotafood.api.application.dto.catalog.OptionGroupDto;
 import br.com.rotafood.api.application.service.OptionGroupService;
+import br.com.rotafood.api.domain.entity.catalog.OptionGroupType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -11,14 +12,25 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/v1/merchants/{merchantId}/optionGroups")
+@RequestMapping( ApiVersion.VERSION + "/merchants/{merchantId}/optionGroups")
 public class OptionGroupController {
 
     @Autowired
     private OptionGroupService optionGroupService;
 
     @GetMapping
-    public List<OptionGroupDto> getAll(@PathVariable UUID merchantId) {
+    public List<OptionGroupDto> getAll(
+            @PathVariable UUID merchantId,
+            @RequestParam(required = false) OptionGroupType optionGroupType) {
+        
+        if (optionGroupType != null) {
+            return optionGroupService.getAllByMerchantIdAndOptionGroupType(merchantId, optionGroupType)
+                    .stream()
+                    .map(OptionGroupDto::new)
+                    .toList();
+        }
+
+        
         return optionGroupService.getAllByMerchantId(merchantId)
                 .stream()
                 .map(OptionGroupDto::new)

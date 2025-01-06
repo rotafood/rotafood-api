@@ -20,7 +20,7 @@ import br.com.rotafood.api.application.service.CategoryService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/v1/merchants/{merchantId}/categories")
+@RequestMapping( ApiVersion.VERSION + "/merchants/{merchantId}/categories")
 public class CategoryController {
 
     @Autowired

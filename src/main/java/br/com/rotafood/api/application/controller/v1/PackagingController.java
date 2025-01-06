@@ -17,7 +17,7 @@ import br.com.rotafood.api.application.service.PackagingService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/v1/merchants/{merchantId}/packagings")
+@RequestMapping( ApiVersion.VERSION + "/merchants/{merchantId}/packagings")
 public class PackagingController {
 
     @Autowired

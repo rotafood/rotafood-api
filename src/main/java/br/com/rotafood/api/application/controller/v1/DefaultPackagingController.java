@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/v1/default-packagings")
+@RequestMapping( ApiVersion.VERSION + "/default-packagings")
 public class DefaultPackagingController {
 
     @Autowired

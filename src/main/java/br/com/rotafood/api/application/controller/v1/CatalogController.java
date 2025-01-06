@@ -21,7 +21,7 @@ import jakarta.validation.Valid;
 
 
 @RestController
-@RequestMapping("/v1/merchants/{merchantId}/catalogs")
+@RequestMapping( ApiVersion.VERSION + "/merchants/{merchantId}/catalogs")
 public class CatalogController {
 
     @Autowired
@@ -54,6 +54,8 @@ public class CatalogController {
     ) { 
         return new CatalogDto(this.catalogService.getByIdAndMerchantId(catalogId, merchantId));
     }
+
+
 
     @PreAuthorize("hasAuthority('CATEGORY')")
     @PutMapping
