@@ -7,6 +7,7 @@ import br.com.rotafood.api.domain.entity.catalog.Option;
 import br.com.rotafood.api.domain.entity.catalog.OptionGroup;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -38,15 +39,15 @@ public class OrderItemOption {
     @Column(precision = 10, scale = 2)
     private BigDecimal totalPrice;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)    
     @JoinColumn(name = "orderItemId")
     private OrderItem orderItem;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)    
     @JoinColumn(name = "optionGroupId")
     private OptionGroup optionGroup;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)    
     @JoinColumn(name = "optionId")
     private Option option;
 

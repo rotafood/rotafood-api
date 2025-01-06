@@ -55,7 +55,7 @@ public class Product {
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
-    private Serving serving; 
+    private Serving serving = Serving.NOT_APPLICABLE; 
     
     @Column(name = "tags", columnDefinition = "text[]")
     private List<String> tags;
@@ -71,29 +71,43 @@ public class Product {
 
     @Column
     private Integer quantity;
-
-
-    @OneToOne(mappedBy = "product")
-    private SellingOption sellingOption;
     
     @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private Item item;
 
     @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private Option option;
-    
-    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Weight weight;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductPackaging> productPackagings = new ArrayList<>();
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductOptionGroup> productOptionGroups = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "merchantId", nullable = false)
     private Merchant merchant;
+
+
+    public void addProductPackaging(ProductPackaging packaging) {
+        this.productPackagings.add(packaging);
+        packaging.setProduct(this);
+    }
+
+    public void removeProductPackaging(ProductPackaging packaging) {
+        this.productPackagings.remove(packaging);
+        packaging.setProduct(null);
+    }
+
+    public void addProductOptionGroup(ProductOptionGroup productOptionGroup) {
+        this.productOptionGroups.add(productOptionGroup);
+        productOptionGroup.setProduct(this);
+    }
+
+    public void removeProductOptionGroup(ProductOptionGroup productOptionGroup) {
+        this.productOptionGroups.remove(productOptionGroup);
+        productOptionGroup.setProduct(null);
+    }
     
 
 }

@@ -19,7 +19,9 @@ import br.com.rotafood.api.domain.repository.CatalogCategoryRepository;
 import br.com.rotafood.api.domain.repository.CatalogRepository;
 import br.com.rotafood.api.domain.repository.CategoryRepository;
 import br.com.rotafood.api.domain.repository.MerchantRepository;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.PersistenceContext;
 
 @Service
 public class CategoryService {
@@ -28,6 +30,10 @@ public class CategoryService {
     @Autowired private CategoryRepository categoryRepository;
     @Autowired private MerchantRepository merchantRepository;
     @Autowired private CatalogCategoryRepository catalogCategoryRepository;
+
+    @Autowired
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public Category getByIdAndMerchantId(UUID categoryId, UUID merchantId) {
         return categoryRepository.findByIdAndMerchantId(categoryId, merchantId);
@@ -41,12 +47,10 @@ public class CategoryService {
             throw new EntityNotFoundException("Categoria não encontrada.");
         }
 
-        // Remover associações na tabela intermediária
-        catalogCategoryRepository.deleteByCategoryId(category.getId());
-
-        // Excluir a categoria
         categoryRepository.delete(category);
     }
+
+
 
     public List<Category> getAllByMerchantId(UUID merchantId) {
         return categoryRepository.findByMerchantId(merchantId);
@@ -79,7 +83,6 @@ public class CategoryService {
 
         Category savedCategory = categoryRepository.save(category);
 
-        // Garantir que a categoria esteja associada a todos os catálogos do merchant
         associateCategoryWithAllCatalogs(savedCategory, merchantId);
 
         return savedCategory;

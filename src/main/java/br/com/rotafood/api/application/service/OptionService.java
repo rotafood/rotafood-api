@@ -2,18 +2,20 @@ package br.com.rotafood.api.application.service;
 
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.rotafood.api.application.dto.catalog.ContextModifierDto;
 import br.com.rotafood.api.application.dto.catalog.OptionDto;
 import br.com.rotafood.api.application.dto.catalog.ProductOptionDto;
 import br.com.rotafood.api.domain.entity.catalog.ContextModifier;
 import br.com.rotafood.api.domain.entity.catalog.Option;
 import br.com.rotafood.api.domain.entity.catalog.OptionGroup;
 import br.com.rotafood.api.domain.entity.catalog.Product;
-import br.com.rotafood.api.domain.entity.catalog.Shift;
+import br.com.rotafood.api.domain.entity.catalog.Serving;
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
 import br.com.rotafood.api.domain.repository.MerchantRepository;
 import br.com.rotafood.api.domain.repository.OptionRepository;
@@ -38,12 +40,16 @@ public class OptionService {
     @Transactional
     public Option updateOrCreate(OptionDto optionDto, OptionGroup optionGroup) {
         Option option = optionDto.id() != null
-            ? optionRepository.findByIdAndOptionGroupId(optionDto.id(), optionGroup.getId())
+            ? optionRepository.findById(optionDto.id()).orElse(new Option())
             : new Option();
+
+        // System.err.println(optionDto);
+
 
         option.setStatus(optionDto.status());
         option.setIndex(optionDto.index());
         option.setOptionGroup(optionGroup);
+        option.setFractions(optionDto.fractions());
         
         optionRepository.save(option);
 
@@ -54,17 +60,39 @@ public class OptionService {
         product.setOption(option);
         option.setProduct(product);
 
+        List<UUID> incomingContextModifierIds = optionDto.contextModifiers().stream()
+        .map(ContextModifierDto::id)
+        .filter(Objects::nonNull)
+        .toList();
+
+        List<ContextModifier> toRemove = option.getContextModifiers().stream()
+            .filter(existingModifier -> !incomingContextModifierIds.contains(existingModifier.getId()))
+            .toList();
+
+        toRemove.forEach(contextModifierService::delete);
+
+        var updatedContextModifiers = optionDto.contextModifiers().stream()
+            .map(contextModifierDto -> {
+                var contextModifier = this.contextModifierService.updateOrCreate(contextModifierDto);
+
+                contextModifier.setOption(option);
+                if (contextModifierDto.parentOptionId() != null) {
+                    Option parentOption = optionRepository.findById(contextModifierDto.parentOptionId()).orElse(null);
+                    contextModifier.setParentOptionModifier(parentOption);
+                }
+
+                return this.contextModifierService.updateOrCreate(contextModifierDto);
+            })
+            .toList();
+
         option.getContextModifiers().clear();
-        List<ContextModifier> contextModifiers = contextModifierService.updateOrCreateAll(optionDto.contextModifiers());
-        option.getContextModifiers().addAll(contextModifiers);
-        contextModifiers.forEach(cm -> cm.setOption(option));
+        option.getContextModifiers().addAll(updatedContextModifiers);
 
         return optionRepository.save(option);
     }
 
     @Transactional
     public Product updateOrCreateProductOption(ProductOptionDto productDto, UUID merchantId) {
-
         Merchant merchant = this.merchantRepository.getReferenceById(merchantId);
 
         Product product = productDto.id() != null
@@ -77,8 +105,8 @@ public class OptionService {
         product.setDescription(productDto.description());
         product.setEan(productDto.ean());
         product.setImagePath(productDto.imagePath());
-        product.setServing(productDto.serving());
-        product.setServing(productDto.serving());
+        product.setServing(Serving.NOT_APPLICABLE);
+        product.setQuantity(productDto.quantity());
         
 
         return productRepository.save(product);
@@ -93,6 +121,11 @@ public class OptionService {
         }
     
         optionRepository.delete(option);
+    }
+
+    @Transactional
+    public void deleteAll(List<Option> options) {
+        this.optionRepository.deleteAll(options);
     }
     
 

@@ -20,10 +20,10 @@ public class CatalogCategory {
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "catalog_id", nullable = false)
+    @JoinColumn(name = "catalogId", nullable = false)
     private Catalog catalog;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", nullable = false)
+    @JoinColumn(name = "categoryId", nullable = false)
     private Category category;
 }

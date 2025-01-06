@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.rotafood.api.application.dto.catalog.CategoryDto;
 import br.com.rotafood.api.application.dto.catalog.ItemDto;
 import br.com.rotafood.api.domain.entity.catalog.Category;
 import br.com.rotafood.api.domain.entity.catalog.ContextModifier;
@@ -12,11 +13,10 @@ import br.com.rotafood.api.domain.entity.catalog.Item;
 import br.com.rotafood.api.domain.entity.catalog.TemplateType;
 import br.com.rotafood.api.domain.entity.catalog.Product;
 import br.com.rotafood.api.domain.entity.catalog.Shift;
+import br.com.rotafood.api.domain.entity.catalog.Status;
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
-import br.com.rotafood.api.domain.repository.CategoryRepository;
 import br.com.rotafood.api.domain.repository.ItemRepository;
 import br.com.rotafood.api.domain.repository.MerchantRepository;
-import br.com.rotafood.api.domain.repository.ProductRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
@@ -33,13 +33,10 @@ public class ItemService {
     private MerchantRepository merchantRepository;
 
     @Autowired
-    private CategoryRepository categoryRepository;
+    private CategoryService categoryService;
 
     @Autowired 
     private ShiftService shiftService;
-
-    @Autowired
-    private ProductRepository productRepository;
 
     @Autowired
     private ContextModifierService contextModifierService;
@@ -65,32 +62,30 @@ public class ItemService {
             return this.updateOrCreatePizza(itemDto, merchantId);
         }
     
-        Category category = categoryRepository.findByIdAndMerchantId(itemDto.categoryId(), merchantId);
+        Category category = categoryService.getByIdAndMerchantId(itemDto.categoryId(), merchantId);
         
         item.setMerchant(merchant);
         item.setCategory(category);
         item.setType(itemDto.type());
         item.setStatus(itemDto.status());
         item.setIndex(itemDto.index());
+        itemRepository.save(item);
+
     
         Product product = productService.updateOrCreate(itemDto.product(), merchantId);
         item.setProduct(product);
     
-        item.getContextModifiers().clear();
         List<ContextModifier> contextModifiers = contextModifierService.updateOrCreateAll(itemDto.contextModifiers());
-        item.getContextModifiers().addAll(contextModifiers);
-
-        item.getShifts().clear();
+        item.getContextModifiers().clear();
+        contextModifiers.forEach(item::addContextModifier);
+    
         List<Shift> shifts = shiftService.updateOrCreateAll(itemDto.shifts());
-        item.getShifts().addAll(shifts);
-
-        itemRepository.save(item);
+        item.getShifts().clear();
+        shifts.forEach(item::addShift);
         
-        contextModifiers.forEach(cm -> cm.setItem(item));
-        shifts.forEach(shift -> shift.setItem(item));
         product.setItem(item);
     
-        return item;
+        return itemRepository.save(item);
     }
     
     @Transactional
@@ -102,35 +97,44 @@ public class ItemService {
         
         Merchant merchant = merchantRepository.getReferenceById(merchantId);
 
-        Category category = categoryRepository.findByIdAndMerchantId(itemDto.categoryId(), merchantId);
+        Category category = itemDto.categoryId() != null ? 
+            categoryService.getByIdAndMerchantId(itemDto.categoryId(), merchantId) : 
+            this.categoryService.updateOrCreate(
+                new CategoryDto(null, null, itemDto.product().name(), TemplateType.PIZZA, Status.AVALIABLE, merchantId
+                ), merchantId);
         
         item.setMerchant(merchant);
         item.setCategory(category);
         item.setType(itemDto.type());
         item.setStatus(itemDto.status());
         item.setIndex(itemDto.index());
+        itemRepository.save(item);
 
-        contextModifierService.deleteAll(item.getContextModifiers());
-        item.getContextModifiers().clear();
-        List<ContextModifier> contextModifiers = contextModifierService.updateOrCreateAll(itemDto.contextModifiers());
-        contextModifiers.forEach(cm -> cm.setItem(item));
-        item.setContextModifiers(contextModifiers);
-
+    
         Product product = productService.updateOrCreate(itemDto.product(), merchantId);
         item.setProduct(product);
-        product.setItem(item);
+    
+        List<ContextModifier> contextModifiers = contextModifierService.updateOrCreateAll(itemDto.contextModifiers());
+        item.getContextModifiers().clear();
+        contextModifiers.forEach(item::addContextModifier);
+    
+        List<Shift> shifts = shiftService.updateOrCreateAll(itemDto.shifts());
+        item.getShifts().clear();
+        shifts.forEach(item::addShift);
 
-        
-        return new Item();
+        product.setItem(item);
+    
+        return itemRepository.save(item);
     }
 
+    @Transactional
     public void deleteByIdAndMerchantId(UUID itemId, UUID merchantId) {
         var item = itemRepository.findByIdAndMerchantId(itemId, merchantId);
-        if (item != null) {
-            
-            productRepository.delete(item.getProduct());
-        }
+        itemRepository.delete(item);
+
     }
+
+
 
     public List<Item> getAllByMerchantId(UUID merchantId) {
         return this.itemRepository.getAllByMerchantId(merchantId);

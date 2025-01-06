@@ -12,7 +12,8 @@ public record ProductOptionDto(
     String ean,
     UUID optionId,
     Serving serving,
-    String imagePath
+    String imagePath,
+    Integer quantity
 ) {
     public ProductOptionDto(Product product) {
         this(
@@ -22,7 +23,8 @@ public record ProductOptionDto(
             product.getEan(),
             product.getOption() != null ? product.getOption().getId() : null,
             product.getServing(),
-            product.getImagePath()
+            product.getImagePath(),
+            product.getQuantity()
         );
     }
 }

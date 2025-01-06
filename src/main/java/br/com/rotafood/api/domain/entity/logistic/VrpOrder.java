@@ -5,6 +5,7 @@ import java.util.UUID;
 import br.com.rotafood.api.domain.entity.order.Order;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -29,14 +30,14 @@ public class VrpOrder {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;  
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)    
     @JoinColumn(name = "vrpRouteId")
     private VrpRoute vrpRoute;
 
     @Column
     private int index;
     
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)    
     @JoinColumn(name = "orderId")
     private Order order;
     

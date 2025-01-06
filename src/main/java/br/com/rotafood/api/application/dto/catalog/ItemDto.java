@@ -6,15 +6,22 @@ import java.util.UUID;
 import br.com.rotafood.api.domain.entity.catalog.Item;
 import br.com.rotafood.api.domain.entity.catalog.Status;
 import br.com.rotafood.api.domain.entity.catalog.TemplateType;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
+@Valid
 public record ItemDto(
     UUID id,
+    @NotNull
     Status status,
     Integer index,
+    @NotNull
     TemplateType type,
     UUID categoryId,
     List<ShiftDto> shifts,
     List<ContextModifierDto> contextModifiers,
+    @Valid
+    @NotNull
     ProductDto product
 ) {
     public ItemDto(Item item) {

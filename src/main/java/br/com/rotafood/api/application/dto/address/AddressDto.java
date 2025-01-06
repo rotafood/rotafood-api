@@ -3,6 +3,7 @@ package br.com.rotafood.api.application.dto.address;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+import br.com.rotafood.api.domain.entity.address.Address;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -41,4 +42,21 @@ public record AddressDto (
     
     @NotNull
     BigDecimal longitude
-) {}
+) {
+    public AddressDto(Address address) {
+        this(
+            address.getId(),
+            address.getCountry(),
+            address.getState(),
+            address.getCity(),
+            address.getNeighborhood(),
+            address.getPostalCode(),
+            address.getStreetName(),
+            address.getStreetNumber(),
+            address.getFormattedAddress(),
+            address.getComplement(),
+            address.getLatitude(),
+            address.getLongitude()
+        );
+    }
+}

@@ -7,9 +7,14 @@ import br.com.rotafood.api.domain.entity.catalog.DietaryRestrictions;
 import br.com.rotafood.api.domain.entity.catalog.PackagingType;
 import br.com.rotafood.api.domain.entity.catalog.Product;
 import br.com.rotafood.api.domain.entity.catalog.Serving;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
+
+@Valid
 public record ProductDto(
     UUID id,
+    @NotNull
     String name,
     String description,
     String ean,
@@ -17,7 +22,6 @@ public record ProductDto(
     List<DietaryRestrictions> dietaryRestrictions,
     UUID itemId,
     UUID optionId,
-    WeightDto weight,
     Serving serving,
     List<String> tags,
     String imagePath,
@@ -40,7 +44,6 @@ public record ProductDto(
                 : List.of(),
             product.getItem() != null ? product.getItem().getId() : null,
             product.getOption() != null ? product.getOption().getId() : null,
-            product.getWeight() != null ? new WeightDto(product.getWeight()) : null,
             product.getServing(),
             product.getTags(),
             product.getImagePath(),

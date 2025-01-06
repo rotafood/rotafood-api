@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -40,11 +41,11 @@ public class Shift {
     private Boolean saturday;
     private Boolean sunday;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)    
     @JoinColumn(name = "itemId", referencedColumnName = "id", nullable = true)
     private Item item;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)    
     @JoinColumn(name = "merchantId", referencedColumnName = "id", nullable = true)
     private Merchant merchant;
 }

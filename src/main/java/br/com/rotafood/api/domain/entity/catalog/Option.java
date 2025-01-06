@@ -9,6 +9,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -40,17 +41,17 @@ public class Option {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @Column(nullable = false)
+    @Column
     private Integer index;
 
     @OneToMany(mappedBy = "option", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ContextModifier> contextModifiers = new ArrayList<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)    
     @JoinColumn(name = "optionGroupId")  
     private OptionGroup optionGroup;
     
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)    
     @JoinColumn(name = "productId", nullable = true)
     private Product product;
 
@@ -59,5 +60,15 @@ public class Option {
 
     @Column(nullable = true)
     private UUID iFoodOptionId;
+
+    public void addContextModifier(ContextModifier modifier) {
+        this.contextModifiers.add(modifier);
+        modifier.setOption(this);
+    }
+
+    public void removeContextModifier(ContextModifier modifier) {
+        this.contextModifiers.remove(modifier);
+        modifier.setOption(null);
+    }
 
 }

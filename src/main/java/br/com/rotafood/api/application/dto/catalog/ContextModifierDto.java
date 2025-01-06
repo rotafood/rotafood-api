@@ -20,7 +20,7 @@ public record ContextModifierDto(
             contextModifier.getId(),
             contextModifier.getItem() != null ? contextModifier.getItem().getId(): null,
             contextModifier.getOption() != null ? contextModifier.getOption().getId(): null,
-            contextModifier.getParentOptionModifier() != null? contextModifier.getParentOptionModifier().getOption().getId() : null,
+            contextModifier.getParentOptionModifier() != null? contextModifier.getParentOptionModifier().getId() : null,
             contextModifier.getStatus(),
             new PriceDto(contextModifier.getPrice()),
             contextModifier.getCatalogContext()

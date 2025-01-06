@@ -1,6 +1,6 @@
 package br.com.rotafood.api.domain.entity.order;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
@@ -40,6 +40,9 @@ public class OrderTakeout {
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
     private OrderTakeoutMode mode;
+
+    @Column
+    private String comments;
 
     @OneToOne
     @JoinColumn(name = "orderId")

@@ -15,6 +15,8 @@ public interface ItemRepository extends JpaRepository<Item, UUID> {
 
     Item findByIdAndProductIdAndCategoryIdAndMerchantId(UUID id, UUID productId, UUID categoryId, UUID merchantId);
 
+    void deleteByCategoryId(UUID categoryId);
+
 
 }
  

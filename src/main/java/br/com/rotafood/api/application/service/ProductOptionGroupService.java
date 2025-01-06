@@ -6,10 +6,13 @@ import org.springframework.stereotype.Service;
 import br.com.rotafood.api.application.dto.catalog.ProductOptionGroupDto;
 import br.com.rotafood.api.domain.entity.catalog.ProductOptionGroup;
 import br.com.rotafood.api.domain.entity.catalog.OptionGroup;
+import br.com.rotafood.api.domain.entity.catalog.Product;
 import br.com.rotafood.api.domain.repository.ProductOptionGroupRepository;
 import jakarta.transaction.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -23,40 +26,52 @@ public class ProductOptionGroupService {
 
 
     @Transactional
-    public List<ProductOptionGroup> createOrUpdateAll(List<ProductOptionGroupDto> productOptionGroupDtos, UUID productId, UUID merchantId) {
-        List<ProductOptionGroup> existingProductOptionGroups = productOptionGroupRepository.findAllByProductId(productId);
+    public List<ProductOptionGroup> createOrUpdateAll(List<ProductOptionGroupDto> productOptionGroupDtos, Product product, UUID merchantId) {
+        if (productOptionGroupDtos == null || productOptionGroupDtos.isEmpty()) {
+            List<ProductOptionGroup> toRemove = new ArrayList<>(product.getProductOptionGroups());
+            product.getProductOptionGroups().clear();
+            deleteAll(toRemove);
+            return List.of();
+        }
 
         List<UUID> incomingIds = productOptionGroupDtos.stream()
             .map(ProductOptionGroupDto::id)
-            .filter(id -> id != null)
+            .filter(Objects::nonNull)
             .toList();
 
-        List<ProductOptionGroup> toRemove = existingProductOptionGroups.stream()
+        List<ProductOptionGroup> toRemove = product.getProductOptionGroups().stream()
             .filter(pog -> !incomingIds.contains(pog.getId()))
             .toList();
 
-        if (!toRemove.isEmpty()) {
-            productOptionGroupRepository.deleteAll(toRemove);
-        }
+        product.getProductOptionGroups().removeAll(toRemove);
+        this.deleteAll(toRemove);
 
-        return productOptionGroupDtos.stream().map(productOptionGroupDto -> {
+        List<ProductOptionGroup> updatedProductOptionGroups = productOptionGroupDtos.stream().map(productOptionGroupDto -> {
             OptionGroup optionGroup = optionGroupService.updateOrCreate(productOptionGroupDto.optionGroup(), merchantId);
 
             ProductOptionGroup productOptionGroup = productOptionGroupDto.id() != null
-                ? existingProductOptionGroups.stream()
-                    .filter(pog -> pog.getId().equals(productOptionGroupDto.id()))
-                    .findFirst()
+                ? productOptionGroupRepository.findById(productOptionGroupDto.id())
                     .orElse(new ProductOptionGroup())
                 : new ProductOptionGroup();
 
             productOptionGroup.setOptionGroup(optionGroup);
+            productOptionGroup.setProduct(product);
             productOptionGroup.setIndex(productOptionGroupDto.index());
             productOptionGroup.setMin(productOptionGroupDto.min());
             productOptionGroup.setMax(productOptionGroupDto.max());
 
             return productOptionGroupRepository.save(productOptionGroup);
         }).toList();
+
+        updatedProductOptionGroups.forEach(updated -> {
+            if (!product.getProductOptionGroups().contains(updated)) {
+                product.getProductOptionGroups().add(updated);
+            }
+        });
+
+        return updatedProductOptionGroups;
     }
+
 
     @Transactional
     public void unlinkOptionGroup(UUID productOptionGroupId) {

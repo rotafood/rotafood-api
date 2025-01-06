@@ -10,22 +10,15 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.rotafood.api.application.dto.catalog.ProductDto;
 import br.com.rotafood.api.domain.entity.catalog.DietaryRestrictions;
 import br.com.rotafood.api.domain.entity.catalog.Product;
-import br.com.rotafood.api.domain.entity.catalog.ProductOptionGroup;
-import br.com.rotafood.api.domain.entity.catalog.ProductPackaging;
-import br.com.rotafood.api.domain.entity.catalog.Weight;
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
 import br.com.rotafood.api.domain.repository.MerchantRepository;
 import br.com.rotafood.api.domain.repository.ProductRepository;
-import br.com.rotafood.api.domain.repository.WeightRepository;
 
 @Service
 public class ProductService { 
 
     @Autowired
     private ProductRepository productRepository;
-
-    @Autowired
-    private WeightRepository weightRepository;
 
     @Autowired
     private MerchantRepository merchantRepository;
@@ -57,46 +50,15 @@ public class ProductService {
         product.setQuantity(productDto.quantity());
 
         productRepository.save(product);
-
-
-    
-        if (productDto.weight() != null) {
-            Weight weight = productDto.weight().id() != null 
-                ? weightRepository.findById(productDto.weight().id()).orElseGet(Weight::new) 
-                : new Weight();
-            weight.setQuantity(productDto.weight().quantity());
-            weight.setUnit(productDto.weight().unit());
-            weight = this.weightRepository.save(weight);
-
-            weight.setProduct(product);
-            product.setWeight(weight);
-        }
     
     
         if (productDto.packagings() != null) {
-            product.getProductPackagings().clear();
-    
-            List<ProductPackaging> productPackagings = productPackagingService.createOrUpdateAll(
-                productDto.packagings(),
-                product.getId(),
-                merchantId
-            );
-    
-            productPackagings.forEach(cm -> cm.setProduct(product));
-            product.getProductPackagings().addAll(productPackagings);
+            productPackagingService.createOrUpdateAll(productDto.packagings(), product, merchantId);
         }
+        
     
         if (productDto.optionGroups() != null) {
-            product.getProductOptionGroups().clear();
-    
-            List<ProductOptionGroup> productOptionGroups = productOptionGroupService.createOrUpdateAll(
-                productDto.optionGroups(),
-                product.getId(),
-                merchantId
-            );
-    
-            productOptionGroups.forEach(cm -> cm.setProduct(product));
-            product.getProductOptionGroups().addAll(productOptionGroups);
+            productOptionGroupService.createOrUpdateAll(productDto.optionGroups(), product, merchantId);
         }
     
         return product;
@@ -106,9 +68,11 @@ public class ProductService {
 
     @Transactional
     public void deleteById(UUID productId, UUID merchantId) {
-        Product product = productRepository.findByIdAndMerchantId(productId, merchantId);
-        productRepository.delete(product);
-    }
+            Product product = productRepository.findByIdAndMerchantId(productId, merchantId);
+            System.err.println(product);
+
+            productRepository.delete(product);
+        }
 
     public Product getById(UUID productId, UUID merchantId) {
         return productRepository.findByIdAndMerchantId(productId, merchantId);

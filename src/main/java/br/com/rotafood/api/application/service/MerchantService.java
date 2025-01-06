@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import br.com.rotafood.api.application.dto.address.AddressDto;
 import br.com.rotafood.api.application.dto.merchant.MerchantCreateDto;
+import br.com.rotafood.api.application.dto.merchant.MerchantDto;
 import br.com.rotafood.api.application.dto.merchant.MerchantOwnerCreationDto;
 import br.com.rotafood.api.application.dto.merchant.OwnerCreateDto;
 import br.com.rotafood.api.domain.entity.address.Address;
@@ -71,7 +73,7 @@ public class MerchantService {
             null, 
             merchantDto.name(), 
             merchantDto.corporateName(),
-            merchantDto.corporateName(), 
+            null, 
             merchantDto.description(), 
             merchantDto.documentType(),
             merchantDto.document(), 
@@ -82,6 +84,43 @@ public class MerchantService {
             null, 
             null
         );
+        return merchantRepository.save(merchant);
+    }
+
+    @Transactional
+    public Merchant updateMerchant(MerchantDto merchantDto) {
+
+        Merchant merchant = merchantRepository.findById(merchantDto.id())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Merchant not found"));
+
+        String existingOnlineName = merchant.getOnlineName();
+        if ((existingOnlineName == null || !existingOnlineName.equals(merchantDto.onlineName())) &&
+            merchantRepository.existsByOnlineName(merchantDto.onlineName())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Online name already in use");
+        }
+        merchant.setName(merchantDto.name());
+        merchant.setCorporateName(merchantDto.corporateName());
+        merchant.setOnlineName(merchantDto.onlineName());
+        merchant.setDescription(merchantDto.description());
+        merchant.setImagePath(merchantDto.imagePath());
+        merchant.setDocumentType(merchantDto.documentType());
+        merchant.setDocument(merchantDto.document());
+        merchant.setMerchantType(merchantDto.merchantType());
+
+
+        if (merchantDto.address() != null) {
+            Address currentAddress = merchant.getAddress();
+
+            if (currentAddress != null) {
+                currentAddress.updateFromDto(merchantDto.address());
+                addressRepository.save(currentAddress);
+            } else {
+                Address newAddress = new Address(merchantDto.address());
+                addressRepository.save(newAddress);
+                merchant.setAddress(newAddress);
+            }
+        }
+
         return merchantRepository.save(merchant);
     }
 
@@ -101,6 +140,13 @@ public class MerchantService {
     public MerchantUser getMerchantUserByEmail(String email) {
         return this.merchantUserRepository.findByEmail(email);
     }
-    
-    
+
+    public boolean existMerchantByOnlineName(String onlineName) {
+        return this.merchantRepository.existsByOnlineName(onlineName);
+    }
+
+    public Merchant getMerchantById(UUID id) {
+        return this.merchantRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Merchant not found"));
+    }
 }

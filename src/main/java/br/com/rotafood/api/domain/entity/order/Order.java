@@ -63,39 +63,76 @@ public class Order {
     @Column(columnDefinition = "TEXT")
     private String extraInfo;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)    
     @JoinColumn(name = "merchantId")
     private Merchant merchant;
 
-    @OneToOne(mappedBy = "order")
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "orderTotalId")
     private OrderTotal total;
 
-    @OneToOne(mappedBy = "order")
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "orderCustomerId")
     private OrderCustomer customer;
 
-    @OneToOne(mappedBy = "order")
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "orderDeliveryId")
     private OrderDelivery delivery;
 
-    @OneToOne(mappedBy = "order")
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "orderScheduleId")
     private OrderSchedule schedule;
 
-    @OneToOne(mappedBy = "order")
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "orderIndoorId")
     private OrderIndoor indoor;
 
-    @OneToOne(mappedBy = "order")
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "orderTakeoutId")
     private OrderTakeout takeout;
-    
-    @OneToOne(mappedBy = "order")
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "orderPaymentId")
     private OrderPayment payment;
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> items;
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderBenefit> benefits;
 
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderAdditionalFee> additionalFees;
+
+    public void addItem(OrderItem item) {
+        items.add(item);
+        item.setOrder(this);
+    }
+
+    public void removeItem(OrderItem item) {
+        items.remove(item);
+        item.setOrder(null);
+    }
+
+    public void addBenefit(OrderBenefit benefit) {
+        benefits.add(benefit);
+        benefit.setOrder(this);
+    }
+
+    public void removeBenefit(OrderBenefit benefit) {
+        benefits.remove(benefit);
+        benefit.setOrder(null);
+    }
+
+    public void addAdditionalFee(OrderAdditionalFee additionalFee) {
+        additionalFees.add(additionalFee);
+        additionalFee.setOrder(this);
+    }
+
+    public void removeAdditionalFee(OrderAdditionalFee additionalFee) {
+        additionalFees.remove(additionalFee);
+        additionalFee.setOrder(null);
+    }
 
 }

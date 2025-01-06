@@ -49,10 +49,20 @@ public class OptionGroup {
     @OneToMany(mappedBy = "optionGroup", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Option> options = new ArrayList<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)    
     @JoinColumn(name = "merchantId")
     private Merchant merchant;
 
     @Column(nullable = true)
     private UUID iFoodOptionGroupId;
+
+    public void addOption(Option option) {
+        this.options.add(option);
+        option.setOptionGroup(this);
+    }
+
+    public void removeOption(Option option) {
+        this.options.remove(option);
+        option.setOptionGroup(null);
+    }
 }

@@ -7,6 +7,7 @@ import java.util.UUID;
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -35,7 +36,7 @@ public class Vrp {
     private UUID id;   
 
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)    
     @JoinColumn(name = "merhcantId")
     private Merchant merchant;
 

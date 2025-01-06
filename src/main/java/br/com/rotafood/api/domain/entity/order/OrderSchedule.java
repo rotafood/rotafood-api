@@ -7,8 +7,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -36,9 +34,5 @@ public class OrderSchedule {
 
     @Temporal(TemporalType.DATE) 
     private Date deliveryDateTimeEnd;
-
-    @OneToOne
-    @JoinColumn(name = "orderId")
-    private Order order;
 
 }

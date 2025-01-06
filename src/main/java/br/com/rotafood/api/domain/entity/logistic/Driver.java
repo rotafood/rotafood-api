@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -41,7 +42,7 @@ public class Driver {
     @OneToMany(mappedBy = "driver")
     private List<DriverRoute> routes;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)    
     @JoinColumn(name = "merchantId")
     private Merchant merchant;
 

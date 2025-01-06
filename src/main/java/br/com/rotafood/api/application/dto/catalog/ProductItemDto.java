@@ -14,9 +14,7 @@ public record ProductItemDto(
     String ean,
     String additionalInformation,
     List<DietaryRestrictions> dietaryRestrictions,
-    SellingOptionDto sellingOption,
     UUID itemId,
-    WeightDto weight,
     Serving serving,
     List<String> tags,
     String imagePath,
@@ -36,9 +34,7 @@ public record ProductItemDto(
                     .map(DietaryRestrictions::valueOf)
                     .toList()
                 : List.of(),
-            product.getSellingOption() != null ? new SellingOptionDto(product.getSellingOption()) : null,
             product.getItem() != null ? product.getItem().getId() : null,
-            product.getWeight() != null ? new WeightDto(product.getWeight()) : null,
             product.getServing(),
             product.getTags(),
             product.getImagePath(),

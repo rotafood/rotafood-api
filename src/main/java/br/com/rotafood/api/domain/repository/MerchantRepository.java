@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
 
-public interface MerchantRepository extends JpaRepository<Merchant, UUID> {}
+public interface MerchantRepository extends JpaRepository<Merchant, UUID> {
+    boolean existsByOnlineName(String existsByOnlineName);
+}

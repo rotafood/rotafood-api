@@ -53,15 +53,15 @@ public class Item {
     @Column(nullable = true)
     private UUID iFoodItemId;
     
-    @ManyToOne
-    @JoinColumn(name = "merchantId")
+    @ManyToOne(fetch = FetchType.LAZY)    
+    @JoinColumn(name = "merchantId", nullable = false)
     private Merchant merchant;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "productId")    
     private Product product;
     
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoryId")
     private Category category;
 
@@ -70,5 +70,25 @@ public class Item {
 
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Shift> shifts = new ArrayList<>();
+
+    public void addContextModifier(ContextModifier modifier) {
+        this.contextModifiers.add(modifier);
+        modifier.setItem(this);
+    }
+
+    public void removeContextModifier(ContextModifier modifier) {
+        this.contextModifiers.remove(modifier);
+        modifier.setItem(null);
+    }
+
+    public void addShift(Shift shift) {
+        this.shifts.add(shift);
+        shift.setItem(this);
+    }
+
+    public void removeShift(Shift shift) {
+        this.shifts.remove(shift);
+        shift.setItem(null);
+    }
 
 }

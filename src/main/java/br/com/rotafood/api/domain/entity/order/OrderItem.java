@@ -7,6 +7,7 @@ import java.util.UUID;
 import br.com.rotafood.api.domain.entity.catalog.Item;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -43,11 +44,11 @@ public class OrderItem {
     @OneToMany(mappedBy = "orderItem")
     private List<OrderItemOption> options;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)    
     @JoinColumn(name = "itemId")
     private Item item;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)    
     @JoinColumn(name = "orderId")
     private Order order;
 

@@ -47,6 +47,7 @@ public class Merchant {
     @Column(length = 64)
     private String corporateName;
     
+    @Column
     private String onlineName;
 
     @Column(length = 256)

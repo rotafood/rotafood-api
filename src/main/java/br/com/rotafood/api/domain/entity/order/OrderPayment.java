@@ -9,8 +9,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -34,7 +32,6 @@ public class OrderPayment {
     @Column(length = 1024)
     private String description;
 
-    
     @Column(precision = 10, scale = 2)
     private BigDecimal pending;
     
@@ -43,10 +40,16 @@ public class OrderPayment {
     
     @OneToMany(mappedBy = "payment")
     private List<OrderPaymentMethod> methods;
-    
-    @ManyToOne
-    @JoinColumn(name = "orderId")
-    private Order order;
+
+    public void addPaymentMethod(OrderPaymentMethod method) {
+        methods.add(method);
+        method.setPayment(this);
+    }
+
+    public void removePaymentMethod(OrderPaymentMethod method) {
+        methods.remove(method);
+        method.setPayment(null);
+    }
 
 }
 

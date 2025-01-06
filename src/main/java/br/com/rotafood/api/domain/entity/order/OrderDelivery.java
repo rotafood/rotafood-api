@@ -36,22 +36,22 @@ public class OrderDelivery {
     private UUID id;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 20)
+    @Column(length = 20, nullable = false)
     private OrderDeliveryMode mode;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 20)
+    @Column(length = 20, nullable = false)
     private OrderDeliveryBy deliveryBy;
 
-    @Column(length = 256)
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20, nullable = false)
+    private OrderDeliveryDescription description;
+
+    @Column(length = 256, nullable = false)
     private String pickupCode;
 
-    @Temporal(TemporalType.DATE) 
+    @Temporal(TemporalType.TIMESTAMP)
     private Date deliveryDateTime;
-
-    @OneToOne
-    @JoinColumn(name = "orderId")
-    private Order order;
 
     @OneToOne
     @JoinColumn(name = "addressId")
