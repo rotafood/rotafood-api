@@ -1,7 +1,8 @@
 package br.com.rotafood.api.application.controller.v1;
 
 import br.com.rotafood.api.application.dto.catalog.ImageDto;
-import br.com.rotafood.api.application.service.ImageService;
+import br.com.rotafood.api.application.service.catalog.ImageService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -1,10 +1,10 @@
-package br.com.rotafood.api.application.service;
+package br.com.rotafood.api.application.service.order;
 
-import br.com.rotafood.api.application.dto.order.OrderScheduleDto;
+import br.com.rotafood.api.application.dto.order.OrderIndoorDto;
 import br.com.rotafood.api.domain.entity.order.Order;
-import br.com.rotafood.api.domain.entity.order.OrderSchedule;
+import br.com.rotafood.api.domain.entity.order.OrderIndoor;
 import br.com.rotafood.api.domain.repository.OrderRepository;
-import br.com.rotafood.api.domain.repository.OrderScheduleRepository;
+import br.com.rotafood.api.domain.repository.OrderIndoorRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,30 +13,30 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
-public class OrderScheduleService {
+public class OrderIndoorService {
 
     @Autowired
-    private OrderScheduleRepository orderScheduleRepository;
+    private OrderIndoorRepository orderIndoorRepository;
 
     @Autowired
     private OrderRepository orderRepository;
 
     @Transactional
-    public OrderSchedule createOrUpdate(OrderScheduleDto dto, UUID orderId) {
+    public OrderIndoor createOrUpdate(OrderIndoorDto dto, UUID orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new EntityNotFoundException("Order not found."));
 
-        OrderSchedule schedule = order.getSchedule() != null
-                ? order.getSchedule()
-                : new OrderSchedule();
+        OrderIndoor indoor = order.getIndoor() != null
+                ? order.getIndoor()
+                : new OrderIndoor();
 
-        schedule.setDeliveryDateTimeStart(dto.deliveryDateTimeStart());
-        schedule.setDeliveryDateTimeEnd(dto.deliveryDateTimeEnd());
+        indoor.setMode(dto.mode());
+        indoor.setDeliveryDateTime(dto.deliveryDateTime());
 
-        order.setSchedule(schedule);
+        order.setIndoor(indoor);
 
         orderRepository.save(order);
-        return orderScheduleRepository.save(schedule);
+        return orderIndoorRepository.save(indoor);
     }
 
     @Transactional
@@ -44,16 +44,16 @@ public class OrderScheduleService {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new EntityNotFoundException("Order not found."));
 
-        if (order.getSchedule() != null) {
-            orderScheduleRepository.delete(order.getSchedule());
-            order.setSchedule(null);
+        if (order.getIndoor() != null) {
+            orderIndoorRepository.delete(order.getIndoor());
+            order.setIndoor(null);
             orderRepository.save(order);
         }
     }
 
-    public OrderSchedule getByOrderId(UUID orderId) {
+    public OrderIndoor getByOrderId(UUID orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new EntityNotFoundException("Order not found."));
-        return order.getSchedule();
+        return order.getIndoor();
     }
 }

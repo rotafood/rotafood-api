@@ -1,7 +1,7 @@
 package br.com.rotafood.api.application.controller.v1;
 
 import br.com.rotafood.api.application.dto.order.FullOrderDto;
-import br.com.rotafood.api.application.service.OrderService;
+import br.com.rotafood.api.application.service.order.OrderService;
 import br.com.rotafood.api.domain.entity.order.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

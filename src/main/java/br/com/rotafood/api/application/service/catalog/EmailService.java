@@ -1,4 +1,4 @@
-package br.com.rotafood.api.application.service;
+package br.com.rotafood.api.application.service.catalog;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;

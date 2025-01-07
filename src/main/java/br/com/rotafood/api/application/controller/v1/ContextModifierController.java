@@ -1,8 +1,7 @@
 package br.com.rotafood.api.application.controller.v1;
 
 import br.com.rotafood.api.application.dto.catalog.ContextModifierDto;
-import br.com.rotafood.api.application.service.ContextModifierService;
-
+import br.com.rotafood.api.application.service.catalog.ContextModifierService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

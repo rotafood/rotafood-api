@@ -1,11 +1,11 @@
 package br.com.rotafood.api.infra.dbinit;
 
-import br.com.rotafood.api.application.service.DefaultPackagingPopulateService;
-import br.com.rotafood.api.application.service.DefaultProductPopulateService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+
+import br.com.rotafood.api.application.service.catalog.DefaultPackagingPopulateService;
+import br.com.rotafood.api.application.service.catalog.DefaultProductPopulateService;
 
 @Component
 public class DatabaseInitializer implements CommandLineRunner {

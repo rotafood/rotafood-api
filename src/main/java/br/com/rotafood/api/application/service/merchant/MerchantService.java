@@ -1,4 +1,4 @@
-package br.com.rotafood.api.application.service;
+package br.com.rotafood.api.application.service.merchant;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -17,6 +17,7 @@ import br.com.rotafood.api.application.dto.merchant.MerchantCreateDto;
 import br.com.rotafood.api.application.dto.merchant.MerchantDto;
 import br.com.rotafood.api.application.dto.merchant.MerchantOwnerCreationDto;
 import br.com.rotafood.api.application.dto.merchant.OwnerCreateDto;
+import br.com.rotafood.api.application.service.catalog.CatalogService;
 import br.com.rotafood.api.domain.entity.address.Address;
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
 import br.com.rotafood.api.domain.entity.merchant.MerchantPermission;

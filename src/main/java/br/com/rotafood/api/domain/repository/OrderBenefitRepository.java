@@ -10,4 +10,6 @@ import java.util.UUID;
 public interface OrderBenefitRepository extends JpaRepository<OrderBenefit, UUID> {
     List<OrderBenefit> findAllByMerchantId(UUID merchantId);
     Optional<OrderBenefit> findByIdAndMerchantId(UUID id, UUID merchantId);
+    List<OrderBenefit> findAllByOrderId(UUID orderId);
+
 }

@@ -1,4 +1,4 @@
-package br.com.rotafood.api.application.service;
+package br.com.rotafood.api.application.service.catalog;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

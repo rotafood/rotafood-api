@@ -1,4 +1,4 @@
-package br.com.rotafood.api.application.service;
+package br.com.rotafood.api.application.service.catalog;
 
 import java.util.ArrayList;
 import java.util.List;

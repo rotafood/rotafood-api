@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.rotafood.api.application.dto.address.AddressDto;
 import br.com.rotafood.api.application.dto.logistic.VrpOriginDto;
 import br.com.rotafood.api.application.dto.logistic.VrpOutDto;
-import br.com.rotafood.api.application.service.LogisticService;
+import br.com.rotafood.api.application.service.catalog.LogisticService;
 import jakarta.servlet.http.HttpServletRequest;
 
 

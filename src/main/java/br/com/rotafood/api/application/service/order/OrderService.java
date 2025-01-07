@@ -1,7 +1,10 @@
-package br.com.rotafood.api.application.service;
+package br.com.rotafood.api.application.service.order;
 
 
 import br.com.rotafood.api.application.dto.order.FullOrderDto;
+import br.com.rotafood.api.application.dto.order.OrderAdditionalFeeDto;
+import br.com.rotafood.api.application.dto.order.OrderBenefitDto;
+import br.com.rotafood.api.application.dto.order.OrderItemDto;
 import br.com.rotafood.api.domain.entity.order.Order;
 import br.com.rotafood.api.domain.repository.OrderRepository;
 import br.com.rotafood.api.domain.repository.MerchantRepository;
@@ -30,6 +33,25 @@ public class OrderService {
 
     @Autowired
     private OrderCustomerService orderCustomerService;
+
+
+    @Autowired
+    private OrderTakeoutService orderTakeOrderTakeoutService;
+
+    @Autowired
+    private OrderPaymentService orderPaymentService;
+
+    @Autowired
+    private OrderIndoorService orderIndoorService;
+
+    @Autowired
+    private OrderItemService orderItemService;
+
+    @Autowired
+    private OrderBenefitService orderBenefitService;
+
+    @Autowired
+    private OrderAdditionalFeeService orderAdditionalFeeService;
 
     public List<Order> getAllByMerchantId(UUID merchantId) {
         return orderRepository.findAllByMerchantId(merchantId);
@@ -65,12 +87,42 @@ public class OrderService {
             orderTotalService.createOrUpdate(fullOrderDto.total(), order.getId());
         }
 
+        if (fullOrderDto.takeout() != null) {
+            orderTakeOrderTakeoutService.createOrUpdate(fullOrderDto.takeout(), order.getId());
+        }
+
         if (fullOrderDto.customer() != null) {
             orderCustomerService.createOrAssociate(fullOrderDto.customer(), order.getId());
         }
 
         if (fullOrderDto.delivery() != null) {
             orderDeliveryService.createOrUpdate(fullOrderDto.delivery(), order.getId());
+        }
+
+        if (fullOrderDto.indoor() != null) {
+            orderIndoorService.createOrUpdate(fullOrderDto.indoor(), order.getId());
+        }
+
+        if (fullOrderDto.payment() != null) {
+            orderPaymentService.createOrUpdate(fullOrderDto.payment(), order.getId());
+        }
+
+        if (fullOrderDto.items() != null) {
+            for (OrderItemDto itemDto : fullOrderDto.items()) {
+                orderItemService.createOrUpdate(itemDto, order.getId());
+            }
+        }
+
+        if (fullOrderDto.benefits() != null) {
+            for (OrderBenefitDto benefitDto : fullOrderDto.benefits()) {
+                orderBenefitService.createOrUpdate(benefitDto, order.getId());
+            }
+        }
+
+        if (fullOrderDto.additionalFees() != null) {
+            for (OrderAdditionalFeeDto feeDto : fullOrderDto.additionalFees()) {
+                orderAdditionalFeeService.createOrUpdate(feeDto, order.getId());
+            }
         }
 
         return orderRepository.save(order);

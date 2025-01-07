@@ -1,7 +1,8 @@
 package br.com.rotafood.api.application.controller.v1;
 
 import br.com.rotafood.api.application.dto.catalog.ItemDto;
-import br.com.rotafood.api.application.service.ItemService;
+import br.com.rotafood.api.application.service.catalog.ItemService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

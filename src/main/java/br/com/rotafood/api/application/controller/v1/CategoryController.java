@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.rotafood.api.application.dto.catalog.CategoryDto;
 import br.com.rotafood.api.application.dto.catalog.FullCategoryDto;
-import br.com.rotafood.api.application.service.CategoryService;
+import br.com.rotafood.api.application.service.catalog.CategoryService;
 import jakarta.validation.Valid;
 
 @RestController

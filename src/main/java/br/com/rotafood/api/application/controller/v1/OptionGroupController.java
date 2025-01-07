@@ -1,7 +1,7 @@
 package br.com.rotafood.api.application.controller.v1;
 
 import br.com.rotafood.api.application.dto.catalog.OptionGroupDto;
-import br.com.rotafood.api.application.service.OptionGroupService;
+import br.com.rotafood.api.application.service.catalog.OptionGroupService;
 import br.com.rotafood.api.domain.entity.catalog.OptionGroupType;
 
 import org.springframework.beans.factory.annotation.Autowired;

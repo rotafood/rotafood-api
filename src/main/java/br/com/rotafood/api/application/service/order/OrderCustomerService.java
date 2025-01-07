@@ -1,4 +1,4 @@
-package br.com.rotafood.api.application.service;
+package br.com.rotafood.api.application.service.order;
 
 import br.com.rotafood.api.application.dto.order.OrderCustomerDto;
 import br.com.rotafood.api.domain.entity.order.Order;

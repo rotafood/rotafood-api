@@ -1,4 +1,4 @@
-package br.com.rotafood.api.application.service;
+package br.com.rotafood.api.application.service.catalog;
 
 import java.io.IOException;
 import java.util.List;

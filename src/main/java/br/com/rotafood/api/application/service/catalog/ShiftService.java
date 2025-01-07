@@ -1,4 +1,4 @@
-package br.com.rotafood.api.application.service;
+package br.com.rotafood.api.application.service.catalog;
 
 import br.com.rotafood.api.application.dto.catalog.ShiftDto;
 import br.com.rotafood.api.domain.entity.catalog.Shift;

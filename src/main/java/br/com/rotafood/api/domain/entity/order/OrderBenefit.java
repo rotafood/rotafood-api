@@ -36,8 +36,7 @@ public class OrderBenefit {
     @Column(precision = 10, scale = 2)
     private BigDecimal value;
 
-    @Enumerated(EnumType.STRING)
-    private OrderBenefitTarget target;
+    private String target;
 
     @ManyToOne(fetch = FetchType.LAZY)    
     @JoinColumn(name = "orderId")

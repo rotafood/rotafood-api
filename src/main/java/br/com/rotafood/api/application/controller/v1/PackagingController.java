@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.rotafood.api.application.dto.catalog.PackagingDto;
-import br.com.rotafood.api.application.service.PackagingService;
+import br.com.rotafood.api.application.service.catalog.PackagingService;
 import jakarta.validation.Valid;
 
 @RestController

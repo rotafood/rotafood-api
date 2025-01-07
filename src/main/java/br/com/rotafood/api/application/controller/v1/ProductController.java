@@ -1,11 +1,10 @@
 package br.com.rotafood.api.application.controller.v1;
 
 
-import br.com.rotafood.api.application.service.ProductService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import br.com.rotafood.api.application.service.catalog.ProductService;
 import jakarta.validation.Valid;
 import java.util.UUID;
 

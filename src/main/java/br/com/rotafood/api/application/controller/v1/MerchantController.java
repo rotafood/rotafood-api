@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.rotafood.api.application.dto.merchant.MerchantDto;
-import br.com.rotafood.api.application.service.MerchantService;
+import br.com.rotafood.api.application.service.merchant.MerchantService;
 import jakarta.validation.Valid;
 
 @RestController

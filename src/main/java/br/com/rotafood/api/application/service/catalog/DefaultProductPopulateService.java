@@ -1,4 +1,4 @@
-package br.com.rotafood.api.application.service;
+package br.com.rotafood.api.application.service.catalog;
 
 import br.com.rotafood.api.domain.entity.catalog.DefaultProduct;
 import br.com.rotafood.api.domain.repository.DefaultProductRepository;
