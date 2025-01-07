@@ -11,6 +11,5 @@ import br.com.rotafood.api.domain.entity.catalog.Packaging;
 public interface PackagingRepository extends JpaRepository<Packaging, UUID> {
 
     List<Packaging> findByMerchantId(UUID merchantId);
-
     Optional<Packaging> findByIdAndMerchantId(UUID id, UUID merchantId);
 }
