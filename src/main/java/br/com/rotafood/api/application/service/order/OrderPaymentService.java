@@ -1,6 +1,7 @@
 package br.com.rotafood.api.application.service.order;
 
 import br.com.rotafood.api.application.dto.order.OrderPaymentDto;
+import br.com.rotafood.api.application.dto.order.OrderPaymentMethodDto;
 import br.com.rotafood.api.domain.entity.order.Order;
 import br.com.rotafood.api.domain.entity.order.OrderPayment;
 import br.com.rotafood.api.domain.repository.OrderPaymentRepository;
@@ -19,6 +20,9 @@ public class OrderPaymentService {
     private OrderPaymentRepository orderPaymentRepository;
 
     @Autowired
+    private OrderPaymentMethodService orderPaymentMethodService;
+
+    @Autowired
     private OrderRepository orderRepository;
 
     @Transactional
@@ -34,9 +38,15 @@ public class OrderPaymentService {
         payment.setPending(dto.pending());
         payment.setPrepaid(dto.prepaid());
 
-        order.setPayment(payment);
+        if (dto.methods() != null) {
+            for (OrderPaymentMethodDto methodDto : dto.methods()) {
+                orderPaymentMethodService.createOrUpdate(methodDto, payment.getId());
+            }
+        }
 
+        order.setPayment(payment);
         orderRepository.save(order);
+
         return orderPaymentRepository.save(payment);
     }
 
