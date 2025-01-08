@@ -2,13 +2,11 @@ package br.com.rotafood.api.application.service.catalog;
 
 
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.rotafood.api.application.dto.catalog.ContextModifierDto;
 import br.com.rotafood.api.application.dto.catalog.OptionDto;
 import br.com.rotafood.api.application.dto.catalog.ProductOptionDto;
 import br.com.rotafood.api.domain.entity.catalog.ContextModifier;
@@ -43,7 +41,6 @@ public class OptionService {
             ? optionRepository.findById(optionDto.id()).orElse(new Option())
             : new Option();
 
-        // System.err.println(optionDto);
 
 
         option.setStatus(optionDto.status());
@@ -60,33 +57,10 @@ public class OptionService {
         product.setOption(option);
         option.setProduct(product);
 
-        List<UUID> incomingContextModifierIds = optionDto.contextModifiers().stream()
-        .map(ContextModifierDto::id)
-        .filter(Objects::nonNull)
-        .toList();
-
-        List<ContextModifier> toRemove = option.getContextModifiers().stream()
-            .filter(existingModifier -> !incomingContextModifierIds.contains(existingModifier.getId()))
-            .toList();
-
-        toRemove.forEach(contextModifierService::delete);
-
-        var updatedContextModifiers = optionDto.contextModifiers().stream()
-            .map(contextModifierDto -> {
-                var contextModifier = this.contextModifierService.updateOrCreate(contextModifierDto);
-
-                contextModifier.setOption(option);
-                if (contextModifierDto.parentOptionId() != null) {
-                    Option parentOption = optionRepository.findById(contextModifierDto.parentOptionId()).orElse(null);
-                    contextModifier.setParentOptionModifier(parentOption);
-                }
-
-                return this.contextModifierService.updateOrCreate(contextModifierDto);
-            })
-            .toList();
+        List<ContextModifier> contextModifiers = contextModifierService.updateOrCreateAll(optionDto.contextModifiers());
 
         option.getContextModifiers().clear();
-        option.getContextModifiers().addAll(updatedContextModifiers);
+        contextModifiers.forEach(option::addContextModifier);
 
         return optionRepository.save(option);
     }

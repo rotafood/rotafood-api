@@ -10,13 +10,10 @@ import org.springframework.stereotype.Service;
 
 import br.com.rotafood.api.application.dto.catalog.OptionDto;
 import br.com.rotafood.api.application.dto.catalog.OptionGroupDto;
-import br.com.rotafood.api.domain.entity.catalog.ProductOptionGroup;
 import br.com.rotafood.api.domain.entity.catalog.Option;
 import br.com.rotafood.api.domain.entity.catalog.OptionGroup;
 import br.com.rotafood.api.domain.entity.catalog.OptionGroupType;
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
-import br.com.rotafood.api.domain.repository.ProductOptionGroupRepository;
-import br.com.rotafood.api.domain.repository.ProductRepository;
 import br.com.rotafood.api.domain.repository.MerchantRepository;
 import br.com.rotafood.api.domain.repository.OptionGroupRepository;
 import jakarta.transaction.Transactional;
@@ -26,12 +23,6 @@ public class OptionGroupService {
 
     @Autowired
     private OptionGroupRepository optionGroupRepository;
-
-    @Autowired
-    private ProductOptionGroupRepository productOptionGroupRepository;
-
-    @Autowired
-    private ProductRepository productRepository;
 
     @Autowired
     private MerchantRepository merchantRepository;
@@ -50,72 +41,49 @@ public class OptionGroupService {
     public OptionGroup updateOrCreate(OptionGroupDto optionGroupDto, UUID merchantId) {
         Merchant merchant = merchantRepository.findById(merchantId)
             .orElseThrow(() -> new IllegalArgumentException("Merchant não encontrado."));
-    
+
         OptionGroup optionGroup = optionGroupDto.id() != null
             ? optionGroupRepository.findById(optionGroupDto.id())
                 .orElseThrow(() -> new IllegalArgumentException("OptionGroup não encontrado."))
             : new OptionGroup();
-    
+
         optionGroup.setName(optionGroupDto.name());
         optionGroup.setStatus(optionGroupDto.status());
         optionGroup.setOptionGroupType(optionGroupDto.optionGroupType());
         optionGroup.setMerchant(merchant);
 
-    
-        optionGroupRepository.save(optionGroup);
-    
-        if (optionGroupDto.options() == null || optionGroupDto.options().isEmpty()) {
-            List<Option> toRemove = new ArrayList<>(optionGroup.getOptions());
-            optionGroup.getOptions().clear();
-            optionService.deleteAll(toRemove);
-            return optionGroupRepository.save(optionGroup);
-        }
-    
-        List<UUID> incomingOptionIds = optionGroupDto.options().stream()
-            .map(OptionDto::id)
-            .filter(Objects::nonNull)
-            .toList();
-    
-        List<Option> optionsToRemove = optionGroup.getOptions().stream()
-            .filter(existingOption -> !incomingOptionIds.contains(existingOption.getId()))
-            .toList();
-    
-        optionsToRemove.forEach(optionService::unlinkAndDeleteOption);
+        updateOptions(optionGroup, optionGroupDto.options());
 
-    
-        List<Option> updatedOptions = optionGroupDto.options().stream()
-            .map(optionDto -> optionService.updateOrCreate(optionDto, optionGroup))
-            .toList();
-    
-        optionGroup.getOptions().clear();
-        optionGroup.getOptions().addAll(updatedOptions);
-    
         return optionGroupRepository.save(optionGroup);
     }
+
+    private void updateOptions(OptionGroup optionGroup, List<OptionDto> optionDtos) {
+        if (optionDtos == null || optionDtos.isEmpty()) {
+            List<Option> toRemove = new ArrayList<>(optionGroup.getOptions());
+            toRemove.forEach(optionService::unlinkAndDeleteOption);
+            return;
+        }
     
-
-    @Transactional
-    public void linkOptionGroupToProduct(UUID productId, UUID optionGroupId, Integer index, UUID merchantId) {
-        var product = productRepository.findByIdAndMerchantId(productId, merchantId);
-        var optionGroup = optionGroupRepository.getReferenceById(optionGroupId);
-
-        var productOptionGroup = new ProductOptionGroup();
-        productOptionGroup.setProduct(product);
-        productOptionGroup.setOptionGroup(optionGroup);
-        productOptionGroup.setIndex(index);
-
-        productOptionGroupRepository.save(productOptionGroup);
+        List<UUID> incomingOptionIds = optionDtos.stream()
+                .map(OptionDto::id)
+                .filter(Objects::nonNull)
+                .toList();
+    
+        List<Option> optionsToRemove = optionGroup.getOptions().stream()
+                .filter(existingOption -> !incomingOptionIds.contains(existingOption.getId()))
+                .toList();
+    
+        optionsToRemove.forEach(option -> {
+            optionGroup.removeOption(option);
+            optionService.unlinkAndDeleteOption(option);
+        });
+    
+        optionDtos.forEach(optionDto -> {
+            Option newOption = optionService.updateOrCreate(optionDto, optionGroup);
+            optionGroup.addOption(newOption);
+        });
     }
-
-
-
-    @Transactional
-    public void unlinkOptionGroupFromItem(UUID productId, UUID optionGroupId, UUID merchantId) {
-        var product = productRepository.findByIdAndMerchantId(productId, merchantId);
-        var productOptionGroup = productOptionGroupRepository.findByIdAndOptionGroupId(product.getId(), optionGroupId);
-
-        productOptionGroupRepository.delete(productOptionGroup);
-    }
+    
 
     @Transactional
     public void deleteByIdAndMerchantId(UUID optionGroupId, UUID merchantId) {

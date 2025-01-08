@@ -39,35 +39,28 @@ public class ProductOptionGroupService {
             .filter(Objects::nonNull)
             .toList();
 
-        List<ProductOptionGroup> toRemove = product.getProductOptionGroups().stream()
-            .filter(pog -> !incomingIds.contains(pog.getId()))
-            .toList();
-
-        product.getProductOptionGroups().removeAll(toRemove);
-        this.deleteAll(toRemove);
-
-        List<ProductOptionGroup> updatedProductOptionGroups = productOptionGroupDtos.stream().map(productOptionGroupDto -> {
-            OptionGroup optionGroup = optionGroupService.updateOrCreate(productOptionGroupDto.optionGroup(), merchantId);
-
-            ProductOptionGroup productOptionGroup = productOptionGroupDto.id() != null
-                ? productOptionGroupRepository.findById(productOptionGroupDto.id())
-                    .orElse(new ProductOptionGroup())
-                : new ProductOptionGroup();
-
-            productOptionGroup.setOptionGroup(optionGroup);
-            productOptionGroup.setProduct(product);
-            productOptionGroup.setIndex(productOptionGroupDto.index());
-            productOptionGroup.setMin(productOptionGroupDto.min());
-            productOptionGroup.setMax(productOptionGroupDto.max());
-
-            return productOptionGroupRepository.save(productOptionGroup);
-        }).toList();
-
-        updatedProductOptionGroups.forEach(updated -> {
-            if (!product.getProductOptionGroups().contains(updated)) {
-                product.getProductOptionGroups().add(updated);
+        product.getProductOptionGroups().forEach(pog -> {
+            if (!incomingIds.contains(pog.getId())) {
+                product.removeProductOptionGroup(pog);
             }
         });
+
+        List<ProductOptionGroup> updatedProductOptionGroups = productOptionGroupDtos.stream()
+            .map(dto -> {
+                ProductOptionGroup productOptionGroup = product.getProductOptionGroups().stream()
+                    .filter(pog -> pog.getId() != null && pog.getId().equals(dto.id()))
+                    .findFirst()
+                    .orElse(null);
+
+                    OptionGroup optionGroup = optionGroupService.updateOrCreate(dto.optionGroup(), merchantId);
+                    productOptionGroup.setOptionGroup(optionGroup);
+                    productOptionGroup.setIndex(dto.index());
+                    productOptionGroup.setMin(dto.min());
+                    productOptionGroup.setMax(dto.max());
+
+                    return productOptionGroup;
+            })
+            .toList();
 
         return updatedProductOptionGroups;
     }
