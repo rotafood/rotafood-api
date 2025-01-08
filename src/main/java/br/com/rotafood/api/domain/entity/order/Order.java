@@ -45,9 +45,6 @@ public class Order {
     @Temporal(TemporalType.DATE) 
     private Date createdAt;
 
-    @Enumerated(EnumType.STRING)
-    @Column(length = 20)
-    private OrderType orderType;
 
     @Temporal(TemporalType.DATE) 
     private Date preparationStartDateTime;
@@ -58,7 +55,15 @@ public class Order {
 
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
-    private OrderTiming orderTiming;
+    private OrderTiming timing;
+
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20)
+    private OrderType type;
+
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20)
+    private OrderStatus status;
 
     @Column(columnDefinition = "TEXT")
     private String extraInfo;

@@ -80,8 +80,9 @@ public class OptionGroupService {
     
         optionDtos.forEach(optionDto -> {
             Option newOption = optionService.updateOrCreate(optionDto, optionGroup);
-            optionGroup.addOption(newOption);
-        });
+            if (!optionGroup.getOptions().contains(newOption)) {
+                optionGroup.addOption(newOption);
+            }        });
     }
     
 

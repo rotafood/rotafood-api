@@ -3,6 +3,8 @@ package br.com.rotafood.api.application.controller.v1;
 import br.com.rotafood.api.application.dto.order.FullOrderDto;
 import br.com.rotafood.api.application.service.order.OrderService;
 import br.com.rotafood.api.domain.entity.order.Order;
+import br.com.rotafood.api.domain.entity.order.OrderType;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,9 +20,17 @@ public class OrderController {
     private OrderService orderService;
 
     @GetMapping
-    public List<Order> getAllOrders(@PathVariable UUID merchantId) {
-        return orderService.getAllByMerchantId(merchantId);
+    public List<FullOrderDto> getAllOrders(            
+        @PathVariable UUID merchantId,
+        @RequestParam(required = false) List<OrderType> orderTypes,
+        @RequestParam(required = false) Boolean isCompleted) {
+
+    return orderService.getAllByFilters(merchantId, orderTypes, isCompleted)
+            .stream()
+            .map(FullOrderDto::new)
+            .toList();
     }
+
 
     @GetMapping("/{orderId}")
     public Order getOrderById(@PathVariable UUID merchantId, @PathVariable UUID orderId) {
@@ -33,6 +43,7 @@ public class OrderController {
             @RequestBody @Valid FullOrderDto fullOrderDto) {
         return orderService.createOrUpdate(fullOrderDto, merchantId);
     }
+
 
     @DeleteMapping("/{orderId}")
     public void deleteOrder(@PathVariable UUID merchantId, @PathVariable UUID orderId) {

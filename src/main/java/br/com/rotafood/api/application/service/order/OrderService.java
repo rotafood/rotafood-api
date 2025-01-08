@@ -6,6 +6,7 @@ import br.com.rotafood.api.application.dto.order.OrderAdditionalFeeDto;
 import br.com.rotafood.api.application.dto.order.OrderBenefitDto;
 import br.com.rotafood.api.application.dto.order.OrderItemDto;
 import br.com.rotafood.api.domain.entity.order.Order;
+import br.com.rotafood.api.domain.entity.order.OrderType;
 import br.com.rotafood.api.domain.repository.OrderRepository;
 import br.com.rotafood.api.domain.repository.MerchantRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -73,9 +74,10 @@ public class OrderService {
                 .orElseThrow(() -> new EntityNotFoundException("Merchant not found."));
 
         order.setMerchant(merchant);
-        order.setOrderType(fullOrderDto.orderType());
+        order.setType(fullOrderDto.type());
         order.setSalesChannel(fullOrderDto.salesChannel());
-        order.setOrderTiming(fullOrderDto.orderTiming());
+        order.setTiming(fullOrderDto.timing());
+        order.setStatus(fullOrderDto.status());
         order.setExtraInfo(fullOrderDto.extraInfo());
         order.setPreparationStartDateTime(fullOrderDto.preparationStartDateTime());
         order.setModifiedAt(fullOrderDto.modifiedAt());
@@ -133,6 +135,10 @@ public class OrderService {
         Order order = orderRepository.findByIdAndMerchantId(orderId, merchantId)
                 .orElseThrow(() -> new EntityNotFoundException("Order not found."));
         orderRepository.delete(order);
+    }
+
+    public List<Order> getAllByFilters(UUID merchantId, List<OrderType> orderTypes, Boolean isCompleted) {
+        return orderRepository.findAllByFilters(merchantId, orderTypes, isCompleted);
     }
 }
 

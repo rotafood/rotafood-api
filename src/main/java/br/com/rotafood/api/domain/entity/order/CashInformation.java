@@ -25,4 +25,7 @@ public class CashInformation {
 
     @Column(precision = 10, scale = 2, nullable = false)
     private BigDecimal changeFor;
+
+    @Column
+    private String description;
 }

@@ -4,10 +4,23 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
+import br.com.rotafood.api.domain.entity.order.OrderPayment;
+
 public record OrderPaymentDto(
     UUID id,
     String description,
     List<OrderPaymentMethodDto> methods,
     BigDecimal pending,
     BigDecimal prepaid
-) {}
+) {
+    public OrderPaymentDto(OrderPayment payment) {
+    this(
+        payment.getId(),
+        payment.getDescription(),
+        payment.getMethods() != null ? payment.getMethods().stream().map(OrderPaymentMethodDto::new).toList() : List.of(),
+        payment.getPending(),
+        payment.getPrepaid()
+    );
+}
+
+}

@@ -1,11 +1,10 @@
 package br.com.rotafood.api.application.dto.order;
 
 
-import java.util.List;
 import java.util.UUID;
 
-import br.com.rotafood.api.application.dto.catalog.PriceDto;
-import br.com.rotafood.api.application.dto.catalog.ProductPackagingDto;
+
+import br.com.rotafood.api.domain.entity.catalog.Item;
 import br.com.rotafood.api.domain.entity.catalog.Serving;
 
 public record OrderItemDetailDto(
@@ -15,9 +14,18 @@ public record OrderItemDetailDto(
     String ean,
     String additionalInformation,
     Serving serving,
-    String imagePath,
-    PriceDto itemPrice,
-    List<PriceDto> optionsPrice,
-    ProductPackagingDto packaging,
-    List<OrderItemOptionDto> options
-) {}
+    String imagePath
+) {
+    public OrderItemDetailDto(Item itemDetail) {
+        this(
+            itemDetail.getId(),
+            itemDetail.getProduct().getName(),
+            itemDetail.getProduct().getDescription(),
+            itemDetail.getProduct().getEan(),
+            itemDetail.getProduct().getAdditionalInformation(),
+            itemDetail.getProduct().getServing(),
+            itemDetail.getProduct().getImagePath()
+        );
+    }
+    
+}

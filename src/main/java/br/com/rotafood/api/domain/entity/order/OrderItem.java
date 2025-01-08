@@ -41,6 +41,9 @@ public class OrderItem {
     @Column(precision = 10, scale = 2)
     private BigDecimal totalPrice;
 
+    @Column(precision = 10, scale = 2)
+    private BigDecimal optionsPrice;
+
     @OneToMany(mappedBy = "orderItem")
     private List<OrderItemOption> options;
 
