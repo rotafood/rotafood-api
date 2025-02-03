@@ -6,14 +6,19 @@ import br.com.rotafood.api.application.dto.order.OrderAdditionalFeeDto;
 import br.com.rotafood.api.application.dto.order.OrderBenefitDto;
 import br.com.rotafood.api.application.dto.order.OrderItemDto;
 import br.com.rotafood.api.domain.entity.order.Order;
+import br.com.rotafood.api.domain.entity.order.OrderStatus;
 import br.com.rotafood.api.domain.entity.order.OrderType;
 import br.com.rotafood.api.domain.repository.OrderRepository;
+import br.com.rotafood.api.infra.utils.DateUtils;
 import br.com.rotafood.api.domain.repository.MerchantRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -51,6 +56,7 @@ public class OrderService {
     @Autowired
     private OrderBenefitService orderBenefitService;
 
+
     @Autowired
     private OrderAdditionalFeeService orderAdditionalFeeService;
 
@@ -79,9 +85,7 @@ public class OrderService {
         order.setTiming(fullOrderDto.timing());
         order.setStatus(fullOrderDto.status());
         order.setExtraInfo(fullOrderDto.extraInfo());
-        order.setPreparationStartDateTime(fullOrderDto.preparationStartDateTime());
-        order.setModifiedAt(fullOrderDto.modifiedAt());
-        order.setCreatedAt(fullOrderDto.createdAt());
+        order.setPreparationStartDateTime(fullOrderDto.preparationStartDateTime().toInstant());
 
         order = orderRepository.save(order);
 
@@ -137,8 +141,20 @@ public class OrderService {
         orderRepository.delete(order);
     }
 
-    public List<Order> getAllByFilters(UUID merchantId, List<OrderType> orderTypes, Boolean isCompleted) {
-        return orderRepository.findAllByFilters(merchantId, orderTypes, isCompleted);
+    public Page<Order> getAllByFilters(
+        UUID merchantId, 
+        List<OrderType> orderTypes, 
+        List<OrderStatus> orderStatuses,
+        String startDate, 
+        String endDate,
+        Pageable pageable
+    ) {
+        Instant start = DateUtils.parseDateStringToInstant(startDate, false);
+        Instant end = DateUtils.parseDateStringToInstant(endDate, true);
+
+        return orderRepository.findAllByFilters(merchantId, orderTypes, orderStatuses, start, end, pageable);
     }
+
+
 }
 

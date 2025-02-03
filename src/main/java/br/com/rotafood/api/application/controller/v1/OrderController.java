@@ -1,11 +1,18 @@
 package br.com.rotafood.api.application.controller.v1;
 
+import br.com.rotafood.api.application.dto.PaginationDto;
 import br.com.rotafood.api.application.dto.order.FullOrderDto;
+import br.com.rotafood.api.application.dto.order.OrderDto;
 import br.com.rotafood.api.application.service.order.OrderService;
-import br.com.rotafood.api.domain.entity.order.Order;
+import br.com.rotafood.api.domain.entity.order.OrderStatus;
 import br.com.rotafood.api.domain.entity.order.OrderType;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
@@ -20,28 +27,40 @@ public class OrderController {
     private OrderService orderService;
 
     @GetMapping
-    public List<FullOrderDto> getAllOrders(            
+    public ResponseEntity<PaginationDto<OrderDto>> getAllOrders(            
         @PathVariable UUID merchantId,
         @RequestParam(required = false) List<OrderType> orderTypes,
-        @RequestParam(required = false) Boolean isCompleted) {
+        @RequestParam(required = false) List<OrderStatus> orderStatuses,
+        @RequestParam(required = false) String startDate,
+        @RequestParam(required = false) String endDate,
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size,
+        @RequestParam(defaultValue = "createdAt") String sortBy,
+        @RequestParam(defaultValue = "desc") String sortDirection) {
+        
 
-    return orderService.getAllByFilters(merchantId, orderTypes, isCompleted)
-            .stream()
-            .map(FullOrderDto::new)
-            .toList();
+        Pageable pageable = PageRequest.of(page, size, Sort.by(
+            sortDirection.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC, sortBy));
+
+        Page<OrderDto> orders = orderService.getAllByFilters(
+            merchantId, orderTypes, orderStatuses, startDate, endDate, pageable
+        ).map(OrderDto::new);
+
+        return ResponseEntity.ok(PaginationDto.fromPage(orders, "/orders"));
     }
+
 
 
     @GetMapping("/{orderId}")
-    public Order getOrderById(@PathVariable UUID merchantId, @PathVariable UUID orderId) {
-        return orderService.getByIdAndMerchantId(orderId, merchantId);
+    public FullOrderDto getOrderById(@PathVariable UUID merchantId, @PathVariable UUID orderId) {
+        return new FullOrderDto(orderService.getByIdAndMerchantId(orderId, merchantId));
     }
 
     @PutMapping
-    public Order createOrUpdateOrder(
+    public FullOrderDto createOrUpdateOrder(
             @PathVariable UUID merchantId,
             @RequestBody @Valid FullOrderDto fullOrderDto) {
-        return orderService.createOrUpdate(fullOrderDto, merchantId);
+        return new FullOrderDto(orderService.createOrUpdate(fullOrderDto, merchantId));
     }
 
 

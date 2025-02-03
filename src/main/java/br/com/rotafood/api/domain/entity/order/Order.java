@@ -1,8 +1,11 @@
 package br.com.rotafood.api.domain.entity.order;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
 import jakarta.persistence.CascadeType;
@@ -19,8 +22,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -39,15 +40,16 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Temporal(TemporalType.DATE) 
-    private Date modifiedAt;
+    @CreationTimestamp
+    @Column(updatable = false, nullable = false)
+    private Instant createdAt;
 
-    @Temporal(TemporalType.DATE) 
-    private Date createdAt;
+    @UpdateTimestamp
+    @Column(nullable = false)
+    private Instant modifiedAt;
 
-
-    @Temporal(TemporalType.DATE) 
-    private Date preparationStartDateTime;
+    @Column(nullable = false)
+    private Instant preparationStartDateTime;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 20)

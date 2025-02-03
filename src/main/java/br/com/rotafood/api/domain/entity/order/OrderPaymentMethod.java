@@ -40,7 +40,7 @@ public class OrderPaymentMethod {
 
     @Enumerated(EnumType.STRING)
     @Column(length = 20, nullable = false)
-    private PaymentMethodType method;
+    private OrderPaymentMethodType method;
 
     @Column(nullable = false)
     private boolean prepaid;
@@ -50,26 +50,26 @@ public class OrderPaymentMethod {
 
     @Enumerated(EnumType.STRING)
     @Column(length = 10, nullable = false)
-    private PaymentType type;
+    private OrderPaymentType type;
 
     @Column(precision = 10, scale = 2, nullable = false)
     private BigDecimal value;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "walletId")
-    private DigitalWalletInformation wallet;
+    private OrderDigitalWalletInformation wallet;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "cashId")
-    private CashInformation cash;
+    private OrderCashInformation cash;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "cardId")
-    private CreditCardInformation card;
+    private OrderCreditCardInformation card;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "transactionId")
-    private TransactionInformation transaction;
+    private OrderTransactionInformation transaction;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "paymentMethodId")

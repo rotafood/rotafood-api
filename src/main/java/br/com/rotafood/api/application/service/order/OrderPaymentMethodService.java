@@ -20,16 +20,16 @@ public class OrderPaymentMethodService {
     private OrderPaymentRepository orderPaymentRepository;
 
     @Autowired
-    private DigitalWalletInformationRepository walletRepository;
+    private OrderDigitalWalletInformationRepository walletRepository;
 
     @Autowired
-    private CashInformationRepository cashRepository;
+    private OrderCashInformationRepository cashRepository;
 
     @Autowired
-    private CreditCardInformationRepository cardRepository;
+    private OrderCreditCardInformationRepository cardRepository;
 
     @Autowired
-    private TransactionInformationRepository transactionRepository;
+    private OrderTransactionInformationRepository transactionRepository;
 
     @Transactional
     public OrderPaymentMethod createOrUpdate(OrderPaymentMethodDto dto, UUID paymentId) {
@@ -47,7 +47,7 @@ public class OrderPaymentMethodService {
         method.setPayment(payment);
 
         if (dto.wallet() != null) {
-            DigitalWalletInformation wallet = new DigitalWalletInformation();
+            OrderDigitalWalletInformation wallet = new OrderDigitalWalletInformation();
             wallet.setWalletName(dto.wallet().walletName());
             wallet.setWalletId(dto.wallet().walletId());
             wallet = walletRepository.save(wallet);
@@ -55,21 +55,21 @@ public class OrderPaymentMethodService {
         }
 
         if (dto.cash() != null) {
-            CashInformation cash = new CashInformation();
+            OrderCashInformation cash = new OrderCashInformation();
             cash.setChangeFor(dto.cash().changeFor());
             cash = cashRepository.save(cash);
             method.setCash(cash);
         }
 
         if (dto.card() != null) {
-            CreditCardInformation card = new CreditCardInformation();
+            OrderCreditCardInformation card = new OrderCreditCardInformation();
             card.setBrand(dto.card().brand());
             card = cardRepository.save(card);
             method.setCard(card);
         }
 
         if (dto.transaction() != null) {
-            TransactionInformation transaction = new TransactionInformation();
+            OrderTransactionInformation transaction = new OrderTransactionInformation();
             transaction.setAuthorizationCode(dto.transaction().authorizationCode());
             transaction.setAcquirerDocument(dto.transaction().acquirerDocument());
             transaction = transactionRepository.save(transaction);

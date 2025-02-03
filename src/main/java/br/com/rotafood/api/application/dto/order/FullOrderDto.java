@@ -4,24 +4,20 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import br.com.rotafood.api.application.dto.merchant.MerchantDto;
-import br.com.rotafood.api.domain.entity.order.Order;
-import br.com.rotafood.api.domain.entity.order.OrderSalesChannel;
-import br.com.rotafood.api.domain.entity.order.OrderStatus;
-import br.com.rotafood.api.domain.entity.order.OrderTiming;
-import br.com.rotafood.api.domain.entity.order.OrderType;
+import br.com.rotafood.api.domain.entity.order.*;
+import br.com.rotafood.api.infra.utils.DateUtils;
 
 public record FullOrderDto(
     UUID id,
     Date modifiedAt,
     Date createdAt,
+    Date preparationStartDateTime,
     OrderType type,
     OrderStatus status,
-    Date preparationStartDateTime,
     OrderSalesChannel salesChannel,
     OrderTiming timing,
     String extraInfo,
-    MerchantDto merchant,
+    UUID merchantId,
     OrderTotalDto total,
     OrderCustomerDto customer,
     OrderDeliveryDto delivery,
@@ -36,15 +32,15 @@ public record FullOrderDto(
     public FullOrderDto(Order order) {
         this(
             order.getId(),
-            order.getModifiedAt(),
-            order.getCreatedAt(),
+            DateUtils.convertInstantToDate(order.getModifiedAt()),
+            DateUtils.convertInstantToDate(order.getCreatedAt()),
+            DateUtils.convertInstantToDate(order.getPreparationStartDateTime()),
             order.getType(),
             order.getStatus(),
-            order.getPreparationStartDateTime(),
             order.getSalesChannel(),
             order.getTiming(),
             order.getExtraInfo(),
-            new MerchantDto(order.getMerchant()),
+            order.getMerchant().getId(),
             order.getTotal() != null ? new OrderTotalDto(order.getTotal()) : null,
             order.getCustomer() != null ? new OrderCustomerDto(order.getCustomer()) : null,
             order.getDelivery() != null ? new OrderDeliveryDto(order.getDelivery()) : null,
@@ -57,6 +53,4 @@ public record FullOrderDto(
             order.getAdditionalFees() != null ? order.getAdditionalFees().stream().map(OrderAdditionalFeeDto::new).toList() : List.of()
         );
     }
-    
 }
-
