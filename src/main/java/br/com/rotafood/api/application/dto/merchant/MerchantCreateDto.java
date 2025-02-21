@@ -8,8 +8,9 @@ import jakarta.validation.constraints.NotBlank;
 public record MerchantCreateDto (
     @NotBlank()
     String name,
-    @NotBlank()
+
     String corporateName,
+    
     @NotBlank()
     String description,
 

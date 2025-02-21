@@ -4,14 +4,14 @@ import java.util.UUID;
 
 import br.com.rotafood.api.domain.entity.catalog.CatalogContext;
 import br.com.rotafood.api.domain.entity.catalog.ContextModifier;
-import br.com.rotafood.api.domain.entity.catalog.Status;
+import br.com.rotafood.api.domain.entity.catalog.AvailabilityStatus;
 
 public record ContextModifierDto(
     UUID id,
     UUID itemId,
     UUID optionId,
     UUID parentOptionId,
-    Status status,
+    AvailabilityStatus status,
     PriceDto price,
     CatalogContext catalogContext
 ) {

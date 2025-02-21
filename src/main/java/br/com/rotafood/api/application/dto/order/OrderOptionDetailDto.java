@@ -3,6 +3,8 @@ package br.com.rotafood.api.application.dto.order;
 
 import java.util.UUID;
 
+import br.com.rotafood.api.application.dto.catalog.ContextModifierDto;
+import br.com.rotafood.api.domain.entity.catalog.CatalogContext;
 import br.com.rotafood.api.domain.entity.catalog.Option;
 import br.com.rotafood.api.domain.entity.catalog.Serving;
 
@@ -10,6 +12,7 @@ public record OrderOptionDetailDto(
     UUID id,
     String name,
     String description,
+    ContextModifierDto contextModifier,
     String ean,
     String additionalInformation,
     Serving serving,
@@ -18,11 +21,16 @@ public record OrderOptionDetailDto(
     String optionGroupName,
     UUID optionGroupId
 ) {
-    public OrderOptionDetailDto(Option option) {
+    public OrderOptionDetailDto(Option option, CatalogContext catalogContext) {
         this(
             option.getId(),
             option.getProduct() != null ? option.getProduct().getName() : null,
             option.getProduct() != null ? option.getProduct().getDescription() : null,
+            option.getContextModifiers().stream()
+                .filter(cm -> cm.getCatalogContext().equals(catalogContext))
+                .findFirst()
+                .map(ContextModifierDto::new)  
+                .orElse(null),
             option.getProduct() != null ? option.getProduct().getEan() : null,
             option.getProduct() != null ? option.getProduct().getAdditionalInformation() : null,
             option.getProduct() != null ? option.getProduct().getServing() : null,

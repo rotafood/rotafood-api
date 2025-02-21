@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import br.com.rotafood.api.domain.entity.catalog.Category;
-import br.com.rotafood.api.domain.entity.catalog.Status;
+import br.com.rotafood.api.domain.entity.catalog.AvailabilityStatus;
 import br.com.rotafood.api.domain.entity.catalog.TemplateType;
 
 public record FullCategoryDto(
@@ -12,7 +12,7 @@ public record FullCategoryDto(
     Integer index,
     String name, 
     TemplateType template,
-    Status status,
+    AvailabilityStatus status,
     List<ItemDto> items
 ) {
     public FullCategoryDto(Category category) {

@@ -39,7 +39,7 @@ public class Option {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private AvailabilityStatus status;
 
     @Column
     private Integer index;

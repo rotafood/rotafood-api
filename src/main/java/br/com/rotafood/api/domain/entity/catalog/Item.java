@@ -41,7 +41,7 @@ public class Item {
 
     @Column
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private AvailabilityStatus status;
     
     @Column
     private Integer index;

@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import br.com.rotafood.api.domain.entity.catalog.Item;
-import br.com.rotafood.api.domain.entity.catalog.Status;
+import br.com.rotafood.api.domain.entity.catalog.AvailabilityStatus;
 import br.com.rotafood.api.domain.entity.catalog.TemplateType;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -13,7 +13,7 @@ import jakarta.validation.constraints.NotNull;
 public record ItemDto(
     UUID id,
     @NotNull
-    Status status,
+    AvailabilityStatus status,
     Integer index,
     @NotNull
     TemplateType type,

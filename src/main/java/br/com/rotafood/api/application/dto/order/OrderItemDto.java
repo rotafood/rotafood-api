@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
+import br.com.rotafood.api.domain.entity.catalog.CatalogContext;
 import br.com.rotafood.api.domain.entity.order.OrderItem;
 
 
@@ -11,6 +12,7 @@ public record OrderItemDto(
     UUID id,
     int quantity,
     BigDecimal totalPrice,
+    CatalogContext catalogContext,
     OrderItemDetailDto item,
     List<OrderItemOptionDto> options
 
@@ -20,7 +22,8 @@ public record OrderItemDto(
         orderItem.getId(),
         orderItem.getQuantity(),
         orderItem.getTotalPrice(),
-        new OrderItemDetailDto(orderItem.getItem()),
+        orderItem.getCatalogContext(),
+        new OrderItemDetailDto(orderItem.getItem(), orderItem.getCatalogContext()),
         orderItem.getOptions() != null ? orderItem.getOptions().stream().map(OrderItemOptionDto::new).toList() : null
     );
 }

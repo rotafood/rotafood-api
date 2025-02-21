@@ -5,12 +5,12 @@ import java.util.UUID;
 
 import br.com.rotafood.api.domain.entity.catalog.OptionGroup;
 import br.com.rotafood.api.domain.entity.catalog.OptionGroupType;
-import br.com.rotafood.api.domain.entity.catalog.Status;
+import br.com.rotafood.api.domain.entity.catalog.AvailabilityStatus;
 
 public record OptionGroupDto(
     UUID id,
     String name,
-    Status status,
+    AvailabilityStatus status,
     OptionGroupType optionGroupType,
     List<OptionDto> options,
     UUID iFoodOptionGroupId

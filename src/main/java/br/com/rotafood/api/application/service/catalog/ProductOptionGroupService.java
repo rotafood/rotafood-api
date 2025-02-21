@@ -39,31 +39,38 @@ public class ProductOptionGroupService {
             .filter(Objects::nonNull)
             .toList();
 
-        product.getProductOptionGroups().forEach(pog -> {
-            if (!incomingIds.contains(pog.getId())) {
-                product.removeProductOptionGroup(pog);
-            }
-        });
+        // Remover ProductOptionGroups que não estão na nova lista
+        product.getProductOptionGroups().removeIf(pog -> !incomingIds.contains(pog.getId()));
 
         List<ProductOptionGroup> updatedProductOptionGroups = productOptionGroupDtos.stream()
             .map(dto -> {
+                // Buscar um ProductOptionGroup existente
                 ProductOptionGroup productOptionGroup = product.getProductOptionGroups().stream()
                     .filter(pog -> pog.getId() != null && pog.getId().equals(dto.id()))
                     .findFirst()
                     .orElse(null);
 
-                    OptionGroup optionGroup = optionGroupService.updateOrCreate(dto.optionGroup(), merchantId);
-                    productOptionGroup.setOptionGroup(optionGroup);
-                    productOptionGroup.setIndex(dto.index());
-                    productOptionGroup.setMin(dto.min());
-                    productOptionGroup.setMax(dto.max());
+                // Se não existir, criar um novo
+                if (productOptionGroup == null) {
+                    productOptionGroup = new ProductOptionGroup();
+                    productOptionGroup.setProduct(product);
+                    product.getProductOptionGroups().add(productOptionGroup);
+                }
 
-                    return productOptionGroup;
+                // Atualizar ou criar a OptionGroup
+                OptionGroup optionGroup = optionGroupService.updateOrCreate(dto.optionGroup(), merchantId);
+                productOptionGroup.setOptionGroup(optionGroup);
+                productOptionGroup.setIndex(dto.index());
+                productOptionGroup.setMin(dto.min());
+                productOptionGroup.setMax(dto.max());
+
+                return productOptionGroup;
             })
             .toList();
 
         return updatedProductOptionGroups;
     }
+
 
 
     @Transactional

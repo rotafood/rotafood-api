@@ -3,7 +3,7 @@ package br.com.rotafood.api.application.dto.catalog;
 import java.util.UUID;
 
 import br.com.rotafood.api.domain.entity.catalog.Category;
-import br.com.rotafood.api.domain.entity.catalog.Status;
+import br.com.rotafood.api.domain.entity.catalog.AvailabilityStatus;
 import br.com.rotafood.api.domain.entity.catalog.TemplateType;
 
 public record CategoryDto(
@@ -11,7 +11,7 @@ public record CategoryDto(
     Integer index,
     String name,
     TemplateType template,
-    Status status,
+    AvailabilityStatus status,
     UUID iFoodCategoryId
 ) {
     public CategoryDto(Category category) {

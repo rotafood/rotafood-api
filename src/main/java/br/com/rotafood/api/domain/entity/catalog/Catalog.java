@@ -41,7 +41,7 @@ public class Catalog {
 
     @Column
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private AvailabilityStatus status;
 
     @Column
     @Enumerated(EnumType.STRING)

@@ -1,6 +1,7 @@
 package br.com.rotafood.api.application.service.catalog;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,42 +17,45 @@ import br.com.rotafood.api.domain.entity.catalog.Image;
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
 import br.com.rotafood.api.domain.repository.ImageRepository;
 import br.com.rotafood.api.domain.repository.MerchantRepository;
-import br.com.rotafood.api.infra.gcp.GoogleCloudStorage;
+import br.com.rotafood.api.infra.minio.MinioStorageService;
 
 @Service
 public class ImageService {
 
     @Autowired
     private ImageRepository imageRepository;
+
     @Autowired
-    private GoogleCloudStorage googleCloudStorage;
+    private MinioStorageService minioStorageService;
+
     @Autowired
     private MerchantRepository merchantRepository;
 
-    @Value("${gcp.bucket.name}")
+    @Value("${minio.bucket.name}")
     private String bucketName;
 
-    @Value("${gcp.bucket.url}")
-    private String bucketUrl;
+    @Value("${minio.url}")
+    private String minioUrl;
 
     @Transactional
     public Image uploadImage(MultipartFile file, UUID merchantId) {
-    String contentType = file.getContentType();
-    if (contentType == null || (!contentType.equals("image/png") && !contentType.equals("image/jpeg"))) {
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Apenas arquivos PNG ou JPEG são permitidos.");
-    }
+        String contentType = file.getContentType();
+        if (contentType == null || (!contentType.equals("image/png") && !contentType.equals("image/jpeg"))) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Apenas arquivos PNG ou JPEG são permitidos.");
+        }
 
         try {
             UUID id = UUID.randomUUID();
             String fileExtension = contentType.equals("image/png") ? ".png" : ".jpeg";
-            String fileName = id.toString() + fileExtension;
-            String filePath = "images/" + fileName;
+            String fileName = "images/" + id.toString() + fileExtension;
 
-            googleCloudStorage.uploadFile(bucketName, file.getBytes(), filePath);
+            try (InputStream inputStream = file.getInputStream()) {
+                minioStorageService.uploadFile(bucketName, fileName, inputStream, contentType);
+            }
 
             Merchant merchant = this.merchantRepository.getReferenceById(merchantId);
             Image image = new Image();
-            image.setPath(this.bucketUrl + "/" + this.bucketName + "/" + filePath);
+            image.setPath(minioUrl + "/" + bucketName + "/" + fileName);
             image.setId(id);
             image.setMerchant(merchant);
 
@@ -62,7 +66,6 @@ public class ImageService {
         }
     }
 
-    @SuppressWarnings("unused")
     @Transactional
     public void deleteByIdAndMerchantId(UUID imageId, UUID merchantId) {
         Image image = imageRepository.findByIdAndMerchantId(imageId, merchantId);
@@ -72,16 +75,14 @@ public class ImageService {
         }
     
         String imagePath = image.getPath();
-        String basePath = "rotafood-api/";
-        int startIndex = imagePath.indexOf(basePath);
-        String result = imagePath.substring(startIndex + basePath.length());
-     
         if (imagePath == null) {
-            throw new IllegalArgumentException("Caminho relativo não encontrado na URL: " + result);
+            throw new IllegalArgumentException("Caminho da imagem não encontrado.");
         }
-    
-        googleCloudStorage.deleteFile(bucketName, result);
-    
+
+        String fileKey = imagePath.replace(minioUrl + "/" + bucketName + "/", "");
+
+        minioStorageService.deleteFile(bucketName, fileKey);
+
         imageRepository.delete(image);
     }
     
@@ -92,5 +93,4 @@ public class ImageService {
     public List<Image> getAllByMerchantId(UUID merchantId) {
         return imageRepository.findAllByMerchantId(merchantId);
     }
-
 }

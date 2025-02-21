@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.rotafood.api.application.dto.catalog.CatalogDto;
 import br.com.rotafood.api.application.dto.merchant.MerchantUserDto;
 import br.com.rotafood.api.application.service.catalog.CatalogService;
-import br.com.rotafood.api.domain.entity.catalog.Status;
+import br.com.rotafood.api.domain.entity.catalog.AvailabilityStatus;
 import jakarta.validation.Valid;
 
 
@@ -72,7 +72,7 @@ public class CatalogController {
     public CatalogDto changeStatus(
         @PathVariable UUID merchantId,
         @PathVariable UUID catalogId,
-        @PathVariable Status status,
+        @PathVariable AvailabilityStatus status,
         @RequestBody @Valid CatalogDto catalogDto
     ) {
         return new CatalogDto(this.catalogService.updateOrCreate(catalogDto, merchantId));

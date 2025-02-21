@@ -13,7 +13,7 @@ import br.com.rotafood.api.domain.entity.catalog.Item;
 import br.com.rotafood.api.domain.entity.catalog.TemplateType;
 import br.com.rotafood.api.domain.entity.catalog.Product;
 import br.com.rotafood.api.domain.entity.catalog.Shift;
-import br.com.rotafood.api.domain.entity.catalog.Status;
+import br.com.rotafood.api.domain.entity.catalog.AvailabilityStatus;
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
 import br.com.rotafood.api.domain.repository.ItemRepository;
 import br.com.rotafood.api.domain.repository.MerchantRepository;
@@ -100,7 +100,7 @@ public class ItemService {
         Category category = itemDto.categoryId() != null ? 
             categoryService.getByIdAndMerchantId(itemDto.categoryId(), merchantId) : 
             this.categoryService.updateOrCreate(
-                new CategoryDto(null, null, itemDto.product().name(), TemplateType.PIZZA, Status.AVALIABLE, merchantId
+                new CategoryDto(null, null, itemDto.product().name(), TemplateType.PIZZA, AvailabilityStatus.AVAILIABLE, merchantId
                 ), merchantId);
         
         item.setMerchant(merchant);

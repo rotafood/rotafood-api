@@ -44,7 +44,7 @@ public class OptionGroup {
     
     @Column
     @Enumerated(value = EnumType.STRING)
-    private Status status;
+    private AvailabilityStatus status;
     
     @OneToMany(mappedBy = "optionGroup", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Option> options = new ArrayList<>();

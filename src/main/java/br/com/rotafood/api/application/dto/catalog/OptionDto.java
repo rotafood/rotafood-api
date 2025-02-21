@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.UUID;
 
 import br.com.rotafood.api.domain.entity.catalog.Option;
-import br.com.rotafood.api.domain.entity.catalog.Status;
+import br.com.rotafood.api.domain.entity.catalog.AvailabilityStatus;
 
 public record OptionDto (
     UUID id,
-    Status status,
+    AvailabilityStatus status,
     Integer index,
     List<ContextModifierDto> contextModifiers,
     List<Integer> fractions,

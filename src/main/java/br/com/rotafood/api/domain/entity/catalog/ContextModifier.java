@@ -33,7 +33,7 @@ public class ContextModifier {
     private UUID id;
     
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private AvailabilityStatus status;
     
     @ManyToOne(fetch = FetchType.LAZY)    
     @JoinColumn(name = "priceId", nullable = false)

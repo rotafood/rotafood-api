@@ -1,5 +1,6 @@
 package br.com.rotafood.api.application.dto.merchant;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.UUID;
 
@@ -19,6 +20,8 @@ public record MerchantDto (
     String document,
     MerchantType merchantType,
     Date createdAt,
+    Instant lastRotafoodOpenedUtc,
+    Instant lastIfoodOpenedUtc,
     AddressDto address
     ) {
 
@@ -33,6 +36,8 @@ public record MerchantDto (
        merchant.getDocument(), 
        merchant.getMerchantType(), 
        merchant.getCreatedAt(), 
+       merchant.getLastRotafoodOpened(),
+       merchant.getLastIfoodOpened(),
        new AddressDto(merchant.getAddress()));
     }
 }

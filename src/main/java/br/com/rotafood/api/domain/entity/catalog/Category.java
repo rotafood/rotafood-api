@@ -44,8 +44,8 @@ public class Category {
     @Column
     private Integer index;
 
-    @Column(nullable = false)
-    private Status status;
+    @Enumerated(value = EnumType.STRING)
+    private AvailabilityStatus status;
 
     @Column
     @Enumerated(EnumType.STRING)

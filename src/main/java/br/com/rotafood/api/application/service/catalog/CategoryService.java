@@ -56,6 +56,7 @@ public class CategoryService {
         return categoryRepository.findByMerchantId(merchantId);
     }
 
+
     @Transactional
     public Category updateOrCreate(CategoryDto categoryDto, UUID merchantId) {
         Merchant merchant = merchantRepository.findById(merchantId)
@@ -87,6 +88,8 @@ public class CategoryService {
 
         return savedCategory;
     }
+
+
 
     private void adjustIndexesForUpdate(Integer newIndex, Category category, UUID merchantId) {
         List<Category> categories = categoryRepository.findByMerchantId(merchantId);

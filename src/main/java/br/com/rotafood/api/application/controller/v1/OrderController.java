@@ -3,7 +3,9 @@ package br.com.rotafood.api.application.controller.v1;
 import br.com.rotafood.api.application.dto.PaginationDto;
 import br.com.rotafood.api.application.dto.order.FullOrderDto;
 import br.com.rotafood.api.application.dto.order.OrderDto;
+import br.com.rotafood.api.application.service.merchant.MerchantService;
 import br.com.rotafood.api.application.service.order.OrderService;
+import br.com.rotafood.api.domain.entity.order.OrderSalesChannel;
 import br.com.rotafood.api.domain.entity.order.OrderStatus;
 import br.com.rotafood.api.domain.entity.order.OrderType;
 
@@ -16,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -25,6 +28,9 @@ public class OrderController {
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private MerchantService merchantService;
 
     @GetMapping
     public ResponseEntity<PaginationDto<OrderDto>> getAllOrders(            
@@ -48,6 +54,31 @@ public class OrderController {
 
         return ResponseEntity.ok(PaginationDto.fromPage(orders, "/orders"));
     }
+
+    @GetMapping("/polling")
+    public ResponseEntity<PaginationDto<OrderDto>> pollUnfinishedOrders(
+        @PathVariable UUID merchantId,
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size,
+        @RequestParam(defaultValue = "createdAt") String sortBy,
+        @RequestParam(defaultValue = "desc") String sortDirection,
+        @RequestParam(defaultValue = "ROTAFOOD") List<OrderSalesChannel> sources) {
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(
+            sortDirection.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC, sortBy));
+
+        List<OrderStatus> orderStatuses = List.of(OrderStatus.CREATED);
+
+        merchantService.updateMerchantOpened(merchantId, sources);
+
+        Page<OrderDto> orders = orderService.getAllByFilters(
+            merchantId, null, orderStatuses, null, null, pageable
+        ).map(OrderDto::new);
+
+        return ResponseEntity.ok(PaginationDto.fromPage(orders, "/orders/polling"));
+    }
+
+
 
 
 

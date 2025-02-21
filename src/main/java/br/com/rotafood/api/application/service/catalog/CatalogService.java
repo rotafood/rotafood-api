@@ -15,7 +15,7 @@ import br.com.rotafood.api.domain.entity.catalog.Catalog;
 import br.com.rotafood.api.domain.entity.catalog.CatalogCategory;
 import br.com.rotafood.api.domain.entity.catalog.CatalogContext;
 import br.com.rotafood.api.domain.entity.catalog.Category;
-import br.com.rotafood.api.domain.entity.catalog.Status;
+import br.com.rotafood.api.domain.entity.catalog.AvailabilityStatus;
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
 import br.com.rotafood.api.domain.repository.CatalogCategoryRepository;
 import br.com.rotafood.api.domain.repository.CatalogRepository;
@@ -92,9 +92,9 @@ public class CatalogService {
     @Transactional
     public void createDefaultCatalogsForMerchant(Merchant merchant) {
         List<CatalogDto> defaultCatalogs = List.of(
-            new CatalogDto(null, new Date(), Status.AVALIABLE, CatalogContext.TABLE, null),
-                new CatalogDto(null, new Date(), Status.AVALIABLE, CatalogContext.DELIVERY, null),
-                new CatalogDto(null, new Date(), Status.AVALIABLE, CatalogContext.IFOOD, null)
+            new CatalogDto(null, new Date(), AvailabilityStatus.AVAILIABLE, CatalogContext.TABLE, null),
+                new CatalogDto(null, new Date(), AvailabilityStatus.AVAILIABLE, CatalogContext.DELIVERY, null),
+                new CatalogDto(null, new Date(), AvailabilityStatus.AVAILIABLE, CatalogContext.IFOOD, null)
         );
 
         defaultCatalogs.forEach(catalogDto -> updateOrCreate(catalogDto, merchant.getId()));

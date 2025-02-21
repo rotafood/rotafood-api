@@ -5,12 +5,12 @@ import java.util.UUID;
 
 import br.com.rotafood.api.domain.entity.catalog.Catalog;
 import br.com.rotafood.api.domain.entity.catalog.CatalogContext;
-import br.com.rotafood.api.domain.entity.catalog.Status;
+import br.com.rotafood.api.domain.entity.catalog.AvailabilityStatus;
 
 public record CatalogDto(
     UUID id,
     Date modifiedAt,
-    Status status,
+    AvailabilityStatus status,
     CatalogContext catalogContext,
     UUID iFoodCatalofId
 ) {

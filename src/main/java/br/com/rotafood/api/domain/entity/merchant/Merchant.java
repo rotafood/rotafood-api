@@ -5,6 +5,7 @@ import java.util.UUID;
 import br.com.rotafood.api.domain.entity.address.Address;
 import br.com.rotafood.api.domain.entity.catalog.Shift;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -59,14 +60,24 @@ public class Merchant {
     @Column(length = 16)
     private String document;
 
-    @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
     private MerchantType merchantType;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     private Date createdAt;
 
+    @Column
     private String imagePath;
+
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false)
+    private Instant lastRotafoodOpened;
+    
+    @Temporal(TemporalType.TIMESTAMP)
+    private Instant lastIfoodOpened;
+    
 
     @OneToOne
     @JoinColumn(name = "addressId")
