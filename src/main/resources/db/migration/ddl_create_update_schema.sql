@@ -240,3 +240,7 @@ create table order_item_options (id uuid not null, catalog_context varchar(20), 
 alter table if exists order_item_options add constraint FKb0i8d6fkc67ybqy3117w6m2e8 foreign key (option_id) references options;
 alter table if exists order_item_options add constraint FKqbe4ccsjsajl5w6d37ucgc9te foreign key (option_group_id) references option_groups;
 alter table if exists order_item_options add constraint FKoxx4p9r1asmwop4wuynr6t0g6 foreign key (order_item_id) references order_items;
+alter table if exists order_payment_methods add column order_payment_id uuid;
+alter table if exists order_payment_methods add constraint FKiqws4qentpwtk7k4s10tdt0o9 foreign key (order_payment_id) references order_payments;
+alter table if exists order_payment_methods add column order_payment_id uuid;
+alter table if exists order_payment_methods add constraint FKiqws4qentpwtk7k4s10tdt0o9 foreign key (order_payment_id) references order_payments;

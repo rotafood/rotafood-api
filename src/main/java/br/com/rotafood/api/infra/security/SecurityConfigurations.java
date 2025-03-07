@@ -34,7 +34,7 @@ public class SecurityConfigurations {
         http
             .cors(cors -> cors.configurationSource(request -> {
                 CorsConfiguration corsConfig = new CorsConfiguration();
-                corsConfig.addAllowedOriginPattern("*"); // Permite todas as origens
+                corsConfig.addAllowedOriginPattern("*");
                 corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                 corsConfig.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Requested-With"));
                 corsConfig.setExposedHeaders(List.of("Authorization"));
@@ -47,8 +47,9 @@ public class SecurityConfigurations {
                 .requestMatchers(
                     "/*/auth/**", 
                     "*/logistic/routes/test/*",
-                    "/*/api-docs/**", 
+                    "/*/api-docs/**",  
                     "/*/logs/**", 
+                    "/*/catalogs/online/**",
                     "/swagger-ui.html", 
                     "/swagger-ui/**").permitAll()
                 .anyRequest().authenticated()
