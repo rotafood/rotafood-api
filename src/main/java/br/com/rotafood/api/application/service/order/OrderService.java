@@ -6,11 +6,25 @@ import br.com.rotafood.api.application.dto.order.OrderAdditionalFeeDto;
 import br.com.rotafood.api.application.dto.order.OrderBenefitDto;
 import br.com.rotafood.api.application.dto.order.OrderItemDto;
 import br.com.rotafood.api.domain.entity.order.Order;
+import br.com.rotafood.api.domain.entity.order.OrderAdditionalFee;
+import br.com.rotafood.api.domain.entity.order.OrderBenefit;
+import br.com.rotafood.api.domain.entity.order.OrderCustomer;
+import br.com.rotafood.api.domain.entity.order.OrderDelivery;
+import br.com.rotafood.api.domain.entity.order.OrderIndoor;
+import br.com.rotafood.api.domain.entity.order.OrderItem;
+import br.com.rotafood.api.domain.entity.order.OrderPayment;
+import br.com.rotafood.api.domain.entity.order.OrderSalesChannel;
+import br.com.rotafood.api.domain.entity.order.OrderSchedule;
 import br.com.rotafood.api.domain.entity.order.OrderStatus;
+import br.com.rotafood.api.domain.entity.order.OrderTakeout;
+import br.com.rotafood.api.domain.entity.order.OrderTiming;
+import br.com.rotafood.api.domain.entity.order.OrderTotal;
 import br.com.rotafood.api.domain.entity.order.OrderType;
 import br.com.rotafood.api.domain.repository.OrderRepository;
+import br.com.rotafood.api.domain.repository.OrderTotalRepository;
 import br.com.rotafood.api.infra.utils.DateUtils;
 import br.com.rotafood.api.domain.repository.MerchantRepository;
+import br.com.rotafood.api.domain.repository.OrderPaymentRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +32,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
@@ -29,20 +44,28 @@ public class OrderService {
     private OrderRepository orderRepository;
 
     @Autowired
+    private OrderTotalRepository orderTotalRepository;
+
+    @Autowired
+    private OrderPaymentRepository orderPaymentRepository;
+
+    @Autowired
     private MerchantRepository merchantRepository;
 
     @Autowired
     private OrderTotalService orderTotalService;
 
     @Autowired
+    private OrderCustomerService orderCustomerService;
+
+    @Autowired
+    private OrderScheduleService orderScheduleService;
+
+    @Autowired
     private OrderDeliveryService orderDeliveryService;
 
     @Autowired
-    private OrderCustomerService orderCustomerService;
-
-
-    @Autowired
-    private OrderTakeoutService orderTakeOrderTakeoutService;
+    private OrderTakeoutService orderTakeoutService;
 
     @Autowired
     private OrderPaymentService orderPaymentService;
@@ -71,67 +94,54 @@ public class OrderService {
 
     @Transactional
     public Order createOrUpdate(FullOrderDto fullOrderDto, UUID merchantId) {
+        var merchant = merchantRepository.findById(merchantId)
+                .orElseThrow(() -> new EntityNotFoundException("Merchant not found."));
+
         Order order = fullOrderDto.id() != null
                 ? orderRepository.findByIdAndMerchantId(fullOrderDto.id(), merchantId)
                         .orElseThrow(() -> new EntityNotFoundException("Order not found."))
                 : new Order();
 
-        var merchant = merchantRepository.findById(merchantId)
-                .orElseThrow(() -> new EntityNotFoundException("Merchant not found."));
 
-        order.setMerchant(merchant);
-        order.setType(fullOrderDto.type());
+        order.setPreparationStartDateTime(fullOrderDto.preparationStartDateTime().toInstant());
         order.setSalesChannel(fullOrderDto.salesChannel());
         order.setTiming(fullOrderDto.timing());
+        order.setType(fullOrderDto.type());
         order.setStatus(fullOrderDto.status());
         order.setExtraInfo(fullOrderDto.extraInfo());
-        order.setPreparationStartDateTime(fullOrderDto.preparationStartDateTime().toInstant());
 
-        order = orderRepository.save(order);
+        order.setMerchant(merchant);
 
-        if (fullOrderDto.total() != null) {
-            orderTotalService.createOrUpdate(fullOrderDto.total(), order.getId());
-        }
+        order.setTotal(fullOrderDto.total() != null ? this.orderTotalService.createOrUpdate(fullOrderDto.total()) : null);
 
-        if (fullOrderDto.takeout() != null) {
-            orderTakeOrderTakeoutService.createOrUpdate(fullOrderDto.takeout(), order.getId());
-        }
+        order.setCustomer(fullOrderDto.customer() != null ? this.orderCustomerService.createOrUpdate(fullOrderDto.customer()) : null);
 
-        if (fullOrderDto.customer() != null) {
-            orderCustomerService.createOrAssociate(fullOrderDto.customer(), order.getId());
-        }
+        order.setDelivery(fullOrderDto.delivery() != null ? this.orderDeliveryService.createOrUpdate(fullOrderDto.delivery()) : null);
 
-        if (fullOrderDto.delivery() != null) {
-            orderDeliveryService.createOrUpdate(fullOrderDto.delivery(), order.getId());
-        }
+        order.setSchedule(fullOrderDto.schedule() != null ? this.orderScheduleService.createOrUpdate(fullOrderDto.schedule()) : null);
 
-        if (fullOrderDto.indoor() != null) {
-            orderIndoorService.createOrUpdate(fullOrderDto.indoor(), order.getId());
-        }
+        order.setTakeout(fullOrderDto.takeout() != null ? this.orderTakeoutService.createOrUpdate(fullOrderDto.takeout()) : null);
 
-        if (fullOrderDto.payment() != null) {
-            orderPaymentService.createOrUpdate(fullOrderDto.payment(), order.getId());
-        }
+        order.setCustomer(fullOrderDto.customer() != null ? this.orderCustomerService.createOrUpdate(fullOrderDto.customer()) : null);
+
+        order.setIndoor(fullOrderDto.indoor() != null ? this.orderIndoorService.createOrUpdate(fullOrderDto.indoor()) : null);
+
+
+        order.setPayment(fullOrderDto.payment() != null ? this.orderPaymentService.createOrUpdate(fullOrderDto.payment()) : null);
+
+        orderRepository.save(order);
 
         if (fullOrderDto.items() != null) {
-            for (OrderItemDto itemDto : fullOrderDto.items()) {
-                orderItemService.createOrUpdate(itemDto, order.getId());
+            if (order.getItems() != null) {
+                order.getItems().clear();
             }
+            fullOrderDto.items().forEach(item -> {
+                this.orderItemService.createOrUpdate(item, order);
+            });
+            
         }
 
-        if (fullOrderDto.benefits() != null) {
-            for (OrderBenefitDto benefitDto : fullOrderDto.benefits()) {
-                orderBenefitService.createOrUpdate(benefitDto, order.getId());
-            }
-        }
-
-        if (fullOrderDto.additionalFees() != null) {
-            for (OrderAdditionalFeeDto feeDto : fullOrderDto.additionalFees()) {
-                orderAdditionalFeeService.createOrUpdate(feeDto, order.getId());
-            }
-        }
-
-        return orderRepository.save(order);
+        return order;
     }
 
     @Transactional
@@ -155,6 +165,44 @@ public class OrderService {
         return orderRepository.findAllByFilters(merchantId, orderTypes, orderStatuses, start, end, pageable);
     }
 
+
+    @Transactional
+    public Order createTestOrder(UUID merchantId) {
+        var merchant = merchantRepository.findById(merchantId)
+                .orElseThrow(() -> new EntityNotFoundException("Merchant not found."));
+
+
+        OrderTotal total = new OrderTotal();
+        total.setBenefits(BigDecimal.valueOf(5.00));
+        total.setDeliveryFee(BigDecimal.valueOf(10.00));
+        total.setOrderAmount(BigDecimal.valueOf(50.00));
+        total.setSubTotal(BigDecimal.valueOf(40.00));
+        total.setAdditionalFees(BigDecimal.valueOf(0.00));
+        this.orderTotalRepository.save(total);
+
+        OrderPayment payment = new OrderPayment();
+        payment.setDescription("Pagamento em dinheiro.");
+        payment.setPending(BigDecimal.ZERO);
+        payment.setPrepaid(BigDecimal.valueOf(50.00));
+
+        this.orderPaymentRepository.save(payment);
+
+        Order order = new Order();
+        order.setId(UUID.randomUUID());
+        order.setMerchant(merchant);
+        order.setCreatedAt(Instant.now());
+        order.setModifiedAt(Instant.now());
+        order.setPreparationStartDateTime(Instant.now());
+        order.setType(OrderType.DELIVERY);
+        order.setStatus(OrderStatus.CREATED);
+        order.setSalesChannel(OrderSalesChannel.ROTAFOOD);
+        order.setTiming(OrderTiming.IMMEDIATE);
+        order.setExtraInfo("Pedido de teste gerado automaticamente.");
+        order.setTotal(total);
+        order.setPayment(payment);
+
+        return orderRepository.save(order);
+    }
 
 }
 

@@ -1,6 +1,7 @@
 package br.com.rotafood.api.domain.entity.order;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -74,72 +75,44 @@ public class Order {
     @JoinColumn(name = "merchantId")
     private Merchant merchant;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "orderTotalId")
     private OrderTotal total;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "orderCustomerId")
     private OrderCustomer customer;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "orderDeliveryId")
     private OrderDelivery delivery;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "orderScheduleId")
     private OrderSchedule schedule;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "orderIndoorId")
     private OrderIndoor indoor;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "orderTakeoutId")
     private OrderTakeout takeout;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "orderPaymentId")
     private OrderPayment payment;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderItem> items;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "orderId")
+    private List<OrderItem> items = new ArrayList<>();
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderBenefit> benefits;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "orderId")
+    private List<OrderBenefit> benefits = new ArrayList<>();
 
-
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderAdditionalFee> additionalFees;
-
-    public void addItem(OrderItem item) {
-        items.add(item);
-        item.setOrder(this);
-    }
-
-    public void removeItem(OrderItem item) {
-        items.remove(item);
-        item.setOrder(null);
-    }
-
-    public void addBenefit(OrderBenefit benefit) {
-        benefits.add(benefit);
-        benefit.setOrder(this);
-    }
-
-    public void removeBenefit(OrderBenefit benefit) {
-        benefits.remove(benefit);
-        benefit.setOrder(null);
-    }
-
-    public void addAdditionalFee(OrderAdditionalFee additionalFee) {
-        additionalFees.add(additionalFee);
-        additionalFee.setOrder(this);
-    }
-
-    public void removeAdditionalFee(OrderAdditionalFee additionalFee) {
-        additionalFees.remove(additionalFee);
-        additionalFee.setOrder(null);
-    }
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "orderId")
+    private List<OrderAdditionalFee> additionalFees = new ArrayList<>();
 
 }

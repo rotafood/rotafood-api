@@ -4,12 +4,12 @@ import java.util.UUID;
 
 import br.com.rotafood.api.domain.entity.order.OrderTransactionInformation;
 
-public record TransactionInformationDto(
+public record OrderTransactionInformationDto(
     UUID id,
     String authorizationCode,
     String acquirerDocument
 ) {
-    public TransactionInformationDto(OrderTransactionInformation transaction) {
+    public OrderTransactionInformationDto(OrderTransactionInformation transaction) {
         this(
             transaction.getId(),
             transaction.getAuthorizationCode(),

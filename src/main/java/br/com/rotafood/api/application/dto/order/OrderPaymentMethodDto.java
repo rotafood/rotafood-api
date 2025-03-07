@@ -18,7 +18,7 @@ public record OrderPaymentMethodDto(
     OrderDigitalWalletInformationDto wallet,
     OrderCashInformationDto cash,
     OrderCreditCardInformationDto card,
-    TransactionInformationDto transaction
+    OrderTransactionInformationDto transaction
 ) {
     public OrderPaymentMethodDto(OrderPaymentMethod method) {
     this(
@@ -32,7 +32,7 @@ public record OrderPaymentMethodDto(
         method.getWallet() != null ? new OrderDigitalWalletInformationDto(method.getWallet()) : null,
         method.getCash() != null ? new OrderCashInformationDto(method.getCash()) : null,
         method.getCard() != null ? new OrderCreditCardInformationDto(method.getCard()) : null,
-        method.getTransaction() != null ? new TransactionInformationDto(method.getTransaction()) : null
+        method.getTransaction() != null ? new OrderTransactionInformationDto(method.getTransaction()) : null
     );
 }
 

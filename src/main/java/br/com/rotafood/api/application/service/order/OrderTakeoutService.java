@@ -2,6 +2,7 @@ package br.com.rotafood.api.application.service.order;
 
 import br.com.rotafood.api.application.dto.order.OrderTakeoutDto;
 import br.com.rotafood.api.domain.entity.order.Order;
+import br.com.rotafood.api.domain.entity.order.OrderCustomer;
 import br.com.rotafood.api.domain.entity.order.OrderTakeout;
 import br.com.rotafood.api.domain.repository.OrderRepository;
 import br.com.rotafood.api.domain.repository.OrderTakeoutRepository;
@@ -18,42 +19,17 @@ public class OrderTakeoutService {
     @Autowired
     private OrderTakeoutRepository orderTakeoutRepository;
 
-    @Autowired
-    private OrderRepository orderRepository;
-
     @Transactional
-    public OrderTakeout createOrUpdate(OrderTakeoutDto dto, UUID orderId) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new EntityNotFoundException("Order not found."));
+    public OrderTakeout createOrUpdate(OrderTakeoutDto orderTakeoutDto) {
 
-        OrderTakeout takeout = order.getTakeout() != null
-                ? order.getTakeout()
+        OrderTakeout takeout = orderTakeoutDto.id() != null
+                ? orderTakeoutRepository.findById(orderTakeoutDto.id())
+                        .orElseThrow(() -> new EntityNotFoundException("OrderTakeout not found."))
                 : new OrderTakeout();
 
-        takeout.setTakeoutDateTime(dto.takeoutDateTime());
-        takeout.setComments(dto.comments());
+        takeout.setTakeoutDateTime(orderTakeoutDto.takeoutDateTime());
+        takeout.setComments(orderTakeoutDto.comments());
 
-        order.setTakeout(takeout);
-
-        orderRepository.save(order);
         return orderTakeoutRepository.save(takeout);
-    }
-
-    @Transactional
-    public void deleteByOrderId(UUID orderId) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new EntityNotFoundException("Order not found."));
-
-        if (order.getTakeout() != null) {
-            orderTakeoutRepository.delete(order.getTakeout());
-            order.setTakeout(null);
-            orderRepository.save(order);
-        }
-    }
-
-    public OrderTakeout getByOrderId(UUID orderId) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new EntityNotFoundException("Order not found."));
-        return order.getTakeout();
     }
 }

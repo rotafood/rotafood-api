@@ -3,6 +3,7 @@ package br.com.rotafood.api.application.service.order;
 import br.com.rotafood.api.application.dto.order.OrderDeliveryDto;
 import br.com.rotafood.api.domain.entity.order.Order;
 import br.com.rotafood.api.domain.entity.order.OrderDelivery;
+import br.com.rotafood.api.domain.entity.order.OrderTotal;
 import br.com.rotafood.api.domain.entity.address.Address;
 import br.com.rotafood.api.domain.repository.OrderDeliveryRepository;
 import br.com.rotafood.api.domain.repository.OrderRepository;
@@ -27,13 +28,12 @@ public class OrderDeliveryService {
     private AddressRepository addressRepository;
 
     @Transactional
-    public OrderDelivery createOrUpdate(OrderDeliveryDto orderDeliveryDto, UUID orderId) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new EntityNotFoundException("Order not found."));
+    public OrderDelivery createOrUpdate(OrderDeliveryDto orderDeliveryDto) {
 
-        OrderDelivery orderDelivery = order.getDelivery() != null
-                ? order.getDelivery()
-                : new OrderDelivery();
+         OrderDelivery orderDelivery = orderDeliveryDto.id() != null 
+            ? this.orderDeliveryRepository.findById(orderDeliveryDto.id()).orElseThrow(() -> 
+                new EntityNotFoundException("Delivery não encontrado para ID: " + orderDeliveryDto.id()))
+            : new OrderDelivery();
 
         Address address = orderDeliveryDto.address() != null
                 ? addressRepository.save(new Address(orderDeliveryDto.address()))
@@ -46,9 +46,6 @@ public class OrderDeliveryService {
         orderDelivery.setDeliveryDateTime(orderDeliveryDto.deliveryDateTime());
         orderDelivery.setAddress(address);
 
-        order.setDelivery(orderDelivery);
-
-        orderRepository.save(order);
         return orderDeliveryRepository.save(orderDelivery);
     }
 

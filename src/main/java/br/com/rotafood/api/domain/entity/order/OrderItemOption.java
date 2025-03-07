@@ -42,14 +42,9 @@ public class OrderItemOption {
     @Column(precision = 10, scale = 2)
     private BigDecimal totalPrice;
 
-
     @Enumerated(EnumType.STRING)
     @Column(length = 20)        
     private CatalogContext catalogContext;
-
-    @ManyToOne(fetch = FetchType.LAZY)    
-    @JoinColumn(name = "orderItemId")
-    private OrderItem orderItem;
 
     @ManyToOne(fetch = FetchType.LAZY)    
     @JoinColumn(name = "optionGroupId")
@@ -58,7 +53,5 @@ public class OrderItemOption {
     @ManyToOne(fetch = FetchType.LAZY)    
     @JoinColumn(name = "optionId")
     private Option option;
-
-
 
 }

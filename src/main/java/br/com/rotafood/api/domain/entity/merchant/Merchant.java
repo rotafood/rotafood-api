@@ -60,6 +60,9 @@ public class Merchant {
     @Column(length = 16)
     private String document;
 
+    @Column
+    private String phone;
+
     @Enumerated(value = EnumType.STRING)
     private MerchantType merchantType;
 
@@ -89,4 +92,25 @@ public class Merchant {
 
     @OneToMany(mappedBy = "merchant", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Shift> openingHours = new ArrayList<>();
+
+
+    public void addMerchantUser(MerchantUser user) {
+        this.merchantUsers.add(user);
+        user.setMerchant(this);
+    }
+
+    public void removeMerchantUser(MerchantUser user) {
+        this.merchantUsers.remove(user);
+        user.setMerchant(null);
+    }
+
+    public void addShift(Shift shift) {
+        this.openingHours.add(shift);
+        shift.setMerchant(this);
+    }
+
+    public void removeShift(Shift shift) {
+        this.openingHours.remove(shift);
+        shift.setMerchant(null);
+    }
 }

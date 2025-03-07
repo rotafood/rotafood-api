@@ -39,25 +39,21 @@ public class ProductOptionGroupService {
             .filter(Objects::nonNull)
             .toList();
 
-        // Remover ProductOptionGroups que não estão na nova lista
         product.getProductOptionGroups().removeIf(pog -> !incomingIds.contains(pog.getId()));
 
         List<ProductOptionGroup> updatedProductOptionGroups = productOptionGroupDtos.stream()
             .map(dto -> {
-                // Buscar um ProductOptionGroup existente
                 ProductOptionGroup productOptionGroup = product.getProductOptionGroups().stream()
                     .filter(pog -> pog.getId() != null && pog.getId().equals(dto.id()))
                     .findFirst()
                     .orElse(null);
 
-                // Se não existir, criar um novo
                 if (productOptionGroup == null) {
                     productOptionGroup = new ProductOptionGroup();
                     productOptionGroup.setProduct(product);
                     product.getProductOptionGroups().add(productOptionGroup);
                 }
 
-                // Atualizar ou criar a OptionGroup
                 OptionGroup optionGroup = optionGroupService.updateOrCreate(dto.optionGroup(), merchantId);
                 productOptionGroup.setOptionGroup(optionGroup);
                 productOptionGroup.setIndex(dto.index());

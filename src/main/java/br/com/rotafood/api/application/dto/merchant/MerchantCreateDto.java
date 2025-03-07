@@ -15,8 +15,12 @@ public record MerchantCreateDto (
     String description,
 
     DocumentType documentType,
+
     @NotBlank()
     String document,
+
+    @NotBlank()
+    String phone,
 
     MerchantType merchantType,
     

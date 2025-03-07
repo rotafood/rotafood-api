@@ -12,7 +12,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -28,10 +27,7 @@ public class OrderItemService {
     private OrderItemRepository orderItemRepository;
 
     @Transactional
-    public OrderItem createOrUpdate(OrderItemDto dto, UUID orderId) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new EntityNotFoundException("Order not found."));
-
+    public OrderItem createOrUpdate(OrderItemDto dto, Order order) {
         Item catalogItem = itemRepository.findById(dto.item().id())
                 .orElseThrow(() -> new EntityNotFoundException("Catalog item not found."));
 
@@ -43,25 +39,10 @@ public class OrderItemService {
         orderItem.setItem(catalogItem);
         orderItem.setQuantity(dto.quantity());
         orderItem.setTotalPrice(dto.totalPrice());
-        orderItem.setOrder(order);
-
-        order.addItem(orderItem);
-
+        order.getItems().add(orderItem);
         orderRepository.save(order);
+        
         return orderItemRepository.save(orderItem);
     }
 
-    @Transactional
-    public void deleteById(UUID itemId) {
-        OrderItem orderItem = orderItemRepository.findById(itemId)
-                .orElseThrow(() -> new EntityNotFoundException("OrderItem not found."));
-        Order order = orderItem.getOrder();
-        order.removeItem(orderItem);
-        orderRepository.save(order);
-        orderItemRepository.delete(orderItem);
-    }
-
-    public List<OrderItem> getByOrderId(UUID orderId) {
-        return orderItemRepository.findAllByOrderId(orderId);
-    }
 }

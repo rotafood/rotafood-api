@@ -1,6 +1,10 @@
 package br.com.rotafood.api.application.service.order;
 
+import br.com.rotafood.api.application.dto.order.OrderCashInformationDto;
+import br.com.rotafood.api.application.dto.order.OrderCreditCardInformationDto;
+import br.com.rotafood.api.application.dto.order.OrderDigitalWalletInformationDto;
 import br.com.rotafood.api.application.dto.order.OrderPaymentMethodDto;
+import br.com.rotafood.api.application.dto.order.OrderTransactionInformationDto;
 import br.com.rotafood.api.domain.entity.order.*;
 import br.com.rotafood.api.domain.repository.*;
 import jakarta.persistence.EntityNotFoundException;
@@ -8,16 +12,11 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
-
 @Service
 public class OrderPaymentMethodService {
 
     @Autowired
     private OrderPaymentMethodRepository orderPaymentMethodRepository;
-
-    @Autowired
-    private OrderPaymentRepository orderPaymentRepository;
 
     @Autowired
     private OrderDigitalWalletInformationRepository walletRepository;
@@ -32,9 +31,7 @@ public class OrderPaymentMethodService {
     private OrderTransactionInformationRepository transactionRepository;
 
     @Transactional
-    public OrderPaymentMethod createOrUpdate(OrderPaymentMethodDto dto, UUID paymentId) {
-        OrderPayment payment = orderPaymentRepository.findById(paymentId)
-                .orElseThrow(() -> new EntityNotFoundException("OrderPayment not found."));
+    public OrderPaymentMethod createOrUpdate(OrderPaymentMethodDto dto) {
 
         OrderPaymentMethod method = dto.id() != null
                 ? orderPaymentMethodRepository.findById(dto.id())
@@ -43,65 +40,69 @@ public class OrderPaymentMethodService {
 
         method.setDescription(dto.description());
         method.setMethod(dto.method());
+        method.setPrepaid(dto.prepaid());
+        method.setCurrency(dto.currency());
+        method.setType(dto.type());
         method.setValue(dto.value());
-        method.setPayment(payment);
+        
 
-        if (dto.wallet() != null) {
-            OrderDigitalWalletInformation wallet = new OrderDigitalWalletInformation();
-            wallet.setWalletName(dto.wallet().walletName());
-            wallet.setWalletId(dto.wallet().walletId());
-            wallet = walletRepository.save(wallet);
-            method.setWallet(wallet);
-        }
-
-        if (dto.cash() != null) {
-            OrderCashInformation cash = new OrderCashInformation();
-            cash.setChangeFor(dto.cash().changeFor());
-            cash = cashRepository.save(cash);
-            method.setCash(cash);
-        }
-
-        if (dto.card() != null) {
-            OrderCreditCardInformation card = new OrderCreditCardInformation();
-            card.setBrand(dto.card().brand());
-            card = cardRepository.save(card);
-            method.setCard(card);
-        }
-
-        if (dto.transaction() != null) {
-            OrderTransactionInformation transaction = new OrderTransactionInformation();
-            transaction.setAuthorizationCode(dto.transaction().authorizationCode());
-            transaction.setAcquirerDocument(dto.transaction().acquirerDocument());
-            transaction = transactionRepository.save(transaction);
-            method.setTransaction(transaction);
-        }
+        method.setCurrency(dto.currency());
+        method.setWallet(this.createOrUpdateWallet(dto.wallet()));
+        method.setCash(this.createOrUpdateCash(dto.cash()));
+        method.setCard(this.createOrUpdateCard(dto.card()));
+        method.setTransaction(this.createOrUpdateTransaction(dto.transaction()));
 
         return orderPaymentMethodRepository.save(method);
     }
 
-    @Transactional
-    public void deleteById(UUID methodId) {
-        OrderPaymentMethod method = orderPaymentMethodRepository.findById(methodId)
-                .orElseThrow(() -> new EntityNotFoundException("OrderPaymentMethod not found."));
+    private OrderDigitalWalletInformation createOrUpdateWallet(OrderDigitalWalletInformationDto walletDto) {
+        if (walletDto == null) return null;
 
-        if (method.getWallet() != null) {
-            walletRepository.delete(method.getWallet());
-        }
-        if (method.getCash() != null) {
-            cashRepository.delete(method.getCash());
-        }
-        if (method.getCard() != null) {
-            cardRepository.delete(method.getCard());
-        }
-        if (method.getTransaction() != null) {
-            transactionRepository.delete(method.getTransaction());
-        }
+        OrderDigitalWalletInformation wallet = walletDto.id() != null
+                ? walletRepository.findById(walletDto.id()).orElse(new OrderDigitalWalletInformation())
+                : new OrderDigitalWalletInformation();
 
-        orderPaymentMethodRepository.delete(method);
+        wallet.setWalletName(walletDto.walletName());
+        wallet.setWalletId(walletDto.walletId());
+
+        return walletRepository.save(wallet);
     }
 
-    public OrderPaymentMethod getById(UUID methodId) {
-        return orderPaymentMethodRepository.findById(methodId)
-                .orElseThrow(() -> new EntityNotFoundException("OrderPaymentMethod not found."));
+    private OrderCashInformation createOrUpdateCash(OrderCashInformationDto cashDto) {
+        if (cashDto == null) return null;
+
+        OrderCashInformation cash = cashDto.id() != null
+                ? cashRepository.findById(cashDto.id()).orElse(new OrderCashInformation())
+                : new OrderCashInformation();
+
+        cash.setChangeFor(cashDto.changeFor());
+        cash.setDescription(cashDto.description());
+
+        return cashRepository.save(cash);
+    }
+
+    private OrderCreditCardInformation createOrUpdateCard(OrderCreditCardInformationDto cardDto) {
+        if (cardDto == null) return null;
+
+        OrderCreditCardInformation card = cardDto.id() != null
+                ? cardRepository.findById(cardDto.id()).orElse(new OrderCreditCardInformation())
+                : new OrderCreditCardInformation();
+
+        card.setBrand(cardDto.brand());
+
+        return cardRepository.save(card);
+    }
+
+    private OrderTransactionInformation createOrUpdateTransaction(OrderTransactionInformationDto transactionDto) {
+        if (transactionDto == null) return null;
+
+        OrderTransactionInformation transaction = transactionDto.id() != null
+                ? transactionRepository.findById(transactionDto.id()).orElse(new OrderTransactionInformation())
+                : new OrderTransactionInformation();
+
+        transaction.setAuthorizationCode(transactionDto.authorizationCode());
+        transaction.setAcquirerDocument(transactionDto.acquirerDocument());
+
+        return transactionRepository.save(transaction);
     }
 }

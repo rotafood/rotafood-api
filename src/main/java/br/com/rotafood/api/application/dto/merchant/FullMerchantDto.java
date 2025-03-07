@@ -1,15 +1,18 @@
 package br.com.rotafood.api.application.dto.merchant;
 
+
 import java.time.Instant;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import br.com.rotafood.api.application.dto.address.AddressDto;
+import br.com.rotafood.api.application.dto.catalog.ShiftDto;
 import br.com.rotafood.api.domain.entity.merchant.DocumentType;
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
 import br.com.rotafood.api.domain.entity.merchant.MerchantType;
 
-public record MerchantDto (
+public record FullMerchantDto (
     UUID id,
     String name,
     String corporateName,
@@ -23,10 +26,11 @@ public record MerchantDto (
     Date createdAt,
     Instant lastRotafoodOpenedUtc,
     Instant lastIfoodOpenedUtc,
-    AddressDto address
+    AddressDto address,
+    List<ShiftDto> openingHours
     ) {
 
-    public MerchantDto(Merchant merchant) {
+    public FullMerchantDto(Merchant merchant) {
        this(merchant.getId(), 
        merchant.getName(), 
        merchant.getCorporateName(), 
@@ -40,6 +44,8 @@ public record MerchantDto (
        merchant.getCreatedAt(), 
        merchant.getLastRotafoodOpened(),
        merchant.getLastIfoodOpened(),
-       new AddressDto(merchant.getAddress()));
+       new AddressDto(merchant.getAddress()),
+       merchant.getOpeningHours().stream().map(ShiftDto::new).toList()
+       );
     }
 }

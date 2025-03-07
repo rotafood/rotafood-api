@@ -1,17 +1,13 @@
 package br.com.rotafood.api.application.service.order;
 
 import br.com.rotafood.api.application.dto.order.OrderPaymentDto;
-import br.com.rotafood.api.application.dto.order.OrderPaymentMethodDto;
-import br.com.rotafood.api.domain.entity.order.Order;
 import br.com.rotafood.api.domain.entity.order.OrderPayment;
 import br.com.rotafood.api.domain.repository.OrderPaymentRepository;
-import br.com.rotafood.api.domain.repository.OrderRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
 
 @Service
 public class OrderPaymentService {
@@ -22,49 +18,24 @@ public class OrderPaymentService {
     @Autowired
     private OrderPaymentMethodService orderPaymentMethodService;
 
-    @Autowired
-    private OrderRepository orderRepository;
-
     @Transactional
-    public OrderPayment createOrUpdate(OrderPaymentDto dto, UUID orderId) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new EntityNotFoundException("Order not found."));
+    public OrderPayment createOrUpdate(OrderPaymentDto dto) {
 
-        OrderPayment payment = order.getPayment() != null
-                ? order.getPayment()
-                : new OrderPayment();
-
+        OrderPayment payment = dto.id() != null 
+        ? this.orderPaymentRepository.findById(dto.id()).orElseThrow(() -> 
+            new EntityNotFoundException("Pagamento não encontrado para ID: " + dto.id()))
+        : new OrderPayment();
+    
         payment.setDescription(dto.description());
         payment.setPending(dto.pending());
         payment.setPrepaid(dto.prepaid());
 
-        if (dto.methods() != null) {
-            for (OrderPaymentMethodDto methodDto : dto.methods()) {
-                orderPaymentMethodService.createOrUpdate(methodDto, payment.getId());
-            }
-        }
+        orderPaymentRepository.save(payment);
 
-        order.setPayment(payment);
-        orderRepository.save(order);
-
+        payment.getMethods().clear();
+        var methods = dto.methods().stream().map(orderPaymentMethodService::createOrUpdate).toList();
+        payment.getMethods().addAll(methods);
+        
         return orderPaymentRepository.save(payment);
-    }
-
-    @Transactional
-    public void deleteByOrderId(UUID orderId) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new EntityNotFoundException("Order not found."));
-
-        if (order.getPayment() != null) {
-            orderPaymentRepository.delete(order.getPayment());
-            order.setPayment(null);
-            orderRepository.save(order);
-        }
-    }
-
-    public OrderPayment getByOrderId(UUID orderId) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new EntityNotFoundException("Order not found."));
-        return order.getPayment();
     }
 }

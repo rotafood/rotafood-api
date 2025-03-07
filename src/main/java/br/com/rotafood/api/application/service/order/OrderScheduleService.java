@@ -22,20 +22,16 @@ public class OrderScheduleService {
     private OrderRepository orderRepository;
 
     @Transactional
-    public OrderSchedule createOrUpdate(OrderScheduleDto dto, UUID orderId) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new EntityNotFoundException("Order not found."));
-
-        OrderSchedule schedule = order.getSchedule() != null
-                ? order.getSchedule()
+    public OrderSchedule createOrUpdate(OrderScheduleDto orderScheduleDto) {
+        OrderSchedule schedule = orderScheduleDto.id() != null
+                ? orderScheduleRepository.findById(orderScheduleDto.id())
+                        .orElseThrow(() -> new EntityNotFoundException("OrderSchedule not found."))
                 : new OrderSchedule();
 
-        schedule.setDeliveryDateTimeStart(dto.deliveryDateTimeStart());
-        schedule.setDeliveryDateTimeEnd(dto.deliveryDateTimeEnd());
+        schedule.setDeliveryDateTimeStart(orderScheduleDto.deliveryDateTimeStart());
+        schedule.setDeliveryDateTimeEnd(orderScheduleDto.deliveryDateTimeEnd());
 
-        order.setSchedule(schedule);
 
-        orderRepository.save(order);
         return orderScheduleRepository.save(schedule);
     }
 

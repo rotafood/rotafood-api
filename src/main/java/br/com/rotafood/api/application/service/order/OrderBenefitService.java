@@ -10,7 +10,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -34,25 +33,10 @@ public class OrderBenefitService {
 
         benefit.setValue(dto.value());
         benefit.setTarget(dto.target());
-        benefit.setOrder(order);
 
-        order.addBenefit(benefit);
+        order.getBenefits().add(benefit);
 
         orderRepository.save(order);
         return orderBenefitRepository.save(benefit);
-    }
-
-    @Transactional
-    public void deleteById(UUID benefitId) {
-        OrderBenefit benefit = orderBenefitRepository.findById(benefitId)
-                .orElseThrow(() -> new EntityNotFoundException("OrderBenefit not found."));
-        Order order = benefit.getOrder();
-        order.removeBenefit(benefit);
-        orderRepository.save(order);
-        orderBenefitRepository.delete(benefit);
-    }
-
-    public List<OrderBenefit> getByOrderId(UUID orderId) {
-        return orderBenefitRepository.findAllByOrderId(orderId);
     }
 }

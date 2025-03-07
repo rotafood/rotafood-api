@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import br.com.rotafood.api.domain.entity.catalog.CatalogContext;
 import br.com.rotafood.api.domain.entity.catalog.Item;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -51,15 +52,12 @@ public class OrderItem {
     @Column(length = 20)    
     private CatalogContext catalogContext;
 
-    @OneToMany(mappedBy = "orderItem")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "orderItemId")
     private List<OrderItemOption> options;
 
     @ManyToOne(fetch = FetchType.LAZY)    
     @JoinColumn(name = "itemId")
     private Item item;
-
-    @ManyToOne(fetch = FetchType.LAZY)    
-    @JoinColumn(name = "orderId")
-    private Order order;
 
 }

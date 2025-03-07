@@ -22,20 +22,12 @@ public class OrderIndoorService {
     private OrderRepository orderRepository;
 
     @Transactional
-    public OrderIndoor createOrUpdate(OrderIndoorDto dto, UUID orderId) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new EntityNotFoundException("Order not found."));
-
-        OrderIndoor indoor = order.getIndoor() != null
-                ? order.getIndoor()
-                : new OrderIndoor();
-
+    public OrderIndoor createOrUpdate(OrderIndoorDto dto) {
+        OrderIndoor indoor = dto.id() != null ? this.orderIndoorRepository.findById(dto.id()).orElseThrow(() -> 
+        new EntityNotFoundException("Indoor não encontrado para ID: " + dto.id())) : new OrderIndoor();
         indoor.setMode(dto.mode());
         indoor.setDeliveryDateTime(dto.deliveryDateTime());
 
-        order.setIndoor(indoor);
-
-        orderRepository.save(order);
         return orderIndoorRepository.save(indoor);
     }
 
