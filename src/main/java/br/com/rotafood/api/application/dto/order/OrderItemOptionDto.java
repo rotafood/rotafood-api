@@ -21,8 +21,8 @@ public record OrderItemOptionDto(
             orderItemOption.getQuantity(),
             orderItemOption.getTotalPrice(),
             orderItemOption.getCatalogContext(),
-            orderItemOption.getOptionGroup() != null ? orderItemOption.getOptionGroup().getName() : null,
-            orderItemOption.getOptionGroup() != null ? orderItemOption.getOptionGroup().getId() : null,
+            orderItemOption.getOption() != null ? orderItemOption.getOption().getOptionGroup().getName() : null,
+            orderItemOption.getOption() != null ? orderItemOption.getOption().getOptionGroup().getId() : null,
             orderItemOption.getOption() != null ? new OrderOptionDetailDto(orderItemOption.getOption(), orderItemOption.getCatalogContext()) : null
         );
     }

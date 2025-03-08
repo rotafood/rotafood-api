@@ -1,6 +1,7 @@
 package br.com.rotafood.api.domain.entity.order;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -54,7 +55,7 @@ public class OrderItem {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "orderItemId")
-    private List<OrderItemOption> options;
+    private List<OrderItemOption> options = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)    
     @JoinColumn(name = "itemId")

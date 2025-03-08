@@ -5,6 +5,7 @@ import br.com.rotafood.api.application.dto.order.FullOrderDto;
 import br.com.rotafood.api.application.dto.order.OrderAdditionalFeeDto;
 import br.com.rotafood.api.application.dto.order.OrderBenefitDto;
 import br.com.rotafood.api.application.dto.order.OrderItemDto;
+import br.com.rotafood.api.application.dto.order.OrderItemOptionDto;
 import br.com.rotafood.api.domain.entity.order.Order;
 import br.com.rotafood.api.domain.entity.order.OrderAdditionalFee;
 import br.com.rotafood.api.domain.entity.order.OrderBenefit;
@@ -35,6 +36,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -132,9 +134,15 @@ public class OrderService {
         orderRepository.save(order);
 
         if (fullOrderDto.items() != null) {
-            if (order.getItems() != null) {
-                order.getItems().clear();
-            }
+            List<UUID> newItemIds = fullOrderDto.items().stream()
+                .map(OrderItemDto::id)
+                .filter(Objects::nonNull)
+                .toList();
+
+            order.getItems().removeIf(existingItem ->
+                    existingItem.getId() != null && !newItemIds.contains(existingItem.getId()));
+
+
             fullOrderDto.items().forEach(item -> {
                 this.orderItemService.createOrUpdate(item, order);
             });

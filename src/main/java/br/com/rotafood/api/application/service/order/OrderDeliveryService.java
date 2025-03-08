@@ -3,7 +3,6 @@ package br.com.rotafood.api.application.service.order;
 import br.com.rotafood.api.application.dto.order.OrderDeliveryDto;
 import br.com.rotafood.api.domain.entity.order.Order;
 import br.com.rotafood.api.domain.entity.order.OrderDelivery;
-import br.com.rotafood.api.domain.entity.order.OrderTotal;
 import br.com.rotafood.api.domain.entity.address.Address;
 import br.com.rotafood.api.domain.repository.OrderDeliveryRepository;
 import br.com.rotafood.api.domain.repository.OrderRepository;

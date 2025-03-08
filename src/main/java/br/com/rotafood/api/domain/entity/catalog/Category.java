@@ -61,8 +61,6 @@ public class Category {
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<CatalogCategory> catalogCategories;
 
-
-
     @Column(nullable = true)
     private UUID iFoodCategoryId;
 }

@@ -51,8 +51,6 @@ public class Catalog {
     @JoinColumn(name = "merchantId") 
     private Merchant merchant;
 
-
-    
     @OneToMany(mappedBy = "catalog", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<CatalogCategory> catalogCategories;
 

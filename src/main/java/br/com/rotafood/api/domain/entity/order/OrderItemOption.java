@@ -5,7 +5,6 @@ import java.util.UUID;
 
 import br.com.rotafood.api.domain.entity.catalog.CatalogContext;
 import br.com.rotafood.api.domain.entity.catalog.Option;
-import br.com.rotafood.api.domain.entity.catalog.OptionGroup;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -45,10 +44,6 @@ public class OrderItemOption {
     @Enumerated(EnumType.STRING)
     @Column(length = 20)        
     private CatalogContext catalogContext;
-
-    @ManyToOne(fetch = FetchType.LAZY)    
-    @JoinColumn(name = "optionGroupId")
-    private OptionGroup optionGroup;
 
     @ManyToOne(fetch = FetchType.LAZY)    
     @JoinColumn(name = "optionId")
