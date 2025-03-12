@@ -7,6 +7,7 @@ import br.com.rotafood.api.domain.entity.order.OrderType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -32,6 +33,12 @@ public interface OrderRepository extends JpaRepository<Order, UUID> {
         @Param("startDate") Instant startDate,
         @Param("endDate") Instant endDate,
         Pageable pageable);
+
+    @Modifying
+    @Query("UPDATE Order o SET o.status = :status WHERE o.id = :orderId AND o.merchant.id = :merchantId")
+    int updateOrderStatus(@Param("merchantId") UUID merchantId, 
+                          @Param("orderId") UUID orderId, 
+                          @Param("status") OrderStatus status);
 
 
 

@@ -4,12 +4,10 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,8 +24,8 @@ import br.com.rotafood.api.application.service.catalog.CatalogService;
 import br.com.rotafood.api.domain.entity.address.Address;
 import br.com.rotafood.api.domain.entity.catalog.Shift;
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
-import br.com.rotafood.api.domain.entity.merchant.MerchantPermission;
 import br.com.rotafood.api.domain.entity.merchant.MerchantUser;
+import br.com.rotafood.api.domain.entity.merchant.MerchantUserRole;
 import br.com.rotafood.api.domain.entity.order.OrderSalesChannel;
 import br.com.rotafood.api.domain.repository.AddressRepository;
 import br.com.rotafood.api.domain.repository.MerchantRepository;
@@ -72,10 +70,7 @@ public class MerchantService {
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Merchant not found"));
 
         if (sources.contains(OrderSalesChannel.ROTAFOOD)) {
-            merchant.setLastRotafoodOpened(Instant.now());
-        }
-        if (sources.contains(OrderSalesChannel.IFOOD)) {
-            merchant.setLastIfoodOpened(Instant.now());
+            merchant.setLastOpenedUtc(Instant.now());
         }
 
         merchantRepository.save(merchant);
@@ -104,7 +99,6 @@ public class MerchantService {
             merchantDto.merchantType(), 
             Date.from(LocalDateTime.now().atZone(ZoneId.of("America/Sao_Paulo")).toInstant()), 
             null,
-            Instant.now(),
             Instant.now(),
             address, 
             null, 
@@ -195,9 +189,8 @@ public class MerchantService {
         merchantUser.setEmail(ownerDto.email());
         merchantUser.setPassword(ownerDto.password());
         merchantUser.setPhone(ownerDto.phone());
-        merchantUser.setMerchantPermissions(Arrays.stream(MerchantPermission.values())
-                                                   .map(Enum::name)
-                                                   .collect(Collectors.toList()));
+        merchantUser.setHasOwner(true);
+        merchantUser.setRole(MerchantUserRole.ADMIN);
         merchantUser.setMerchant(merchant);
         return merchantUserRepository.save(merchantUser);
     }

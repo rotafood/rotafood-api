@@ -20,7 +20,7 @@ public class ContextModifierController {
     public ContextModifierDto updateOrCreate(
             @PathVariable UUID merchantId,
             @RequestBody @Valid ContextModifierDto contextModifierDto) {
-        return new ContextModifierDto(contextModifierService.updateOrCreate(contextModifierDto));
+        return new ContextModifierDto(contextModifierService.updateOrCreate(contextModifierDto, null, null, null));
     }
 
 }

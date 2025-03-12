@@ -1,6 +1,7 @@
 package br.com.rotafood.api.infra.security;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
@@ -29,15 +30,13 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         if (tokenJwt != null) {
             var merchantUserDto = tokenService.getMerchantUser(tokenJwt);
-            var authorities = merchantUserDto.merchantPermissions().stream()
-                .map(permission -> new SimpleGrantedAuthority(permission.name()))
-                .toList();
+            var authority = new SimpleGrantedAuthority("ROLE_" + merchantUserDto.role().name());
 
             var authentication = new UsernamePasswordAuthenticationToken(
                         merchantUserDto, 
-                        null, 
-                        authorities
-                );
+                        null,
+                        List.of(authority)          
+                        );
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }

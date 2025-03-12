@@ -56,10 +56,10 @@ public class OrderController {
     }
 
     @GetMapping("/polling")
-    public ResponseEntity<PaginationDto<OrderDto>> pollUnfinishedOrders(
+    public ResponseEntity<PaginationDto<FullOrderDto>> polling(
         @PathVariable UUID merchantId,
         @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "10") int size,
+        @RequestParam(defaultValue = "100") int size,
         @RequestParam(defaultValue = "createdAt") String sortBy,
         @RequestParam(defaultValue = "desc") String sortDirection,
         @RequestParam(defaultValue = "ROTAFOOD") List<OrderSalesChannel> sources) {
@@ -71,15 +71,21 @@ public class OrderController {
 
         merchantService.updateMerchantOpened(merchantId, sources);
 
-        Page<OrderDto> orders = orderService.getAllByFilters(
+        Page<FullOrderDto> orders = orderService.getAllByFilters(
             merchantId, null, orderStatuses, null, null, pageable
-        ).map(OrderDto::new);
+        ).map(FullOrderDto::new);
 
         return ResponseEntity.ok(PaginationDto.fromPage(orders, "/orders/polling"));
     }
 
-
-
+    @PutMapping("/{orderId}/status")
+    public ResponseEntity<Void> updateOrderStatus(
+            @PathVariable UUID merchantId,
+            @PathVariable UUID orderId,
+            @RequestParam OrderStatus status) {
+        orderService.updateOrderStatus(merchantId, orderId, status);
+        return ResponseEntity.ok().build();
+    }
 
 
     @GetMapping("/{orderId}")

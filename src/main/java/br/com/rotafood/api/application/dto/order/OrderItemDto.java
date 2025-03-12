@@ -6,14 +6,22 @@ import java.util.UUID;
 
 import br.com.rotafood.api.domain.entity.catalog.CatalogContext;
 import br.com.rotafood.api.domain.entity.order.OrderItem;
-
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 
 public record OrderItemDto(
     UUID id,
+    @Min(1)
     int quantity,
+    @Min(0)
     BigDecimal totalPrice,
+    @NotNull
     CatalogContext catalogContext,
+    @NotNull
+    @Valid
     OrderItemDetailDto item,
+    @Valid
     List<OrderItemOptionDto> options
 
 ) {

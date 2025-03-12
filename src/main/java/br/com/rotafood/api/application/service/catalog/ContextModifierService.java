@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import br.com.rotafood.api.application.dto.catalog.ContextModifierDto;
 import br.com.rotafood.api.domain.entity.catalog.ContextModifier;
+import br.com.rotafood.api.domain.entity.catalog.Item;
+import br.com.rotafood.api.domain.entity.catalog.Option;
 import br.com.rotafood.api.domain.entity.catalog.Price;
 import br.com.rotafood.api.domain.repository.ContextModifierRepository;
 import jakarta.transaction.Transactional;
@@ -44,20 +46,32 @@ public class ContextModifierService {
     }
 
     @Transactional
-    public ContextModifier updateOrCreate(ContextModifierDto contextModifierDto) {
+    public ContextModifier updateOrCreate(ContextModifierDto contextModifierDto, Item item, Option option, Option parentOption) {
 
         ContextModifier contextModifier = contextModifierDto.id() != null
                     ? contextModifierRepository.findById(contextModifierDto.id())
                         .orElse(new ContextModifier())
                     : new ContextModifier();
 
-            contextModifier.setCatalogContext(contextModifierDto.catalogContext());
-            contextModifier.setStatus(contextModifierDto.status());
+        contextModifier.setCatalogContext(contextModifierDto.catalogContext());
+        contextModifier.setStatus(contextModifierDto.status());
 
-            if (contextModifierDto.price() != null) {                
-                Price price = priceService.updateOrCreate(contextModifierDto.price());
-                contextModifier.setPrice(price);
-            }
+        if (item != null) {
+            item.addContextModifier(contextModifier);
+        }
+
+        if (option != null) {
+            option.addContextModifier(contextModifier);
+        }
+
+        if (parentOption != null) {
+            parentOption.addContextModifier(contextModifier);
+        }
+
+        if (contextModifierDto.price() != null) {                
+            Price price = priceService.updateOrCreate(contextModifierDto.price());
+            contextModifier.setPrice(price);
+        }
         return contextModifierRepository.save(contextModifier);
     }
 

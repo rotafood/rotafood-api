@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -23,14 +22,12 @@ public class PackagingController {
     @Autowired
     private PackagingService packagingService;
 
-    @PreAuthorize("hasAuthority('CATALOG')")
     @GetMapping
     public List<PackagingDto> getAll(
             @PathVariable UUID merchantId) {
         return packagingService.getAllByMerchantId(merchantId);
     }
 
-    @PreAuthorize("hasAuthority('CATALOG')")
     @GetMapping("/{packagingId}")
     public PackagingDto getById(
             @PathVariable UUID merchantId,
@@ -38,7 +35,6 @@ public class PackagingController {
         return new PackagingDto(packagingService.getByIdAndMerchantId(packagingId, merchantId));
     }
 
-    @PreAuthorize("hasAuthority('CATALOG')")
     @PutMapping
     public PackagingDto updateOrCreate(
             @PathVariable UUID merchantId,

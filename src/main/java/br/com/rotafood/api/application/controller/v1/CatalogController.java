@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,7 +26,7 @@ public class CatalogController {
     @Autowired
     public CatalogService catalogService;
 
-    @PreAuthorize("hasAuthority('CATEGORY')")
+  
     @GetMapping
     public List<CatalogDto> getAll(
         @PathVariable UUID merchantId,
@@ -37,7 +36,7 @@ public class CatalogController {
         return this.catalogService.getAllByMerchantId(merchantId);
     }
 
-    @PreAuthorize("hasAuthority('CATEGORY')")
+  
     @GetMapping("/{catalogId}")
     public CatalogDto getById(
         @PathVariable UUID merchantId,
@@ -46,7 +45,7 @@ public class CatalogController {
         return new CatalogDto(this.catalogService.getByIdAndMerchantId(catalogId, merchantId));
     }
 
-    @PreAuthorize("hasAuthority('CATEGORY')")
+  
     @GetMapping("/{catalogId}/categories")
     public CatalogDto getCategoriesById(
         @PathVariable UUID merchantId,
@@ -57,7 +56,7 @@ public class CatalogController {
 
 
 
-    @PreAuthorize("hasAuthority('CATEGORY')")
+  
     @PutMapping
     public CatalogDto updateOrCreate(
         @PathVariable UUID merchantId,
@@ -67,7 +66,7 @@ public class CatalogController {
         return new CatalogDto(this.catalogService.updateOrCreate(catalogDto, merchantId));
     }
 
-    @PreAuthorize("hasAuthority('CATEGORY')")
+  
     @PutMapping("/{catalogId}/{status}")
     public CatalogDto changeStatus(
         @PathVariable UUID merchantId,

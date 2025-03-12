@@ -1,7 +1,9 @@
 package br.com.rotafood.api.application.service.catalog;
 
 import br.com.rotafood.api.application.dto.catalog.ShiftDto;
+import br.com.rotafood.api.domain.entity.catalog.Item;
 import br.com.rotafood.api.domain.entity.catalog.Shift;
+import br.com.rotafood.api.domain.entity.merchant.Merchant;
 import br.com.rotafood.api.domain.repository.ShiftRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -29,7 +31,7 @@ public class ShiftService {
     }
 
     @Transactional
-    public Shift updateOrCreate(ShiftDto shiftDto) {
+    public Shift updateOrCreate(ShiftDto shiftDto, Item item, Merchant merchant) {
         Shift shift = shiftDto.id() != null
                 ? shiftRepository.findById(shiftDto.id())
                   .orElse(new Shift())
@@ -45,18 +47,15 @@ public class ShiftService {
         shift.setSaturday(shiftDto.saturday());
         shift.setSunday(shiftDto.sunday());
 
-        return shiftRepository.save(shift); 
-    }
-
-    @Transactional
-    public List<Shift> updateOrCreateAll(List<ShiftDto> shiftDtos) {
-        if (shiftDtos == null || shiftDtos.isEmpty()) {
-            return List.of();
+        if (item != null) {
+            item.addShift(shift);
         }
 
-        return shiftDtos.stream()
-                .map(this::updateOrCreate)
-                .toList();
+        if (merchant != null) {
+            merchant.addShift(shift);
+        }
+
+        return shiftRepository.save(shift); 
     }
 
     @Transactional

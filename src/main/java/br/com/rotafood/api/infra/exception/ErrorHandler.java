@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.UUID;
 
 @RestControllerAdvice
 public class ErrorHandler {
@@ -81,8 +80,7 @@ public class ErrorHandler {
                 status.value(),
                 message,
                 details,
-                Instant.now(),
-                UUID.randomUUID().toString()
+                Instant.now()
         ));
     }
 
@@ -92,6 +90,6 @@ public class ErrorHandler {
         }
     }
 
-    public record ErrorResponse(int status, String message, Object details, Instant timestamp, String errorId) {
+    public record ErrorResponse(int status, String message, Object details, Instant timestamp) {
     }
 }

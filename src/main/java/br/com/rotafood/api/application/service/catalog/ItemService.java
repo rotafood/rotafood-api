@@ -8,11 +8,9 @@ import org.springframework.stereotype.Service;
 import br.com.rotafood.api.application.dto.catalog.CategoryDto;
 import br.com.rotafood.api.application.dto.catalog.ItemDto;
 import br.com.rotafood.api.domain.entity.catalog.Category;
-import br.com.rotafood.api.domain.entity.catalog.ContextModifier;
 import br.com.rotafood.api.domain.entity.catalog.Item;
 import br.com.rotafood.api.domain.entity.catalog.TemplateType;
 import br.com.rotafood.api.domain.entity.catalog.Product;
-import br.com.rotafood.api.domain.entity.catalog.Shift;
 import br.com.rotafood.api.domain.entity.catalog.AvailabilityStatus;
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
 import br.com.rotafood.api.domain.repository.ItemRepository;
@@ -69,21 +67,17 @@ public class ItemService {
         item.setType(itemDto.type());
         item.setStatus(itemDto.status());
         item.setIndex(itemDto.index());
+
+        Product product = productService.updateOrCreate(itemDto.product(), merchantId);
+        item.setProduct(product);
+
         itemRepository.save(item);
 
     
-        Product product = productService.updateOrCreate(itemDto.product(), merchantId);
-        item.setProduct(product);
+        itemDto.contextModifiers().forEach(cm -> {
+            this.contextModifierService.updateOrCreate(cm, item, null, null);
+        });
     
-        List<ContextModifier> contextModifiers = contextModifierService.updateOrCreateAll(itemDto.contextModifiers());
-        item.getContextModifiers().clear();
-        contextModifiers.forEach(item::addContextModifier);
-    
-        List<Shift> shifts = shiftService.updateOrCreateAll(itemDto.shifts());
-        item.getShifts().clear();
-        shifts.forEach(item::addShift);
-        
-        product.setItem(item);
     
         return itemRepository.save(item);
     }
@@ -108,21 +102,24 @@ public class ItemService {
         item.setType(itemDto.type());
         item.setStatus(itemDto.status());
         item.setIndex(itemDto.index());
-        itemRepository.save(item);
 
-    
         Product product = productService.updateOrCreate(itemDto.product(), merchantId);
         item.setProduct(product);
-    
-        List<ContextModifier> contextModifiers = contextModifierService.updateOrCreateAll(itemDto.contextModifiers());
-        item.getContextModifiers().clear();
-        contextModifiers.forEach(item::addContextModifier);
-    
-        List<Shift> shifts = shiftService.updateOrCreateAll(itemDto.shifts());
-        item.getShifts().clear();
-        shifts.forEach(item::addShift);
 
-        product.setItem(item);
+        itemRepository.save(item);
+
+        itemDto.contextModifiers().forEach(cm -> {
+            this.contextModifierService.updateOrCreate(cm, item, null, null);
+        });
+    
+        item.getShifts().removeIf(shift -> 
+                itemDto.shifts() != null && 
+                itemDto.shifts().stream().noneMatch(dto -> dto.id().equals(shift.getId()))
+            );
+
+        itemDto.shifts().forEach(cm -> {
+            this.shiftService.updateOrCreate(cm, item, null);
+        });
     
         return itemRepository.save(item);
     }

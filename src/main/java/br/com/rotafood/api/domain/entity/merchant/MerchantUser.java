@@ -11,6 +11,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -47,8 +49,9 @@ public class MerchantUser implements UserDetails  {
     private boolean hasOwner;
 
 
-    @Column(nullable = false, columnDefinition = "text[]")
-    private List<String> merchantPermissions;
+    @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private MerchantUserRole role;
 
     @ManyToOne(fetch = FetchType.LAZY)    
     @JoinColumn(name = "merchantId")

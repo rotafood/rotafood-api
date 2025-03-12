@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping( ApiVersion.VERSION + "/catalogs/online")
-public class CatalogOnline {
+public class CatalogOnlineController {
 
     @Autowired
     private CategoryService categoryService;
@@ -68,12 +68,12 @@ public class CatalogOnline {
     }
 
     @PutMapping("/{onlineName}/orders")
-    public void createOrUpdateOrder(
+    public FullOrderDto createOrUpdateOrder(
         @PathVariable String onlineName, 
         @RequestBody @Valid FullOrderDto orderDto
     ) {
-        this.orderService.createOrUpdate(orderDto, orderDto.merchantId());
+        return new FullOrderDto(this.orderService.createOrUpdate(orderDto, orderDto.merchantId()));
     }
     
-
+ 
 }

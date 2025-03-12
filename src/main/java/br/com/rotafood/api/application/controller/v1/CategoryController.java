@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.rotafood.api.application.dto.SortRequestDto;
 import br.com.rotafood.api.application.dto.catalog.CategoryDto;
 import br.com.rotafood.api.application.dto.catalog.FullCategoryDto;
 import br.com.rotafood.api.application.service.catalog.CategoryService;
@@ -26,7 +27,7 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-    @PreAuthorize("hasAuthority('CATEGORY')")
+  
     @GetMapping
     public List<FullCategoryDto> getAll(
         @PathVariable UUID merchantId
@@ -36,7 +37,7 @@ public class CategoryController {
             .toList();
     }
 
-    @PreAuthorize("hasAuthority('CATEGORY')")
+  
     @GetMapping("simplified")
     public List<CategoryDto> getAllSimplied(
         @PathVariable UUID merchantId
@@ -46,7 +47,7 @@ public class CategoryController {
             .toList();
     }
 
-    @PreAuthorize("hasAuthority('CATEGORY')")
+  
     @GetMapping("/{categoryId}")
     public FullCategoryDto getById(
         @PathVariable UUID merchantId,
@@ -57,7 +58,7 @@ public class CategoryController {
             );
     }
 
-    @PreAuthorize("hasAuthority('CATEGORY')")
+  
     @DeleteMapping("/{categoryId}")
     public void deleteById(
         @PathVariable UUID merchantId,
@@ -66,7 +67,7 @@ public class CategoryController {
         categoryService.deleteByIdAndMerchantId(categoryId, merchantId);
     }
 
-    @PreAuthorize("hasAuthority('CATEGORY')")
+  
     @PutMapping
     public CategoryDto updateOrCreate(
         @PathVariable UUID merchantId,
@@ -74,6 +75,28 @@ public class CategoryController {
     ) {
         var category = categoryService.updateOrCreate(categoryDto, merchantId);
         return new CategoryDto(category);
+    }
+
+
+   
+    @PutMapping("/{categoryId}/sort")
+    public ResponseEntity<Void> sortItemsInCategory(
+        @PathVariable UUID merchantId,
+        @PathVariable UUID categoryId,
+        @RequestBody List<SortRequestDto> sortedItems
+    ) {
+        categoryService.sortItemsInCategory(merchantId, categoryId, sortedItems);
+        return ResponseEntity.ok().build();
+    }
+
+  
+    @PutMapping("/sort")
+    public ResponseEntity<Void> sortCategories(
+        @PathVariable UUID merchantId,
+        @RequestBody List<SortRequestDto> sortedCategories
+    ) {
+        categoryService.sortCategories(merchantId, sortedCategories);
+        return ResponseEntity.ok().build();
     }
 
 }

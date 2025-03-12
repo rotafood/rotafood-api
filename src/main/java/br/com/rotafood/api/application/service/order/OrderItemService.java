@@ -41,6 +41,7 @@ public class OrderItemService {
 
     @Transactional
     public OrderItem createOrUpdate(OrderItemDto orderItemDto, Order order) {
+
         Item catalogItem = itemRepository.findById(orderItemDto.item().id())
                 .orElseThrow(() -> new EntityNotFoundException("Catalog item not found."));
 
@@ -57,29 +58,39 @@ public class OrderItemService {
         orderItemRepository.save(orderItem);
 
         if (orderItemDto.options() != null) {
+
             List<UUID> newOptionIds = orderItemDto.options().stream()
                 .map(OrderItemOptionDto::id)
                 .filter(Objects::nonNull) 
                 .toList();
-            orderItem.getOptions().removeIf(existingOption -> 
-                existingOption.getId() != null && !newOptionIds.contains(existingOption.getId()));
 
-            orderItemDto.options().forEach(optionDto -> this.createOrUpdateOption(optionDto, orderItem));
-        }
+
+                
+                orderItem.getOptions().removeIf(existingOption -> 
+                existingOption.getId() != null && !newOptionIds.contains(existingOption.getId()));
+                
+                orderItemDto.options().forEach(optionDto -> this.createOrUpdateOption(optionDto, orderItem));
+            }
 
         return orderItem;
     }
 
     @Transactional
     public OrderItemOption createOrUpdateOption(OrderItemOptionDto optionDto, OrderItem orderItem) {
-        OrderItemOption orderItemOption = optionDto.id() != null
-                ? orderItemOptionRepository.findById(optionDto.id())
-                        .orElse(new OrderItemOption())
-                : new OrderItemOption();
 
+        System.err.println("Cheguei aqui \n\n\n\n" + optionDto);
+
+        
+        
+        OrderItemOption orderItemOption = optionDto.id() != null
+            ? orderItemOptionRepository.findById(optionDto.id())
+            .orElse(new OrderItemOption())
+                : new OrderItemOption();
+        
         Option option = optionRepository.findById(optionDto.option().id())
                 .orElseThrow(() -> new EntityNotFoundException("Option not found."));
 
+        System.err.println("Cheguei lá \n\n\n\n");
 
         orderItemOption.setQuantity(optionDto.quantity());
         orderItemOption.setTotalPrice(optionDto.totalPrice());

@@ -21,8 +21,7 @@ public record MerchantDto (
     String phone,
     MerchantType merchantType,
     Date createdAt,
-    Instant lastRotafoodOpenedUtc,
-    Instant lastIfoodOpenedUtc,
+    Instant lastOpenedUtc,
     AddressDto address
     ) {
 
@@ -38,8 +37,7 @@ public record MerchantDto (
        merchant.getPhone(),
        merchant.getMerchantType(), 
        merchant.getCreatedAt(), 
-       merchant.getLastRotafoodOpened(),
-       merchant.getLastIfoodOpened(),
+       merchant.getLastOpenedUtc(),
        new AddressDto(merchant.getAddress()));
     }
 }

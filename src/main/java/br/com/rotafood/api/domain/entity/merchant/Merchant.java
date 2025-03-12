@@ -76,11 +76,7 @@ public class Merchant {
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
-    private Instant lastRotafoodOpened;
-    
-    @Temporal(TemporalType.TIMESTAMP)
-    private Instant lastIfoodOpened;
-    
+    private Instant lastOpenedUtc;
 
     @OneToOne
     @JoinColumn(name = "addressId")

@@ -1,7 +1,7 @@
 package br.com.rotafood.api.domain.entity.catalog;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
@@ -47,7 +47,8 @@ public class OptionGroup {
     private AvailabilityStatus status;
     
     @OneToMany(mappedBy = "optionGroup", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Option> options = new ArrayList<>();
+    private Set<Option> options = new HashSet<>();
+    
 
     @ManyToOne(fetch = FetchType.LAZY)    
     @JoinColumn(name = "merchantId")
@@ -58,11 +59,9 @@ public class OptionGroup {
 
     public void addOption(Option option) {
         this.options.add(option);
-        option.setOptionGroup(this);
     }
 
     public void removeOption(Option option) {
         this.options.remove(option);
-        option.setOptionGroup(null);
     }
 }

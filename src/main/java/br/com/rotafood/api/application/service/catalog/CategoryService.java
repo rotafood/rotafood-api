@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.rotafood.api.application.dto.SortRequestDto;
 import br.com.rotafood.api.application.dto.catalog.CategoryDto;
 import br.com.rotafood.api.domain.entity.catalog.Catalog;
 import br.com.rotafood.api.domain.entity.catalog.CatalogCategory;
@@ -18,6 +19,7 @@ import br.com.rotafood.api.domain.entity.merchant.Merchant;
 import br.com.rotafood.api.domain.repository.CatalogCategoryRepository;
 import br.com.rotafood.api.domain.repository.CatalogRepository;
 import br.com.rotafood.api.domain.repository.CategoryRepository;
+import br.com.rotafood.api.domain.repository.ItemRepository;
 import br.com.rotafood.api.domain.repository.MerchantRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
@@ -29,6 +31,7 @@ public class CategoryService {
     @Autowired private CatalogRepository catalogRepository;
     @Autowired private CategoryRepository categoryRepository;
     @Autowired private MerchantRepository merchantRepository;
+    @Autowired private ItemRepository itemRepository;
     @Autowired private CatalogCategoryRepository catalogCategoryRepository;
 
     @Autowired
@@ -72,7 +75,7 @@ public class CategoryService {
         category.setMerchant(merchant);
         category.setIFoodCategoryId(categoryDto.iFoodCategoryId());
 
-        if (categoryDto.index() != null) {
+        if (categoryDto.index() == 1) {
             adjustIndexesForUpdate(categoryDto.index(), category, merchantId);
         } else {
             Integer lastIndex = categoryRepository.findByMerchantId(merchantId).stream()
@@ -120,15 +123,14 @@ public class CategoryService {
     }
 
     @Transactional
-    public void updateIndexes(List<CategoryDto> categoryDtos, UUID merchantId) {
-        List<Category> categoriesToUpdate = categoryDtos.stream()
-                .map(dto -> {
-                    Category category = categoryRepository.findByIdAndMerchantId(dto.id(), merchantId);
-                    category.setIndex(dto.index());
-                    return category;
-                })
-                .toList();
+    public void sortItemsInCategory(UUID merchantId, UUID categoryId, List<SortRequestDto> sortedItems) {
+        sortedItems.forEach(dto -> 
+            itemRepository.updateItemIndex(categoryId, dto.id(), dto.index()));
+    }
 
-        categoryRepository.saveAll(categoriesToUpdate);
+    @Transactional
+    public void sortCategories(UUID merchantId, List<SortRequestDto> sortedCategories) {
+        sortedCategories.forEach(dto -> 
+            categoryRepository.updateCategoryIndex(merchantId, dto.id(), dto.index()));
     }
 }

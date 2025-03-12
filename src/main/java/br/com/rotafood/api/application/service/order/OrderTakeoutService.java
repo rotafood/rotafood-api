@@ -1,17 +1,13 @@
 package br.com.rotafood.api.application.service.order;
 
 import br.com.rotafood.api.application.dto.order.OrderTakeoutDto;
-import br.com.rotafood.api.domain.entity.order.Order;
-import br.com.rotafood.api.domain.entity.order.OrderCustomer;
 import br.com.rotafood.api.domain.entity.order.OrderTakeout;
-import br.com.rotafood.api.domain.repository.OrderRepository;
 import br.com.rotafood.api.domain.repository.OrderTakeoutRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
 
 @Service
 public class OrderTakeoutService {

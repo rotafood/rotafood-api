@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import br.com.rotafood.api.application.dto.catalog.OptionDto;
 import br.com.rotafood.api.application.dto.catalog.ProductOptionDto;
-import br.com.rotafood.api.domain.entity.catalog.ContextModifier;
 import br.com.rotafood.api.domain.entity.catalog.Option;
 import br.com.rotafood.api.domain.entity.catalog.OptionGroup;
 import br.com.rotafood.api.domain.entity.catalog.Product;
@@ -18,6 +17,7 @@ import br.com.rotafood.api.domain.entity.merchant.Merchant;
 import br.com.rotafood.api.domain.repository.MerchantRepository;
 import br.com.rotafood.api.domain.repository.OptionRepository;
 import br.com.rotafood.api.domain.repository.ProductRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -41,28 +41,31 @@ public class OptionService {
             ? optionRepository.findById(optionDto.id()).orElse(new Option())
             : new Option();
 
-
+        Product product = this.updateOrCreateProductOption(
+            optionDto.product(), 
+            optionGroup.getMerchant().getId()
+            );
 
         option.setStatus(optionDto.status());
         option.setIndex(optionDto.index());
-        option.setOptionGroup(optionGroup);
         option.setFractions(optionDto.fractions());
+        option.setProduct(product);
         
+        optionGroup.addOption(option);
+
         optionRepository.save(option);
 
-        var product = this.updateOrCreateProductOption(
-            optionDto.product(), 
-            optionGroup.getMerchant().getId()
-        );
-        product.setOption(option);
-        option.setProduct(product);
+        optionDto.contextModifiers().forEach(cm -> {
+            var parentOption = cm.parentOptionId() != null ? optionRepository
+                .findById(optionDto.id())
+                .orElseThrow(() -> {
+                    throw new EntityNotFoundException("Option não encontrada");
+                }) : null;
 
-        List<ContextModifier> contextModifiers = contextModifierService.updateOrCreateAll(optionDto.contextModifiers());
+            this.contextModifierService.updateOrCreate(cm, null, option, parentOption);
+        });
 
-        option.getContextModifiers().clear();
-        contextModifiers.forEach(option::addContextModifier);
-
-        return optionRepository.save(option);
+        return option;
     }
 
     @Transactional

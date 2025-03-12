@@ -24,8 +24,7 @@ public record FullMerchantDto (
     String phone,
     MerchantType merchantType,
     Date createdAt,
-    Instant lastRotafoodOpenedUtc,
-    Instant lastIfoodOpenedUtc,
+    Instant lastOpenedUtc,
     AddressDto address,
     List<ShiftDto> openingHours
     ) {
@@ -42,8 +41,7 @@ public record FullMerchantDto (
        merchant.getPhone(),
        merchant.getMerchantType(), 
        merchant.getCreatedAt(), 
-       merchant.getLastRotafoodOpened(),
-       merchant.getLastIfoodOpened(),
+       merchant.getLastOpenedUtc(),
        new AddressDto(merchant.getAddress()),
        merchant.getOpeningHours().stream().map(ShiftDto::new).toList()
        );

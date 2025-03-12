@@ -7,19 +7,23 @@ import br.com.rotafood.api.application.dto.catalog.ContextModifierDto;
 import br.com.rotafood.api.domain.entity.catalog.CatalogContext;
 import br.com.rotafood.api.domain.entity.catalog.Option;
 import br.com.rotafood.api.domain.entity.catalog.Serving;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 public record OrderOptionDetailDto(
+    @NotNull
     UUID id,
+    @NotNull
     String name,
     String description,
+    @Valid
+    @NotNull
     ContextModifierDto contextModifier,
     String ean,
     String additionalInformation,
     Serving serving,
     String imagePath,
-    Integer quantity,
-    String optionGroupName,
-    UUID optionGroupId
+    Integer fractions
 ) {
     public OrderOptionDetailDto(Option option, CatalogContext catalogContext) {
         this(
@@ -35,9 +39,7 @@ public record OrderOptionDetailDto(
             option.getProduct() != null ? option.getProduct().getAdditionalInformation() : null,
             option.getProduct() != null ? option.getProduct().getServing() : null,
             option.getProduct() != null ? option.getProduct().getImagePath() : null,
-            option.getFractions() != null ? option.getFractions().size() : null,
-            option.getOptionGroup() != null ? option.getOptionGroup().getName() : null,
-            option.getOptionGroup() != null ? option.getOptionGroup().getId() : null
+            option.getFractions() != null ? option.getFractions().size() : null
         );
     }
     

@@ -227,14 +227,7 @@ alter table if exists vrp_routes add constraint FKt0na9mb4lon2bd457phhgp5bc fore
 alter table if exists vrps add constraint FK3h340mjb1347co602kd48q4tw foreign key (merhcant_id) references merchants;
 alter table if exists weights add constraint FKimwah0owad2wrhqwd78iwbgnh foreign key (product_id) references products;
 
-
-
-
 alter table if exists merchants add column bg_image_path varchar(255);
-
-
-
-
 
 create table order_item_options (id uuid not null, catalog_context varchar(20), quantity integer, total_price numeric(10,2), option_id uuid, option_group_id uuid, order_item_id uuid, primary key (id));
 alter table if exists order_item_options add constraint FKb0i8d6fkc67ybqy3117w6m2e8 foreign key (option_id) references options;
@@ -244,3 +237,16 @@ alter table if exists order_payment_methods add column order_payment_id uuid;
 alter table if exists order_payment_methods add constraint FKiqws4qentpwtk7k4s10tdt0o9 foreign key (order_payment_id) references order_payments;
 alter table if exists order_payment_methods add column order_payment_id uuid;
 alter table if exists order_payment_methods add constraint FKiqws4qentpwtk7k4s10tdt0o9 foreign key (order_payment_id) references order_payments;
+alter table if exists context_modifiers add column context_modifier_id uuid;
+
+
+
+
+
+
+
+
+
+
+alter table if exists merchant_users add column role varchar(255) not null check (role in ('ADMIN','CHEF','GARSON','DRIVER'));
+alter table if exists merchants add column last_opened_utc timestamp(6) with time zone not null;

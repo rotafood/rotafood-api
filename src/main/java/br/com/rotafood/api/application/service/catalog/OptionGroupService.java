@@ -1,6 +1,5 @@
 package br.com.rotafood.api.application.service.catalog;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -58,31 +57,21 @@ public class OptionGroupService {
     }
 
     private void updateOptions(OptionGroup optionGroup, List<OptionDto> optionDtos) {
-        if (optionDtos == null || optionDtos.isEmpty()) {
-            List<Option> toRemove = new ArrayList<>(optionGroup.getOptions());
-            toRemove.forEach(optionService::unlinkAndDeleteOption);
-            return;
-        }
     
         List<UUID> incomingOptionIds = optionDtos.stream()
-                .map(OptionDto::id)
-                .filter(Objects::nonNull)
-                .toList();
-    
+        .map(OptionDto::id)
+        .filter(Objects::nonNull)
+        .toList();
+
         List<Option> optionsToRemove = optionGroup.getOptions().stream()
-                .filter(existingOption -> !incomingOptionIds.contains(existingOption.getId()))
+                .filter(option -> !incomingOptionIds.contains(option.getId()))
                 .toList();
-    
-        optionsToRemove.forEach(option -> {
-            optionGroup.removeOption(option);
-            optionService.unlinkAndDeleteOption(option);
-        });
-    
+
+        optionsToRemove.forEach(optionGroup::removeOption);
+
         optionDtos.forEach(optionDto -> {
-            Option newOption = optionService.updateOrCreate(optionDto, optionGroup);
-            if (!optionGroup.getOptions().contains(newOption)) {
-                optionGroup.addOption(newOption);
-            }        });
+            optionService.updateOrCreate(optionDto, optionGroup);
+        });
     }
     
 

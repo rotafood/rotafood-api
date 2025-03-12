@@ -51,8 +51,8 @@ public class Option {
     @JoinColumn(name = "optionGroupId")  
     private OptionGroup optionGroup;
     
-    @OneToOne(fetch = FetchType.LAZY)    
-    @JoinColumn(name = "productId", nullable = true)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "productId")    
     private Product product;
 
     @Column(columnDefinition = "integer[]")

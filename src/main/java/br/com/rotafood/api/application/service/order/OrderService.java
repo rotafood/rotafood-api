@@ -2,22 +2,11 @@ package br.com.rotafood.api.application.service.order;
 
 
 import br.com.rotafood.api.application.dto.order.FullOrderDto;
-import br.com.rotafood.api.application.dto.order.OrderAdditionalFeeDto;
-import br.com.rotafood.api.application.dto.order.OrderBenefitDto;
 import br.com.rotafood.api.application.dto.order.OrderItemDto;
-import br.com.rotafood.api.application.dto.order.OrderItemOptionDto;
 import br.com.rotafood.api.domain.entity.order.Order;
-import br.com.rotafood.api.domain.entity.order.OrderAdditionalFee;
-import br.com.rotafood.api.domain.entity.order.OrderBenefit;
-import br.com.rotafood.api.domain.entity.order.OrderCustomer;
-import br.com.rotafood.api.domain.entity.order.OrderDelivery;
-import br.com.rotafood.api.domain.entity.order.OrderIndoor;
-import br.com.rotafood.api.domain.entity.order.OrderItem;
 import br.com.rotafood.api.domain.entity.order.OrderPayment;
 import br.com.rotafood.api.domain.entity.order.OrderSalesChannel;
-import br.com.rotafood.api.domain.entity.order.OrderSchedule;
 import br.com.rotafood.api.domain.entity.order.OrderStatus;
-import br.com.rotafood.api.domain.entity.order.OrderTakeout;
 import br.com.rotafood.api.domain.entity.order.OrderTiming;
 import br.com.rotafood.api.domain.entity.order.OrderTotal;
 import br.com.rotafood.api.domain.entity.order.OrderType;
@@ -28,6 +17,8 @@ import br.com.rotafood.api.domain.repository.MerchantRepository;
 import br.com.rotafood.api.domain.repository.OrderPaymentRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import jakarta.validation.ValidationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -78,12 +69,6 @@ public class OrderService {
     @Autowired
     private OrderItemService orderItemService;
 
-    @Autowired
-    private OrderBenefitService orderBenefitService;
-
-
-    @Autowired
-    private OrderAdditionalFeeService orderAdditionalFeeService;
 
     public List<Order> getAllByMerchantId(UUID merchantId) {
         return orderRepository.findAllByMerchantId(merchantId);
@@ -91,21 +76,30 @@ public class OrderService {
 
     public Order getByIdAndMerchantId(UUID orderId, UUID merchantId) {
         return orderRepository.findByIdAndMerchantId(orderId, merchantId)
-                .orElseThrow(() -> new EntityNotFoundException("Order not found."));
+                .orElseThrow(() -> new EntityNotFoundException("Order não encontrado."));
     }
 
     @Transactional
     public Order createOrUpdate(FullOrderDto fullOrderDto, UUID merchantId) {
+        
         var merchant = merchantRepository.findById(merchantId)
-                .orElseThrow(() -> new EntityNotFoundException("Merchant not found."));
+            .orElseThrow(() -> new EntityNotFoundException("Merchant não encontrado."));
+
+        if (merchant.getLastOpenedUtc() == null || 
+            Instant.now().minusSeconds(30).isAfter(merchant.getLastOpenedUtc())) {
+            throw new ValidationException("O restaurante não está aberto no momento.");
+        }
 
         Order order = fullOrderDto.id() != null
-                ? orderRepository.findByIdAndMerchantId(fullOrderDto.id(), merchantId)
-                        .orElseThrow(() -> new EntityNotFoundException("Order not found."))
-                : new Order();
+            ? orderRepository.findByIdAndMerchantId(fullOrderDto.id(), merchantId)
+                .orElseThrow(() -> new EntityNotFoundException("Order não encontrado."))
+                    : new Order();
+        
 
-
-        order.setPreparationStartDateTime(fullOrderDto.preparationStartDateTime().toInstant());
+        order.setPreparationStartDateTime(
+            fullOrderDto.preparationStartDateTime() != null ? 
+            fullOrderDto.preparationStartDateTime().toInstant() : Instant.now()
+        );
         order.setSalesChannel(fullOrderDto.salesChannel());
         order.setTiming(fullOrderDto.timing());
         order.setType(fullOrderDto.type());
@@ -128,41 +122,45 @@ public class OrderService {
 
         order.setIndoor(fullOrderDto.indoor() != null ? this.orderIndoorService.createOrUpdate(fullOrderDto.indoor()) : null);
 
-
         order.setPayment(fullOrderDto.payment() != null ? this.orderPaymentService.createOrUpdate(fullOrderDto.payment()) : null);
 
         orderRepository.save(order);
 
-        if (fullOrderDto.items() != null) {
-            List<UUID> newItemIds = fullOrderDto.items().stream()
-                .map(OrderItemDto::id)
-                .filter(Objects::nonNull)
-                .toList();
+        List<UUID> newItemIds = fullOrderDto.items().stream()
+            .map(OrderItemDto::id)
+            .filter(Objects::nonNull)
+            .toList();
 
-            order.getItems().removeIf(existingItem ->
-                    existingItem.getId() != null && !newItemIds.contains(existingItem.getId()));
+        order.getItems().removeIf(existingItem ->
+                existingItem.getId() != null && !newItemIds.contains(existingItem.getId()));
 
-
-            fullOrderDto.items().forEach(item -> {
-                this.orderItemService.createOrUpdate(item, order);
-            });
+        fullOrderDto.items().forEach(item -> {
+            this.orderItemService.createOrUpdate(item, order);
+        });
             
-        }
 
         return order;
     }
 
     @Transactional
+    public void updateOrderStatus(UUID merchantId, UUID orderId, OrderStatus status) {
+        int updatedRows = orderRepository.updateOrderStatus(merchantId, orderId, status);
+        if (updatedRows == 0) {
+            throw new EntityNotFoundException("Pedido não encontrado ou não pertence ao merchant informado.");
+        }
+    }
+
+    @Transactional
     public void deleteByIdAndMerchantId(UUID orderId, UUID merchantId) {
         Order order = orderRepository.findByIdAndMerchantId(orderId, merchantId)
-                .orElseThrow(() -> new EntityNotFoundException("Order not found."));
+                .orElseThrow(() -> new EntityNotFoundException("Order não encontrado."));
         orderRepository.delete(order);
     }
 
     public Page<Order> getAllByFilters(
         UUID merchantId, 
         List<OrderType> orderTypes, 
-        List<OrderStatus> orderStatuses,
+        List<OrderStatus> orderStatus,
         String startDate, 
         String endDate,
         Pageable pageable
@@ -170,14 +168,30 @@ public class OrderService {
         Instant start = DateUtils.parseDateStringToInstant(startDate, false);
         Instant end = DateUtils.parseDateStringToInstant(endDate, true);
 
-        return orderRepository.findAllByFilters(merchantId, orderTypes, orderStatuses, start, end, pageable);
+        return orderRepository.findAllByFilters(merchantId, orderTypes, orderStatus, start, end, pageable);
+    }
+
+    public Page<Order> pooling(
+        UUID merchantId, 
+        List<OrderType> orderTypes, 
+        List<OrderStatus> orderStatus,
+        String startDate, 
+        String endDate,
+        Pageable pageable
+    ) {
+        Instant start = DateUtils.parseDateStringToInstant(startDate, false);
+        Instant end = DateUtils.parseDateStringToInstant(endDate, true);
+
+        this.merchantRepository.updateLastOpenedUtc(merchantId, Instant.now());
+
+        return orderRepository.findAllByFilters(merchantId, orderTypes, orderStatus, start, end, pageable);
     }
 
 
     @Transactional
     public Order createTestOrder(UUID merchantId) {
         var merchant = merchantRepository.findById(merchantId)
-                .orElseThrow(() -> new EntityNotFoundException("Merchant not found."));
+                .orElseThrow(() -> new EntityNotFoundException("Merchant não encontrado."));
 
 
         OrderTotal total = new OrderTotal();
