@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.rotafood.api.application.dto.SortRequestDto;
 import br.com.rotafood.api.application.dto.catalog.CategoryDto;
 import br.com.rotafood.api.application.dto.catalog.FullCategoryDto;
+import br.com.rotafood.api.application.service.catalog.CatalogCacheService;
 import br.com.rotafood.api.application.service.catalog.CategoryService;
 import jakarta.validation.Valid;
 
@@ -26,6 +27,10 @@ public class CategoryController {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired 
+    private CatalogCacheService catalogCacheService;
+
 
   
     @GetMapping
@@ -65,27 +70,37 @@ public class CategoryController {
         @PathVariable UUID categoryId
     ) {
         categoryService.deleteByIdAndMerchantId(categoryId, merchantId);
+
+        catalogCacheService.updateCatalogCache(merchantId);
+
     }
 
   
     @PutMapping
-    public CategoryDto updateOrCreate(
+    public FullCategoryDto updateOrCreate(
         @PathVariable UUID merchantId,
         @RequestBody @Valid CategoryDto categoryDto
     ) {
         var category = categoryService.updateOrCreate(categoryDto, merchantId);
-        return new CategoryDto(category);
+
+        catalogCacheService.updateCatalogCache(merchantId);
+
+        return new FullCategoryDto(category);
     }
 
 
    
-    @PutMapping("/{categoryId}/sort")
+    @PutMapping("/{categoryId}/items/sort")
     public ResponseEntity<Void> sortItemsInCategory(
         @PathVariable UUID merchantId,
         @PathVariable UUID categoryId,
         @RequestBody List<SortRequestDto> sortedItems
     ) {
         categoryService.sortItemsInCategory(merchantId, categoryId, sortedItems);
+
+        catalogCacheService.updateCatalogCache(merchantId);
+
+
         return ResponseEntity.ok().build();
     }
 
@@ -96,6 +111,9 @@ public class CategoryController {
         @RequestBody List<SortRequestDto> sortedCategories
     ) {
         categoryService.sortCategories(merchantId, sortedCategories);
+
+        catalogCacheService.updateCatalogCache(merchantId);
+
         return ResponseEntity.ok().build();
     }
 

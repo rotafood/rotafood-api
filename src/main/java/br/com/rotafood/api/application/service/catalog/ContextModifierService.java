@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.rotafood.api.application.dto.catalog.ContextModifierDto;
 import br.com.rotafood.api.domain.entity.catalog.ContextModifier;
@@ -14,7 +15,6 @@ import br.com.rotafood.api.domain.entity.catalog.Item;
 import br.com.rotafood.api.domain.entity.catalog.Option;
 import br.com.rotafood.api.domain.entity.catalog.Price;
 import br.com.rotafood.api.domain.repository.ContextModifierRepository;
-import jakarta.transaction.Transactional;
 
 @Service
 public class ContextModifierService {
@@ -54,6 +54,7 @@ public class ContextModifierService {
                     : new ContextModifier();
 
         contextModifier.setCatalogContext(contextModifierDto.catalogContext());
+
         contextModifier.setStatus(contextModifierDto.status());
 
         if (item != null) {
@@ -65,20 +66,20 @@ public class ContextModifierService {
         }
 
         if (parentOption != null) {
-            parentOption.addContextModifier(contextModifier);
-        }
+            contextModifier.setParentOptionModifier(parentOption);
+        }        
 
         if (contextModifierDto.price() != null) {                
             Price price = priceService.updateOrCreate(contextModifierDto.price());
             contextModifier.setPrice(price);
         }
+
         return contextModifierRepository.save(contextModifier);
     }
 
     public Optional<ContextModifier> findById(UUID id) {
         return this.contextModifierRepository.findById(null);
     }
-
     
 
     @Transactional

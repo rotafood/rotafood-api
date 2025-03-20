@@ -11,7 +11,6 @@ import br.com.rotafood.api.domain.repository.ItemRepository;
 import br.com.rotafood.api.domain.repository.OptionRepository;
 import br.com.rotafood.api.domain.repository.OrderItemOptionRepository;
 import br.com.rotafood.api.domain.repository.OrderItemRepository;
-import br.com.rotafood.api.domain.repository.OrderRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +22,6 @@ import java.util.UUID;
 
 @Service
 public class OrderItemService {
-
-    @Autowired
-    private OrderRepository orderRepository;
 
     @Autowired
     private ItemRepository itemRepository;
@@ -51,50 +47,48 @@ public class OrderItemService {
                 : new OrderItem();
 
         orderItem.setItem(catalogItem);
+
         orderItem.setQuantity(orderItemDto.quantity());
+
         orderItem.setTotalPrice(orderItemDto.totalPrice());
+
         order.getItems().add(orderItem);
-        orderRepository.save(order);
+
         orderItemRepository.save(orderItem);
 
         if (orderItemDto.options() != null) {
 
             List<UUID> newOptionIds = orderItemDto.options().stream()
-                .map(OrderItemOptionDto::id)
-                .filter(Objects::nonNull) 
-                .toList();
+                    .map(OrderItemOptionDto::id)
+                    .filter(Objects::nonNull)
+                    .toList();
 
+            orderItem.getOptions().removeIf(
+                    existingOption -> existingOption.getId() != null && !newOptionIds.contains(existingOption.getId()));
 
-                
-                orderItem.getOptions().removeIf(existingOption -> 
-                existingOption.getId() != null && !newOptionIds.contains(existingOption.getId()));
-                
-                orderItemDto.options().forEach(optionDto -> this.createOrUpdateOption(optionDto, orderItem));
-            }
+            orderItemDto.options().forEach(optionDto -> this.createOrUpdateOption(optionDto, orderItem));
+        }
 
-        return orderItem;
+        return orderItemRepository.save(orderItem);
     }
 
     @Transactional
     public OrderItemOption createOrUpdateOption(OrderItemOptionDto optionDto, OrderItem orderItem) {
 
-        System.err.println("Cheguei aqui \n\n\n\n" + optionDto);
-
-        
-        
         OrderItemOption orderItemOption = optionDto.id() != null
-            ? orderItemOptionRepository.findById(optionDto.id())
-            .orElse(new OrderItemOption())
+                ? orderItemOptionRepository.findById(optionDto.id())
+                        .orElse(new OrderItemOption())
                 : new OrderItemOption();
-        
+
         Option option = optionRepository.findById(optionDto.option().id())
                 .orElseThrow(() -> new EntityNotFoundException("Option not found."));
 
-        System.err.println("Cheguei lá \n\n\n\n");
-
         orderItemOption.setQuantity(optionDto.quantity());
+
         orderItemOption.setTotalPrice(optionDto.totalPrice());
+
         orderItemOption.setCatalogContext(optionDto.catalogContext());
+
         orderItemOption.setOption(option);
 
         orderItem.getOptions().add(orderItemOption);

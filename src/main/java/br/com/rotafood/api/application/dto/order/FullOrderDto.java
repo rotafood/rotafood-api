@@ -14,6 +14,7 @@ import jakarta.validation.constraints.NotNull;
 
 public record FullOrderDto(
     UUID id,
+    Long merchantSequence,
     Date modifiedAt,
     Date createdAt,
     @NotNull
@@ -39,7 +40,7 @@ public record FullOrderDto(
     OrderCustomerDto customer,
     OrderDeliveryDto delivery,
     OrderScheduleDto schedule,
-    OrderIndoorDto indoor,
+    OrderDiveInDto indoor,
     OrderTakeoutDto takeout,
 
     @Valid
@@ -56,6 +57,7 @@ public record FullOrderDto(
 ) {
     public FullOrderDto(Order order) {
          this( order.getId(),
+         order.getMerchantSequence(),
          DateUtils.convertInstantToDate(order.getModifiedAt()),
          DateUtils.convertInstantToDate(order.getCreatedAt()),
          DateUtils.convertInstantToDate(order.getPreparationStartDateTime()),
@@ -69,7 +71,7 @@ public record FullOrderDto(
          Optional.ofNullable(order.getCustomer()).map(OrderCustomerDto::new).orElse(null),
          Optional.ofNullable(order.getDelivery()).map(OrderDeliveryDto::new).orElse(null),
          Optional.ofNullable(order.getSchedule()).map(OrderScheduleDto::new).orElse(null),
-         Optional.ofNullable(order.getIndoor()).map(OrderIndoorDto::new).orElse(null),
+         Optional.ofNullable(order.getDiveIn()).map(OrderDiveInDto::new).orElse(null),
          Optional.ofNullable(order.getTakeout()).map(OrderTakeoutDto::new).orElse(null),
          Optional.ofNullable(order.getPayment()).map(OrderPaymentDto::new).orElse(null),
          order.getItems().stream().map(OrderItemDto::new).toList(),
@@ -77,4 +79,90 @@ public record FullOrderDto(
          Optional.ofNullable(order.getAdditionalFees()).map(fees -> fees.stream().map(OrderAdditionalFeeDto::new).toList()).orElse(List.of())
          );
     }
+
+    public String toComandString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("--- COMANDA ---\n");
+        sb.append("Pedido: ").append(merchantSequence).append("\n");
+        sb.append("Data: ").append(DateUtils.formatDateToBrazilianTime(createdAt)).append("\n");
+        sb.append("Canal: ").append(salesChannel).append("\n");
+        sb.append("Tipo: ").append(translateType(type)).append("\n");
+        sb.append("Status: ").append(translateStatus(status)).append("\n");
+        sb.append("-------------------\n");
+        
+        sb.append("Cliente: ").append(customer.name()).append("\n");
+        if (delivery != null) {
+            sb.append("Entrega: ").append(delivery.address().formattedAddress()).append("\n");
+        } else if (indoor != null) {
+            sb.append("Mesa: ").append(indoor.id()).append("\n");
+        } else if (takeout != null) {
+            sb.append("Retirada\n");
+        }
+        sb.append("-------------------\n");
+
+        java.text.DecimalFormat df = new java.text.DecimalFormat("#,##0.00");
+    
+        for (OrderItemDto item : items) {
+            String itemPrice = (item.totalPrice() == null)
+                ? "0,00"
+                : df.format(item.totalPrice());
+            
+            sb.append("(")
+              .append(item.quantity())
+              .append(") ")
+              .append(item.item().name())
+              .append("  R$ ")
+              .append(itemPrice)
+              .append("\n");
+    
+            if (item.options() != null && !item.options().isEmpty()) {
+                for (OrderItemOptionDto option : item.options()) {
+                    String optionPrice = (option.totalPrice() == null)
+                        ? "0,00"
+                        : df.format(option.totalPrice());
+
+                    sb.append("   - ")
+                      .append(option.option().name())
+                      .append("  R$ ")
+                      .append(optionPrice)
+                      .append("\n");
+                }
+            }
+        }
+        
+        sb.append("-------------------\n");
+        sb.append("Total: R$ ").append(total.orderAmount()).append("\n");
+        if (extraInfo != null && !extraInfo.isEmpty()) {
+            sb.append("Info extra: ").append(extraInfo).append("\n");
+        }
+        sb.append(" - \n - \n");
+        
+        return sb.toString();
+    }
+
+
+    public static String translateType(OrderType type) {
+        if (type == null) return "Desconhecido";
+        return switch (type) {
+            case DELIVERY -> "Entrega";
+            case DINE_IN -> "No local IFOOD";
+            case SCHEDULE -> "Agendado";
+            case TAKEOUT -> "Retirada";
+            case COMMAND -> "Comanda";
+        };
+    }
+    
+    public static String translateStatus(OrderStatus status) {
+        if (status == null) return "Desconhecido";
+        return switch (status) {
+            case CREATED -> "Criado";
+            case CONFIRMED -> "Confirmado";
+            case PREPARATION_STARTED -> "Em preparo";
+            case READY_TO_PICKUP -> "Pronto p/ retirar";
+            case DISPATCHED -> "Despachado";
+            case COMPLETED -> "Concluído";
+            case CANCELED -> "Cancelado";
+        };
+    }
+    
 }

@@ -56,33 +56,48 @@ public class OrderController {
     }
 
     @GetMapping("/polling")
-    public ResponseEntity<PaginationDto<FullOrderDto>> polling(
+    public ResponseEntity<List<FullOrderDto>> polling(
         @PathVariable UUID merchantId,
-        @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "100") int size,
-        @RequestParam(defaultValue = "createdAt") String sortBy,
-        @RequestParam(defaultValue = "desc") String sortDirection,
         @RequestParam(defaultValue = "ROTAFOOD") List<OrderSalesChannel> sources) {
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by(
-            sortDirection.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC, sortBy));
-
-        List<OrderStatus> orderStatuses = List.of(OrderStatus.CREATED);
+        List<OrderStatus> orderStatuses = List.of(
+            OrderStatus.CREATED, OrderStatus.CONFIRMED, OrderStatus.PREPARATION_STARTED, OrderStatus.READY_TO_PICKUP
+        );
 
         merchantService.updateMerchantOpened(merchantId, sources);
 
-        Page<FullOrderDto> orders = orderService.getAllByFilters(
-            merchantId, null, orderStatuses, null, null, pageable
-        ).map(FullOrderDto::new);
+        List<FullOrderDto> orders = orderService.polling(
+            merchantId, null, orderStatuses, null, null, Pageable.unpaged()
+        ).map(FullOrderDto::new).toList();
 
-        return ResponseEntity.ok(PaginationDto.fromPage(orders, "/orders/polling"));
+        return ResponseEntity.ok(orders);
     }
 
-    @PutMapping("/{orderId}/status")
+    // @GetMapping("/prints")
+    // public ResponseEntity<List<String>> prints(
+    //     @PathVariable UUID merchantId) {
+
+    //     List<OrderStatus> orderStatuses = List.of(
+    //         OrderStatus.CREATED, OrderStatus.CONFIRMED, OrderStatus.PREPARATION_STARTED
+    //     );
+
+    //     List<String> orders = orderService.getAllByFilters(
+    //         merchantId, null, orderStatuses, null, null, Pageable.unpaged()
+    //     )
+    //         .map(FullOrderDto::new)
+    //         .map(FullOrderDto::toComandString)
+    //         .toList();
+
+    //     return ResponseEntity.ok(orders);
+    // }
+
+
+
+    @PutMapping("/{orderId}/status/{status}")
     public ResponseEntity<Void> updateOrderStatus(
             @PathVariable UUID merchantId,
             @PathVariable UUID orderId,
-            @RequestParam OrderStatus status) {
+            @PathVariable OrderStatus status) {
         orderService.updateOrderStatus(merchantId, orderId, status);
         return ResponseEntity.ok().build();
     }

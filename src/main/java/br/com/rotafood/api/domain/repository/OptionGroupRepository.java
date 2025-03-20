@@ -1,6 +1,7 @@
 package br.com.rotafood.api.domain.repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,7 +13,7 @@ public interface OptionGroupRepository extends JpaRepository<OptionGroup, UUID> 
 
     List<OptionGroup> findAllByMerchantId(UUID merchantId);
 
-    OptionGroup findByIdAndMerchantId(UUID id, UUID merchantId);
+    Optional<OptionGroup> findByIdAndMerchantId(UUID id, UUID merchantId);
 
     List<OptionGroup> findAllByMerchantIdAndOptionGroupType(UUID merchantId, OptionGroupType optionGroupType);
 

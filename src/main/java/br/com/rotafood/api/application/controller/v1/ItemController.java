@@ -1,6 +1,7 @@
 package br.com.rotafood.api.application.controller.v1;
 
 import br.com.rotafood.api.application.dto.catalog.ItemDto;
+import br.com.rotafood.api.application.service.catalog.CatalogCacheService;
 import br.com.rotafood.api.application.service.catalog.ItemService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,9 @@ public class ItemController {
 
     @Autowired
     private ItemService itemService;
+
+    @Autowired 
+    private CatalogCacheService catalogCacheService;
 
     @GetMapping
     public ResponseEntity<List<ItemDto>> getAllItems(@PathVariable UUID merchantId) {
@@ -38,12 +42,17 @@ public class ItemController {
             @PathVariable UUID merchantId,
             @RequestBody @Valid ItemDto itemDto) {
         ItemDto updatedItem = new ItemDto(itemService.updateOrCreate(itemDto, merchantId));
+
+        catalogCacheService.updateCatalogCache(merchantId);
+
         return ResponseEntity.ok(updatedItem);
     }
 
     @DeleteMapping("/{itemId}")
     public ResponseEntity<Void> deleteItem(@PathVariable UUID merchantId, @PathVariable UUID itemId) {
         itemService.deleteByIdAndMerchantId(itemId, merchantId);
+        catalogCacheService.updateCatalogCache(merchantId);
+
         return ResponseEntity.noContent().build();
     }
 }

@@ -1,5 +1,6 @@
 package br.com.rotafood.api.application.service.catalog;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -7,6 +8,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.rotafood.api.application.dto.SortRequestDto;
 import br.com.rotafood.api.application.dto.catalog.OptionDto;
 import br.com.rotafood.api.application.dto.catalog.OptionGroupDto;
 import br.com.rotafood.api.domain.entity.catalog.Option;
@@ -15,6 +17,7 @@ import br.com.rotafood.api.domain.entity.catalog.OptionGroupType;
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
 import br.com.rotafood.api.domain.repository.MerchantRepository;
 import br.com.rotafood.api.domain.repository.OptionGroupRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -47,13 +50,18 @@ public class OptionGroupService {
             : new OptionGroup();
 
         optionGroup.setName(optionGroupDto.name());
+
         optionGroup.setStatus(optionGroupDto.status());
+
         optionGroup.setOptionGroupType(optionGroupDto.optionGroupType());
+
         optionGroup.setMerchant(merchant);
+
+        optionGroupRepository.save(optionGroup);
 
         updateOptions(optionGroup, optionGroupDto.options());
 
-        return optionGroupRepository.save(optionGroup);
+        return optionGroup;
     }
 
     private void updateOptions(OptionGroup optionGroup, List<OptionDto> optionDtos) {
@@ -95,5 +103,26 @@ public class OptionGroupService {
     public List<OptionGroup> getAllByMerchantIdAndOptionGroupType(UUID merchantId, OptionGroupType optionGroupType) {
         return this.optionGroupRepository.findAllByMerchantIdAndOptionGroupType(merchantId, optionGroupType);
     }
+
+    @Transactional
+    public OptionGroup sortOptions(UUID merchantId, UUID optionGroupId, List<SortRequestDto> sortedOptions) {
+        OptionGroup optionGroup = optionGroupRepository.findByIdAndMerchantId(optionGroupId, merchantId)
+                .orElseThrow(() -> new EntityNotFoundException("OptionGroup não encontrado."));
+
+        List<Option> options = optionGroup.getOptions();
+
+        for (SortRequestDto sortRequest : sortedOptions) {
+            options.stream()
+                .filter(o -> o.getId().equals(sortRequest.id()))
+                .findFirst()
+                .ifPresent(o -> o.setIndex(sortRequest.index()));
+        }
+    
+        options.sort(Comparator.comparingInt(Option::getIndex));
+
+        return optionGroupRepository.save(optionGroup);
+    }
+
+
     
 }

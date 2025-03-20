@@ -47,8 +47,18 @@ public class OptionService {
             );
 
         option.setStatus(optionDto.status());
-        option.setIndex(optionDto.index());
+
+        List<Option> options = optionGroup.getOptions().stream().toList();
+
+
+        int newIndex = optionDto.index() == -1 
+                ? options.stream().map(Option::getIndex).max(Integer::compareTo).orElse(0) + 1
+                : optionDto.index();
+
+        option.setIndex(newIndex);
+
         option.setFractions(optionDto.fractions());
+
         option.setProduct(product);
         
         optionGroup.addOption(option);
@@ -56,11 +66,10 @@ public class OptionService {
         optionRepository.save(option);
 
         optionDto.contextModifiers().forEach(cm -> {
-            var parentOption = cm.parentOptionId() != null ? optionRepository
-                .findById(optionDto.id())
-                .orElseThrow(() -> {
-                    throw new EntityNotFoundException("Option não encontrada");
-                }) : null;
+            var parentOption = cm.parentOptionId() != null ? 
+                optionRepository
+                    .findById(cm.parentOptionId())
+                    .orElseThrow(() -> new EntityNotFoundException("Parent Option não encontrada")) : null;
 
             this.contextModifierService.updateOrCreate(cm, null, option, parentOption);
         });
@@ -90,15 +99,15 @@ public class OptionService {
     }
 
     @Transactional
-    public void unlinkAndDeleteOption(Option option) {
-        if (option.getOptionGroup() != null) {
-            OptionGroup optionGroup = option.getOptionGroup();
-            optionGroup.getOptions().remove(option);
-            option.setOptionGroup(null);
-        }
+    public void deleteByIdAndMerchantId(UUID optionId, UUID merchantId) {
+        Option option = optionRepository.findById(optionId)
+            .orElseThrow(() -> new IllegalArgumentException("Option não encontrada."));
     
         optionRepository.delete(option);
+
     }
+
+
 
     @Transactional
     public void deleteAll(List<Option> options) {

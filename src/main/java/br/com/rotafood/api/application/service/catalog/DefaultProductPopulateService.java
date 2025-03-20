@@ -20,10 +20,7 @@ public class DefaultProductPopulateService {
     private DefaultProductRepository defaultProductRepository;
 
     public void populateDatabase(String jsonFilePath) throws IOException {
-        if (defaultProductRepository.count() > 0) {
-            System.out.println("Banco já populado com DefaultProduct. Nenhuma ação necessária.");
-            return;
-        }
+
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = objectMapper.readTree(new File(jsonFilePath));
 

@@ -9,7 +9,7 @@ import br.com.rotafood.api.domain.entity.catalog.Catalog;
 
 public interface CatalogRepository extends JpaRepository<Catalog, UUID>  {
 
-    List<Catalog> findByMerchantId(UUID merchantId);
+    List<Catalog> findAllByMerchantId(UUID merchantId);
 
     Catalog findByIdAndMerchantId(UUID id, UUID merchantId);
 

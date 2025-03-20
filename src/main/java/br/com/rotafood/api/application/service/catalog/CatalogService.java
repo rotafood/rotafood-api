@@ -32,7 +32,7 @@ public class CatalogService {
     @Autowired private CatalogCategoryRepository catalogCategoryRepository;
 
     public List<CatalogDto> getAllByMerchantId(UUID merchantId) {
-        return catalogRepository.findByMerchantId(merchantId)
+        return catalogRepository.findAllByMerchantId(merchantId)
                 .stream()
                 .map(CatalogDto::new)
                 .toList();
@@ -69,19 +69,16 @@ public class CatalogService {
 
         catalog = catalogRepository.save(catalog);
 
-        // Garantir que todas as categorias do merchant estejam associadas ao catálogo
         associateAllCategoriesWithCatalog(catalog, merchantId);
 
         return catalog;
     }
 
     private void associateAllCategoriesWithCatalog(Catalog catalog, UUID merchantId) {
-        List<Category> categories = categoryRepository.findByMerchantId(merchantId);
+        List<Category> categories = categoryRepository.findAllByMerchantId(merchantId);
 
-        // Remover associações antigas
         catalogCategoryRepository.deleteByCatalogId(catalog.getId());
 
-        // Criar novas associações
         Set<CatalogCategory> catalogCategories = categories.stream()
                 .map(category -> new CatalogCategory(null, catalog, category))
                 .collect(Collectors.toSet());

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
 import br.com.rotafood.api.application.dto.merchant.FullMerchantDto;
 import br.com.rotafood.api.application.service.merchant.MerchantService;
 import jakarta.validation.Valid;
@@ -17,6 +18,7 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping( ApiVersion.VERSION + "/merchants/{merchantId}")
 public class MerchantController {
+
     @Autowired
     private MerchantService merchantService;
 
@@ -31,5 +33,5 @@ public class MerchantController {
             @RequestBody @Valid FullMerchantDto merchantDto) {
 
             return new FullMerchantDto(merchantService.updateMerchant(merchantDto));
-        }
+    }
 }

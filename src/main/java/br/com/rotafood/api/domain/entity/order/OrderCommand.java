@@ -1,19 +1,15 @@
-package br.com.rotafood.api.domain.entity.logistic;
+package br.com.rotafood.api.domain.entity.order;
 
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
-import br.com.rotafood.api.domain.entity.merchant.Merchant;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -24,33 +20,24 @@ import lombok.Setter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "vrps")
+@Table(name = "order_commands")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Vrp {
+public class OrderCommand {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;   
+    private UUID id;
 
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20)
+    private OrderDiveInMode mode;
 
-    @ManyToOne(fetch = FetchType.LAZY)    
-    @JoinColumn(name = "merhcantId")
-    private Merchant merchant;
-
-    @OneToMany(mappedBy = "vrp")
-    private List<VrpRoute> routes;
-
-    @Column
     @Temporal(TemporalType.DATE) 
-    private Date createdAt;
+    private Date deliveryDateTime;
 
 
-    @Column
-    @Temporal(TemporalType.DATE) 
-    private Date solvedAt;
-    
-    
 }

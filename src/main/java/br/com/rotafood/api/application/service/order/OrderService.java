@@ -12,6 +12,8 @@ import br.com.rotafood.api.domain.entity.order.OrderTotal;
 import br.com.rotafood.api.domain.entity.order.OrderType;
 import br.com.rotafood.api.domain.repository.OrderRepository;
 import br.com.rotafood.api.domain.repository.OrderTotalRepository;
+import br.com.rotafood.api.infra.rabbitmq.RabbitQueueManager;
+import br.com.rotafood.api.infra.twilio.TwilioService;
 import br.com.rotafood.api.infra.utils.DateUtils;
 import br.com.rotafood.api.domain.repository.MerchantRepository;
 import br.com.rotafood.api.domain.repository.OrderPaymentRepository;
@@ -19,7 +21,9 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ValidationException;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -64,10 +68,26 @@ public class OrderService {
     private OrderPaymentService orderPaymentService;
 
     @Autowired
-    private OrderIndoorService orderIndoorService;
+    private OrderDiveInService orderDiveInService;
 
     @Autowired
     private OrderItemService orderItemService;
+
+    @Autowired
+    private TwilioService twilioService;
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
+    @Autowired
+    private RabbitQueueManager rabbitQueueManager;
+
+
+    @Value("${api.security.allowed.origin}")
+    private String allowedOrigin;
+
+    private static final String ADMIN_PHONE_NUMBER = "+5519981859845";
+
 
 
     public List<Order> getAllByMerchantId(UUID merchantId) {
@@ -86,15 +106,22 @@ public class OrderService {
             .orElseThrow(() -> new EntityNotFoundException("Merchant não encontrado."));
 
         if (merchant.getLastOpenedUtc() == null || 
-            Instant.now().minusSeconds(30).isAfter(merchant.getLastOpenedUtc())) {
+            Instant.now().minusSeconds(30000).isAfter(merchant.getLastOpenedUtc())) {
             throw new ValidationException("O restaurante não está aberto no momento.");
         }
+
+        
 
         Order order = fullOrderDto.id() != null
             ? orderRepository.findByIdAndMerchantId(fullOrderDto.id(), merchantId)
                 .orElseThrow(() -> new EntityNotFoundException("Order não encontrado."))
                     : new Order();
-        
+                    
+        if (order.getMerchantSequence() == null) {
+            Long maxSequence = orderRepository.findMaxMerchantSequenceByMerchantId(merchantId);
+            Long nextSequence = (maxSequence == null) ? 1L : maxSequence + 1L;
+            order.setMerchantSequence(nextSequence);
+        }
 
         order.setPreparationStartDateTime(
             fullOrderDto.preparationStartDateTime() != null ? 
@@ -120,7 +147,7 @@ public class OrderService {
 
         order.setCustomer(fullOrderDto.customer() != null ? this.orderCustomerService.createOrUpdate(fullOrderDto.customer()) : null);
 
-        order.setIndoor(fullOrderDto.indoor() != null ? this.orderIndoorService.createOrUpdate(fullOrderDto.indoor()) : null);
+        order.setDiveIn(fullOrderDto.indoor() != null ? this.orderDiveInService.createOrUpdate(fullOrderDto.indoor()) : null);
 
         order.setPayment(fullOrderDto.payment() != null ? this.orderPaymentService.createOrUpdate(fullOrderDto.payment()) : null);
 
@@ -137,18 +164,33 @@ public class OrderService {
         fullOrderDto.items().forEach(item -> {
             this.orderItemService.createOrUpdate(item, order);
         });
-            
+        this.sendSmsNotification(order);
 
         return order;
     }
 
     @Transactional
     public void updateOrderStatus(UUID merchantId, UUID orderId, OrderStatus status) {
-        int updatedRows = orderRepository.updateOrderStatus(merchantId, orderId, status);
-        if (updatedRows == 0) {
-            throw new EntityNotFoundException("Pedido não encontrado ou não pertence ao merchant informado.");
+    
+        Order order = this.orderRepository.findByIdAndMerchantId(orderId, merchantId)
+                .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado"));
+    
+        order.setStatus(status);
+        orderRepository.save(order);
+    
+        if (status == OrderStatus.CONFIRMED || status == OrderStatus.PREPARATION_STARTED) {
+            FullOrderDto fullOrderDto = new FullOrderDto(order);
+            String message = fullOrderDto.toComandString();
+    
+            String queueName = "queue.merchant." + merchantId;
+    
+            rabbitQueueManager.createMerchantQueue(merchantId.toString());
+    
+            rabbitTemplate.convertAndSend(queueName, message);
         }
     }
+    
+
 
     @Transactional
     public void deleteByIdAndMerchantId(UUID orderId, UUID merchantId) {
@@ -171,7 +213,7 @@ public class OrderService {
         return orderRepository.findAllByFilters(merchantId, orderTypes, orderStatus, start, end, pageable);
     }
 
-    public Page<Order> pooling(
+    public Page<Order> polling(
         UUID merchantId, 
         List<OrderType> orderTypes, 
         List<OrderStatus> orderStatus,
@@ -182,9 +224,34 @@ public class OrderService {
         Instant start = DateUtils.parseDateStringToInstant(startDate, false);
         Instant end = DateUtils.parseDateStringToInstant(endDate, true);
 
+
         this.merchantRepository.updateLastOpenedUtc(merchantId, Instant.now());
 
         return orderRepository.findAllByFilters(merchantId, orderTypes, orderStatus, start, end, pageable);
+    }
+
+    private void sendSmsNotification(Order order) {
+        String orderLink = String.format("%s/cardapios/%s/pedidos/%s", 
+            allowedOrigin, 
+            order.getMerchant().getOnlineName(), 
+            order.getId()
+        );
+
+        String message = String.format(
+            "🛒 *Novo Pedido Criado!*\n\n" +
+            "📌 *ID:* %s\n" +
+            "📍 *Canal de Venda:* %s\n" +
+            "⌚ *Criado em:* %s\n" +
+            "💰 *Total:* R$ %.2f\n\n" +
+            "🔗 *Veja mais detalhes:* %s",
+            order.getId(),
+            order.getSalesChannel(),
+            DateUtils.formatToBrazilianTime(order.getCreatedAt()),
+            order.getTotal().getOrderAmount(),
+            orderLink
+        );
+
+        twilioService.sendSms(ADMIN_PHONE_NUMBER, message);
     }
 
 
@@ -206,7 +273,6 @@ public class OrderService {
         payment.setDescription("Pagamento em dinheiro.");
         payment.setPending(BigDecimal.ZERO);
         payment.setPrepaid(BigDecimal.valueOf(50.00));
-
         this.orderPaymentRepository.save(payment);
 
         Order order = new Order();

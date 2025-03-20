@@ -1,6 +1,5 @@
 package br.com.rotafood.api.application.service.catalog;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -21,9 +20,7 @@ import br.com.rotafood.api.domain.repository.CatalogRepository;
 import br.com.rotafood.api.domain.repository.CategoryRepository;
 import br.com.rotafood.api.domain.repository.ItemRepository;
 import br.com.rotafood.api.domain.repository.MerchantRepository;
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.PersistenceContext;
 
 @Service
 public class CategoryService {
@@ -34,9 +31,6 @@ public class CategoryService {
     @Autowired private ItemRepository itemRepository;
     @Autowired private CatalogCategoryRepository catalogCategoryRepository;
 
-    @Autowired
-    @PersistenceContext
-    private EntityManager entityManager;
 
     public Category getByIdAndMerchantId(UUID categoryId, UUID merchantId) {
         return categoryRepository.findByIdAndMerchantId(categoryId, merchantId);
@@ -51,12 +45,13 @@ public class CategoryService {
         }
 
         categoryRepository.delete(category);
+
     }
 
 
 
     public List<Category> getAllByMerchantId(UUID merchantId) {
-        return categoryRepository.findByMerchantId(merchantId);
+        return categoryRepository.findAllByMerchantId(merchantId);
     }
 
 
@@ -75,15 +70,13 @@ public class CategoryService {
         category.setMerchant(merchant);
         category.setIFoodCategoryId(categoryDto.iFoodCategoryId());
 
-        if (categoryDto.index() == 1) {
-            adjustIndexesForUpdate(categoryDto.index(), category, merchantId);
-        } else {
-            Integer lastIndex = categoryRepository.findByMerchantId(merchantId).stream()
-                    .map(Category::getIndex)
-                    .max(Integer::compareTo)
-                    .orElse(0);
-            category.setIndex(lastIndex + 1);
-        }
+        List<Category> categories = categoryRepository.findAllByMerchantId(merchantId);
+
+        int newIndex = categoryDto.index() == -1 
+                ? categories.stream().map(Category::getIndex).max(Integer::compareTo).orElse(0) + 1
+                : categoryDto.index();
+
+        category.setIndex(newIndex + 1);
 
         Category savedCategory = categoryRepository.save(category);
 
@@ -92,26 +85,8 @@ public class CategoryService {
         return savedCategory;
     }
 
-
-
-    private void adjustIndexesForUpdate(Integer newIndex, Category category, UUID merchantId) {
-        List<Category> categories = categoryRepository.findByMerchantId(merchantId);
-
-        categories.stream()
-                .filter(c -> !c.getId().equals(category.getId()))
-                .sorted(Comparator.comparingInt(Category::getIndex))
-                .forEachOrdered(c -> {
-                    if (c.getIndex() >= newIndex) {
-                        c.setIndex(c.getIndex() + 1);
-                    }
-                });
-
-        categoryRepository.saveAll(categories);
-        category.setIndex(newIndex);
-    }
-
     private void associateCategoryWithAllCatalogs(Category category, UUID merchantId) {
-        List<Catalog> catalogs = catalogRepository.findByMerchantId(merchantId);
+        List<Catalog> catalogs = catalogRepository.findAllByMerchantId(merchantId);
 
         catalogCategoryRepository.deleteByCategoryId(category.getId());
 

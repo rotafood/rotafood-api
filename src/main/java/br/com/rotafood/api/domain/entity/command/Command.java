@@ -5,6 +5,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
+import br.com.rotafood.api.domain.entity.order.Order;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -33,17 +35,21 @@ public class Command {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @ManyToOne(fetch = FetchType.LAZY)    
-    @JoinColumn(name = "dinnerTableId")
-    private DinerTable dinnerTable;
+    @Column(nullable = false)
+    private Integer number;
 
-    @OneToMany(mappedBy = "command")
-    private List<CommandOrder> orders;
+    @ManyToOne(fetch = FetchType.LAZY)    
+    @JoinColumn(name = "tableId")
+    private DinnerTable dinnerTable;
+
+    @OneToMany(mappedBy = "command", orphanRemoval = false, cascade = CascadeType.ALL)
+    private List<Order> orders;
 
     @Column(precision = 10, scale = 2)
     private BigDecimal pending;
     
     @Column(precision = 10, scale = 2)
     private BigDecimal prepaid;
+
     
 }

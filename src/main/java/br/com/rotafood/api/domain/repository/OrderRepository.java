@@ -2,7 +2,9 @@ package br.com.rotafood.api.domain.repository;
 
 import br.com.rotafood.api.domain.entity.order.Order;
 import br.com.rotafood.api.domain.entity.order.OrderStatus;
+import br.com.rotafood.api.domain.entity.order.OrderTiming;
 import br.com.rotafood.api.domain.entity.order.OrderType;
+import jakarta.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +19,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface OrderRepository extends JpaRepository<Order, UUID> {
+    
     List<Order> findAllByMerchantId(UUID merchantId);
+
     Optional<Order> findByIdAndMerchantId(UUID id, UUID merchantId);
 
     @Query("SELECT o FROM Order o " +
@@ -35,10 +39,24 @@ public interface OrderRepository extends JpaRepository<Order, UUID> {
         Pageable pageable);
 
     @Modifying
+    @Transactional
     @Query("UPDATE Order o SET o.status = :status WHERE o.id = :orderId AND o.merchant.id = :merchantId")
     int updateOrderStatus(@Param("merchantId") UUID merchantId, 
                           @Param("orderId") UUID orderId, 
                           @Param("status") OrderStatus status);
+
+
+    List<Order> findByPreparationStartDateTimeBeforeAndStatusNotAndTiming(
+            Instant cutoffTime, 
+            OrderStatus status, 
+            OrderTiming timing);
+
+    @Query("""
+        SELECT MAX(o.merchantSequence) 
+          FROM Order o 
+         WHERE o.merchant.id = :merchantId
+    """)
+    Long findMaxMerchantSequenceByMerchantId(UUID merchantId);
 
 
 

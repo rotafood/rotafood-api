@@ -52,10 +52,10 @@ public class MerchantService {
         validateOwnerEmail(merchantOwnerCreationDto.owner().email());
 
         Address address = createAddress(merchantOwnerCreationDto.merchant().address());
+        
         Merchant merchant = createMerchantEntity(merchantOwnerCreationDto.merchant(), address);
-        MerchantUser merchantUser = createMerchantUser(merchantOwnerCreationDto.owner(), merchant);
 
-        merchantUser.setHasOwner(true);
+        MerchantUser merchantUser = createOwer(merchantOwnerCreationDto.owner(), merchant);
 
         merchantUser = this.merchantUserRepository.save(merchantUser);
 
@@ -183,7 +183,7 @@ public class MerchantService {
     }
 
 
-    private MerchantUser createMerchantUser(OwnerCreateDto ownerDto, Merchant merchant) {
+    private MerchantUser createOwer(OwnerCreateDto ownerDto, Merchant merchant) {
         MerchantUser merchantUser = new MerchantUser();
         merchantUser.setName(ownerDto.name());
         merchantUser.setEmail(ownerDto.email());

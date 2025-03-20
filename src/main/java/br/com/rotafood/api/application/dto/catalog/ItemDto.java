@@ -14,12 +14,14 @@ public record ItemDto(
     UUID id,
     @NotNull
     AvailabilityStatus status,
+    @NotNull
     Integer index,
     @NotNull
     TemplateType type,
     UUID categoryId,
     List<ShiftDto> shifts,
     List<ContextModifierDto> contextModifiers,
+
     @Valid
     @NotNull
     ProductDto product

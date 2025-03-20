@@ -33,7 +33,7 @@ public class LogisticService {
 
     public VrpOutDto logisticRoutesTest(VrpOriginDto origin, Long pointsQuantity) {
         VrpInDto vrpData = generateDataForTest(origin, pointsQuantity, 0.010f);
-        String url = this.logisticServiceUrl + "/logistic/cvrp/";
+        String url = this.logisticServiceUrl + "/logistic/vrp/";
         ResponseEntity<VrpOutDto> response = restTemplate.postForEntity(url, vrpData, VrpOutDto.class);
         return response.getBody();
     }

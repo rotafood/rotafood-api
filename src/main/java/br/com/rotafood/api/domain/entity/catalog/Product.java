@@ -49,21 +49,13 @@ public class Product {
     @Column(length = 512)
     private String additionalInformation;
 
-    @Column(name = "dietary_restrictions", columnDefinition = "text[]")
-    private List<String> dietaryRestrictions;
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private Serving serving = Serving.NOT_APPLICABLE; 
     
-    @Column(name = "tags", columnDefinition = "text[]")
-    private List<String> tags;
-    
     private String imagePath;
     
-    @Column(name = "multipleImages", columnDefinition = "text[]")
-    private List<String> multipleImages;
-
     @Column
     @Enumerated(value = EnumType.STRING)
     private PackagingType packagingType;
@@ -81,7 +73,6 @@ public class Product {
     @JoinColumn(name = "merchantId", nullable = false)
     private Merchant merchant;
 
-
     public void addProductPackaging(ProductPackaging packaging) {
         this.productPackagings.add(packaging);
         packaging.setProduct(this);
@@ -92,6 +83,8 @@ public class Product {
         packaging.setProduct(null);
     }
 
+
+
     public void addProductOptionGroup(ProductOptionGroup productOptionGroup) {
         this.productOptionGroups.add(productOptionGroup);
         productOptionGroup.setProduct(this);
@@ -101,5 +94,4 @@ public class Product {
         this.productOptionGroups.remove(productOptionGroup);
         productOptionGroup.setProduct(null);
     }
-    
 }

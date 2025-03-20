@@ -43,11 +43,10 @@ public class OrderDelivery {
     @Column(length = 20, nullable = false)
     private OrderDeliveryBy deliveryBy;
 
-    @Enumerated(EnumType.STRING)
-    @Column(length = 20, nullable = false)
-    private OrderDeliveryDescription description;
+    @Column(length = 20)
+    private String description;
 
-    @Column(length = 256, nullable = false)
+    @Column(length = 256)
     private String pickupCode;
 
     @Temporal(TemporalType.TIMESTAMP)

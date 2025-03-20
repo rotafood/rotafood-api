@@ -40,6 +40,8 @@ public class ItemService {
     private ContextModifierService contextModifierService;
 
 
+
+
     public Item getByIdAndMerchantId(UUID id, UUID merchantId) {
         Item item = itemRepository.findByIdAndMerchantId(id, merchantId);
         if (item == null) {
@@ -63,9 +65,13 @@ public class ItemService {
         Category category = categoryService.getByIdAndMerchantId(itemDto.categoryId(), merchantId);
         
         item.setMerchant(merchant);
+        
         item.setCategory(category);
+        
         item.setType(itemDto.type());
+        
         item.setStatus(itemDto.status());
+
         item.setIndex(itemDto.index());
 
         Product product = productService.updateOrCreate(itemDto.product(), merchantId);
@@ -78,7 +84,6 @@ public class ItemService {
             this.contextModifierService.updateOrCreate(cm, item, null, null);
         });
     
-    
         return itemRepository.save(item);
     }
     
@@ -86,24 +91,33 @@ public class ItemService {
     public Item updateOrCreatePizza(ItemDto itemDto, UUID merchantId) {
 
         Item item = itemDto.id() != null
-        ? itemRepository.findByIdAndMerchantId(itemDto.id(), merchantId)
-        : new Item();
+            ? itemRepository.findByIdAndMerchantId(itemDto.id(), merchantId)
+            : new Item();
         
         Merchant merchant = merchantRepository.getReferenceById(merchantId);
 
         Category category = itemDto.categoryId() != null ? 
             categoryService.getByIdAndMerchantId(itemDto.categoryId(), merchantId) : 
             this.categoryService.updateOrCreate(
-                new CategoryDto(null, null, itemDto.product().name(), TemplateType.PIZZA, AvailabilityStatus.AVAILIABLE, merchantId
+                new CategoryDto(null, 0, itemDto.product().name(), TemplateType.PIZZA, AvailabilityStatus.AVAILIABLE, null
                 ), merchantId);
         
         item.setMerchant(merchant);
         item.setCategory(category);
         item.setType(itemDto.type());
         item.setStatus(itemDto.status());
-        item.setIndex(itemDto.index());
+        
+
+        List<Item> items = itemRepository.findAllByMerchantId(merchantId);
+
+        int newIndex = itemDto.index() == -1 
+                ? items.stream().map(Item::getIndex).max(Integer::compareTo).orElse(0) + 1
+                : itemDto.index();
+
+        item.setIndex(newIndex + 1);
 
         Product product = productService.updateOrCreate(itemDto.product(), merchantId);
+
         item.setProduct(product);
 
         itemRepository.save(item);
@@ -134,10 +148,7 @@ public class ItemService {
 
 
     public List<Item> getAllByMerchantId(UUID merchantId) {
-        return this.itemRepository.getAllByMerchantId(merchantId);
+        return this.itemRepository.findAllByMerchantId(merchantId);
     }
 
-
-
-  
 }

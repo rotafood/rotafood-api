@@ -1,10 +1,10 @@
-package br.com.rotafood.api.domain.entity.logistic;
+package br.com.rotafood.api.domain.entity.command;
 
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import br.com.rotafood.api.domain.entity.merchant.Merchant;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -15,8 +15,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -24,39 +22,31 @@ import lombok.Setter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "vrp_routes")
+@Table(name = "tables")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class VrpRoute {
+public class DinnerTable {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;   
+    private UUID id;    
 
-    @OneToMany(mappedBy = "vrpRoute")
-    private List<VrpOrder> vrpOrders;
-
-    @ManyToOne(fetch = FetchType.LAZY)    
-    @JoinColumn(name = "vrpId")
-    private Vrp vrp;
-
-    @Column(length = 2048)
-    private String googleMapsLink;
-
+    @Column(nullable = false)
+    private Integer number;
 
     @Column(precision = 10, scale = 2)
-    private BigDecimal totalVolume;
-
+    private BigDecimal pending;
+    
     @Column(precision = 10, scale = 2)
-    private BigDecimal distanceMeters;
+    private BigDecimal prepaid;
 
-    @Column
-    @Temporal(TemporalType.DATE) 
-    private Date createdAt;
+    @OneToMany(mappedBy = "dinnerTable")
+    private List<Command> commands;
 
-    
-    
-    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "merchantId") 
+    private Merchant merchant;
+
 }

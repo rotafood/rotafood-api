@@ -46,7 +46,9 @@ public class ImageService {
 
         try {
             UUID id = UUID.randomUUID();
+            
             String fileExtension = contentType.equals("image/png") ? ".png" : ".jpeg";
+
             String fileName = "images/" + id.toString() + fileExtension;
 
             try (InputStream inputStream = file.getInputStream()) {

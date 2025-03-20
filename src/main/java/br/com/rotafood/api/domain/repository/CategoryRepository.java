@@ -6,12 +6,23 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import br.com.rotafood.api.domain.entity.catalog.Category;
 
 public interface CategoryRepository extends JpaRepository<Category, UUID>  {
 
-    List<Category> findByMerchantId(UUID merchantId);
+    @Query("""
+        SELECT DISTINCT c 
+        FROM Category c
+        LEFT JOIN FETCH c.items i
+        LEFT JOIN FETCH i.product p
+        WHERE c.merchant.id = :merchantId
+        """)
+    List<Category> findAllByMerchantIdWithItems(@Param("merchantId") UUID merchantId);
+
+
+    List<Category> findAllByMerchantId(UUID merchantId);
     
     Category findByIdAndMerchantId(UUID id, UUID merchantId);
 

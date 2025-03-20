@@ -1,10 +1,10 @@
 package br.com.rotafood.api.application.service.order;
 
-import br.com.rotafood.api.application.dto.order.OrderIndoorDto;
+import br.com.rotafood.api.application.dto.order.OrderDiveInDto;
 import br.com.rotafood.api.domain.entity.order.Order;
-import br.com.rotafood.api.domain.entity.order.OrderIndoor;
+import br.com.rotafood.api.domain.entity.order.OrderDiveIn;
 import br.com.rotafood.api.domain.repository.OrderRepository;
-import br.com.rotafood.api.domain.repository.OrderIndoorRepository;
+import br.com.rotafood.api.domain.repository.OrderDiveInRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,22 +13,21 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
-public class OrderIndoorService {
+public class OrderDiveInService {
 
     @Autowired
-    private OrderIndoorRepository orderIndoorRepository;
+    private OrderDiveInRepository orderDiveInRepository;
 
     @Autowired
     private OrderRepository orderRepository;
 
     @Transactional
-    public OrderIndoor createOrUpdate(OrderIndoorDto dto) {
-        OrderIndoor indoor = dto.id() != null ? this.orderIndoorRepository.findById(dto.id()).orElseThrow(() -> 
-        new EntityNotFoundException("Indoor não encontrado para ID: " + dto.id())) : new OrderIndoor();
-        indoor.setMode(dto.mode());
+    public OrderDiveIn createOrUpdate(OrderDiveInDto dto) {
+        OrderDiveIn indoor = dto.id() != null ? this.orderDiveInRepository.findById(dto.id()).orElseThrow(() -> 
+        new EntityNotFoundException("DiveIn não encontrado para ID: " + dto.id())) : new OrderDiveIn();
         indoor.setDeliveryDateTime(dto.deliveryDateTime());
 
-        return orderIndoorRepository.save(indoor);
+        return orderDiveInRepository.save(indoor);
     }
 
     @Transactional
@@ -36,16 +35,16 @@ public class OrderIndoorService {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new EntityNotFoundException("Order not found."));
 
-        if (order.getIndoor() != null) {
-            orderIndoorRepository.delete(order.getIndoor());
-            order.setIndoor(null);
+        if (order.getDiveIn() != null) {
+            orderDiveInRepository.delete(order.getDiveIn());
+            order.setDiveIn(null);
             orderRepository.save(order);
         }
     }
 
-    public OrderIndoor getByOrderId(UUID orderId) {
+    public OrderDiveIn getByOrderId(UUID orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new EntityNotFoundException("Order not found."));
-        return order.getIndoor();
+        return order.getDiveIn();
     }
 }

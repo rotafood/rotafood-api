@@ -4,7 +4,6 @@ import br.com.rotafood.api.application.dto.catalog.ImageDto;
 import br.com.rotafood.api.application.service.catalog.ImageService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,11 +23,6 @@ public class ImageController {
     @Autowired
     private ImageService imageService;
 
-    @Value("${gcp.bucket.name}")
-    private String bucketName;
-
-    @Value("${gcp.bucket.url}")
-    private String bucketUrl;
     
     @GetMapping
     public List<ImageDto> getAllImages(@PathVariable UUID merchantId) {

@@ -13,7 +13,7 @@ public interface ItemRepository extends JpaRepository<Item, UUID> {
 
     Item findByIdAndMerchantId(UUID id, UUID merchantId);
 
-    List<Item> getAllByMerchantId(UUID merchantId);
+    List<Item> findAllByMerchantId(UUID merchantId);
 
     Item findByIdAndProductIdAndCategoryIdAndMerchantId(UUID id, UUID productId, UUID categoryId, UUID merchantId);
 

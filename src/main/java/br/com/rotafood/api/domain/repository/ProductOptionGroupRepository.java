@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import br.com.rotafood.api.domain.entity.catalog.ProductOptionGroup;
 
+
 public interface ProductOptionGroupRepository extends JpaRepository<ProductOptionGroup, UUID> {
 
     ProductOptionGroup findByIdAndOptionGroupId(UUID id, UUID optionGroupId);

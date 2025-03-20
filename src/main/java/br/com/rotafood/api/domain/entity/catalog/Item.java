@@ -70,6 +70,7 @@ public class Item {
 
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Shift> shifts = new ArrayList<>();
+    
 
     public void addContextModifier(ContextModifier modifier) {
         this.contextModifiers.add(modifier);

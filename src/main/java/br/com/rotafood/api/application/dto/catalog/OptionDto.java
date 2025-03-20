@@ -4,11 +4,14 @@ import java.util.List;
 import java.util.UUID;
 
 import br.com.rotafood.api.domain.entity.catalog.Option;
+import jakarta.validation.constraints.NotNull;
 import br.com.rotafood.api.domain.entity.catalog.AvailabilityStatus;
 
 public record OptionDto (
     UUID id,
+    @NotNull
     AvailabilityStatus status,
+    @NotNull
     Integer index,
     List<ContextModifierDto> contextModifiers,
     List<Integer> fractions,

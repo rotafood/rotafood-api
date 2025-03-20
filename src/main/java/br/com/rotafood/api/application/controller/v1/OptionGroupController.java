@@ -1,10 +1,14 @@
 package br.com.rotafood.api.application.controller.v1;
 
+import br.com.rotafood.api.application.dto.SortRequestDto;
 import br.com.rotafood.api.application.dto.catalog.OptionGroupDto;
+import br.com.rotafood.api.application.service.catalog.CatalogCacheService;
 import br.com.rotafood.api.application.service.catalog.OptionGroupService;
+import br.com.rotafood.api.application.service.catalog.OptionService;
 import br.com.rotafood.api.domain.entity.catalog.OptionGroupType;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
@@ -17,6 +21,12 @@ public class OptionGroupController {
 
     @Autowired
     private OptionGroupService optionGroupService;
+
+    @Autowired
+    private OptionService optionService;
+
+    @Autowired 
+    private CatalogCacheService catalogCacheService;
 
     @GetMapping
     public List<OptionGroupDto> getAll(
@@ -46,11 +56,28 @@ public class OptionGroupController {
     public OptionGroupDto updateOrCreate(
             @PathVariable UUID merchantId,
             @RequestBody @Valid OptionGroupDto optionGroupDto) {
+        
+                catalogCacheService.updateCatalogCache(merchantId);
         return new OptionGroupDto(optionGroupService.updateOrCreate(optionGroupDto, merchantId));
     }
 
     @DeleteMapping("/{optionGroupId}")
     public void delete(@PathVariable UUID merchantId, @PathVariable UUID optionGroupId) {
         optionGroupService.deleteByIdAndMerchantId(optionGroupId, merchantId);
+    }
+
+    @PutMapping("/{optionGroupId}/options/sort")
+    public ResponseEntity<Void> updateOrCreateOption(
+            @PathVariable UUID merchantId,
+            @PathVariable UUID optionGroupId,
+            @RequestBody List<SortRequestDto> sortedOptions
+            ) {
+        
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{optionGroupId}/options/{optionId}")
+    public void deleteOption(@PathVariable UUID merchantId, @PathVariable UUID optionId) {
+        optionService.deleteByIdAndMerchantId(optionId, merchantId);
     }
 }

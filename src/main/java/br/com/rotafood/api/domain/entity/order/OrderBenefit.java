@@ -6,6 +6,8 @@ import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -31,5 +33,9 @@ public class OrderBenefit {
     @Column(precision = 10, scale = 2)
     private BigDecimal value;
 
-    private String target;
+    @Column()
+    private String description;
+
+    @Enumerated(EnumType.STRING)
+    private OrderBenefitTarget target;
 }

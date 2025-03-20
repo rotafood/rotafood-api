@@ -23,7 +23,6 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Autowired
     private TokenService tokenService;
 
-    @SuppressWarnings("null")
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         var tokenJwt = recoveryToken(request);
@@ -32,11 +31,12 @@ public class SecurityFilter extends OncePerRequestFilter {
             var merchantUserDto = tokenService.getMerchantUser(tokenJwt);
             var authority = new SimpleGrantedAuthority("ROLE_" + merchantUserDto.role().name());
 
+
             var authentication = new UsernamePasswordAuthenticationToken(
                         merchantUserDto, 
                         null,
                         List.of(authority)          
-                        );
+                        ); 
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }

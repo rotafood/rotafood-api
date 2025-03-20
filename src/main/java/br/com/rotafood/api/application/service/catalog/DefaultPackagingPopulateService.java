@@ -21,10 +21,7 @@ public class DefaultPackagingPopulateService {
     private DefaultPackagingRepository defaultPackagingRepository;
 
     public void populateDatabase(String jsonFilePath) throws IOException {
-        if (defaultPackagingRepository.count() > 0) {
-            System.out.println("Banco já populado com DefaultPackaging. Nenhuma ação necessária.");
-            return;
-        }
+
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = objectMapper.readTree(new File(jsonFilePath));
 

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.rotafood.api.application.dto.catalog.ProductDto;
-import br.com.rotafood.api.domain.entity.catalog.DietaryRestrictions;
 import br.com.rotafood.api.domain.entity.catalog.Product;
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
 import br.com.rotafood.api.domain.repository.MerchantRepository;
@@ -29,6 +28,8 @@ public class ProductService {
     @Autowired
     private ProductOptionGroupService productOptionGroupService;
 
+
+
     @Transactional
     public Product updateOrCreate(ProductDto productDto, UUID merchantId) {
         Merchant merchant = this.merchantRepository.getReferenceById(merchantId);
@@ -42,11 +43,9 @@ public class ProductService {
         product.setDescription(productDto.description());
         product.setEan(productDto.ean());
         product.setAdditionalInformation(productDto.additionalInformation());
-        product.setTags(productDto.tags());
         product.setImagePath(productDto.imagePath());
         product.setServing(productDto.serving());
         product.setPackagingType(productDto.packagingType());
-        product.setDietaryRestrictions(productDto.dietaryRestrictions().stream().map(DietaryRestrictions::name).toList());
         product.setQuantity(productDto.quantity());
 
         productRepository.save(product);
@@ -55,8 +54,7 @@ public class ProductService {
         if (productDto.packagings() != null) {
             productPackagingService.createOrUpdateAll(productDto.packagings(), product, merchantId);
         }
-        
-    
+
         if (productDto.optionGroups() != null) {
             productOptionGroupService.createOrUpdateAll(productDto.optionGroups(), product, merchantId);
         }
@@ -72,7 +70,7 @@ public class ProductService {
             System.err.println(product);
 
             productRepository.delete(product);
-        }
+    }
 
     public Product getById(UUID productId, UUID merchantId) {
         return productRepository.findByIdAndMerchantId(productId, merchantId);

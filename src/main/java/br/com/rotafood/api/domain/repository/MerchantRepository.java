@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
+import jakarta.transaction.Transactional;
 
 public interface MerchantRepository extends JpaRepository<Merchant, UUID> {
     boolean existsByOnlineName(String existsByOnlineName);
@@ -15,6 +16,7 @@ public interface MerchantRepository extends JpaRepository<Merchant, UUID> {
     Optional<Merchant> findByOnlineName(String onlineName);
 
     @Modifying
+    @Transactional
     @Query("UPDATE Merchant m SET m.lastOpenedUtc = :lastOpenedUtc WHERE m.id = :merchantId")
     void updateLastOpenedUtc(UUID merchantId, Instant lastOpenedUtc);
 }

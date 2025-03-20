@@ -1,9 +1,10 @@
 package br.com.rotafood.api.domain.entity.logistic;
 
-import java.util.List;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -11,7 +12,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -20,27 +20,25 @@ import lombok.Setter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "drivers")
+@Table(name = "logistic_settings")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Driver {
+public class LogisticSetting {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private String name;
+    @Column(precision = 10, scale = 2)
+    private BigDecimal minTax;
 
-    private String email;
+    @Column(precision = 10, scale = 2)
+    private BigDecimal taxPerKm;
 
-    private String password;
-
-    private String phone;
-
-    @OneToMany(mappedBy = "driver")
-    private List<DriverRoute> routes;
+    @Column(precision = 10, scale = 2)
+    private BigDecimal kmRadius;
 
     @ManyToOne(fetch = FetchType.LAZY)    
     @JoinColumn(name = "merchantId")

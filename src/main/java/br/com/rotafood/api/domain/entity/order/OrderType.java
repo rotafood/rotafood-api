@@ -2,7 +2,8 @@ package br.com.rotafood.api.domain.entity.order;
 
 public enum OrderType {
     DELIVERY, 
-    INDOOR, 
+    SCHEDULE, 
     TAKEOUT,
+    DINE_IN,
     COMMAND
 }

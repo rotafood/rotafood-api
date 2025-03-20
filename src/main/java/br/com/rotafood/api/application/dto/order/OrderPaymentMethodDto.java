@@ -14,11 +14,7 @@ public record OrderPaymentMethodDto(
     boolean prepaid,
     String currency,
     OrderPaymentType type,
-    BigDecimal value,
-    OrderDigitalWalletInformationDto wallet,
-    OrderCashInformationDto cash,
-    OrderCreditCardInformationDto card,
-    OrderTransactionInformationDto transaction
+    BigDecimal value
 ) {
     public OrderPaymentMethodDto(OrderPaymentMethod method) {
     this(
@@ -28,11 +24,7 @@ public record OrderPaymentMethodDto(
         method.isPrepaid(),
         method.getCurrency(),
         method.getType(),
-        method.getValue(),
-        method.getWallet() != null ? new OrderDigitalWalletInformationDto(method.getWallet()) : null,
-        method.getCash() != null ? new OrderCashInformationDto(method.getCash()) : null,
-        method.getCard() != null ? new OrderCreditCardInformationDto(method.getCard()) : null,
-        method.getTransaction() != null ? new OrderTransactionInformationDto(method.getTransaction()) : null
+        method.getValue()
     );
 }
 

@@ -1,8 +1,8 @@
 package br.com.rotafood.api.domain.entity.order;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import br.com.rotafood.api.domain.entity.catalog.CatalogContext;
@@ -27,7 +27,7 @@ import lombok.Setter;
 import lombok.NoArgsConstructor;
 
 
-@Table(name = "orderItems")
+@Table(name = "order_items")
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -53,9 +53,9 @@ public class OrderItem {
     @Column(length = 20)    
     private CatalogContext catalogContext;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "orderItemId")
-    private List<OrderItemOption> options = new ArrayList<>();
+    private Set<OrderItemOption> options = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)    
     @JoinColumn(name = "itemId")

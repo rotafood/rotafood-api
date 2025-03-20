@@ -1,6 +1,6 @@
 package br.com.rotafood.api.domain.entity.order;
 
-public enum OrderIndoorMode {
+public enum OrderDiveInMode {
     DEFAULT, 
     TABLE
 }

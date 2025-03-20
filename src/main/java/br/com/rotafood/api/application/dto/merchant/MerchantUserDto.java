@@ -11,7 +11,7 @@ public record MerchantUserDto(
     String email,
     String phone,
     MerchantUserRole role,
-    MerchantDto merchant
+    UUID merchantId
 ) {
     public MerchantUserDto(MerchantUser merchantUser) {
         this(
@@ -20,7 +20,7 @@ public record MerchantUserDto(
             merchantUser.getEmail(),
             merchantUser.getPhone(),
             merchantUser.getRole(),
-            new MerchantDto(merchantUser.getMerchant())
+            merchantUser.getMerchant().getId()
         );
     }
 }

@@ -4,13 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.rotafood.api.application.dto.catalog.ProductOptionGroupDto;
-import br.com.rotafood.api.domain.entity.catalog.ProductOptionGroup;
 import br.com.rotafood.api.domain.entity.catalog.OptionGroup;
 import br.com.rotafood.api.domain.entity.catalog.Product;
+import br.com.rotafood.api.domain.entity.catalog.ProductOptionGroup;
 import br.com.rotafood.api.domain.repository.ProductOptionGroupRepository;
 import jakarta.transaction.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -28,57 +27,47 @@ public class ProductOptionGroupService {
     @Transactional
     public List<ProductOptionGroup> createOrUpdateAll(List<ProductOptionGroupDto> productOptionGroupDtos, Product product, UUID merchantId) {
         if (productOptionGroupDtos == null || productOptionGroupDtos.isEmpty()) {
-            List<ProductOptionGroup> toRemove = new ArrayList<>(product.getProductOptionGroups());
+            List<ProductOptionGroup> toRemove = product.getProductOptionGroups();
             product.getProductOptionGroups().clear();
-            deleteAll(toRemove);
+            productOptionGroupRepository.deleteAll(toRemove);
             return List.of();
         }
 
         List<UUID> incomingIds = productOptionGroupDtos.stream()
-            .map(ProductOptionGroupDto::id)
-            .filter(Objects::nonNull)
-            .toList();
+                .map(ProductOptionGroupDto::id)
+                .filter(Objects::nonNull)
+                .toList();
 
         product.getProductOptionGroups().removeIf(pog -> !incomingIds.contains(pog.getId()));
 
         List<ProductOptionGroup> updatedProductOptionGroups = productOptionGroupDtos.stream()
-            .map(dto -> {
-                ProductOptionGroup productOptionGroup = product.getProductOptionGroups().stream()
-                    .filter(pog -> pog.getId() != null && pog.getId().equals(dto.id()))
-                    .findFirst()
-                    .orElse(null);
-
-                if (productOptionGroup == null) {
-                    productOptionGroup = new ProductOptionGroup();
-                    productOptionGroup.setProduct(product);
-                    product.getProductOptionGroups().add(productOptionGroup);
-                }
-
-                OptionGroup optionGroup = optionGroupService.updateOrCreate(dto.optionGroup(), merchantId);
-                productOptionGroup.setOptionGroup(optionGroup);
-                productOptionGroup.setIndex(dto.index());
-                productOptionGroup.setMin(dto.min());
-                productOptionGroup.setMax(dto.max());
-
-                return productOptionGroup;
-            })
-            .toList();
+                .map(dto -> createOrUpdate(dto, product, merchantId))
+                .toList();
 
         return updatedProductOptionGroups;
     }
 
+    private ProductOptionGroup createOrUpdate(ProductOptionGroupDto dto, Product product, UUID merchantId) {
+        ProductOptionGroup productOptionGroup = product.getProductOptionGroups().stream()
+                .filter(pog -> pog.getId() != null && pog.getId().equals(dto.id()))
+                .findFirst()
+                .orElseGet(() -> {
+                    ProductOptionGroup newPog = new ProductOptionGroup();
+                    newPog.setProduct(product);
+                    product.getProductOptionGroups().add(newPog);
+                    return newPog;
+                });
 
+        OptionGroup optionGroup = optionGroupService.updateOrCreate(dto.optionGroup(), merchantId);
 
-    @Transactional
-    public void unlinkOptionGroup(UUID productOptionGroupId) {
-        productOptionGroupRepository.deleteById(productOptionGroupId);
-    }
+        productOptionGroup.setOptionGroup(optionGroup);
 
-    public List<ProductOptionGroup> getAllByProductId(UUID productId) {
-        return productOptionGroupRepository.findAllByProductId(productId);
-    }
+        productOptionGroup.setIndex(dto.index());
 
-    public void deleteAll(List<ProductOptionGroup> productOptionGroups) {
-        productOptionGroupRepository.deleteAll(productOptionGroups);
+        productOptionGroup.setMin(dto.min());
+        
+        productOptionGroup.setMax(dto.max());
+
+        return productOptionGroup;
     }
 }

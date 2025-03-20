@@ -41,10 +41,8 @@ public class ProductOptionGroup {
     @Column
     private Integer index;
 
-
     @ManyToOne(fetch = FetchType.LAZY)    
     @JoinColumn(name = "optionGroupId")
     private OptionGroup optionGroup;
-
 
 }
