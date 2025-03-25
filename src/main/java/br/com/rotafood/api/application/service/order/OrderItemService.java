@@ -95,4 +95,18 @@ public class OrderItemService {
 
         return orderItemOptionRepository.save(orderItemOption);
     }
+
+    @Transactional
+        public void synchronizeItems(List<OrderItemDto> itemDtos, Order order) {
+        List<UUID> newItemIds = itemDtos.stream()
+                .map(OrderItemDto::id)
+                .filter(Objects::nonNull)
+                .toList();
+
+        order.getItems().removeIf(existingItem ->
+                existingItem.getId() != null && !newItemIds.contains(existingItem.getId()));
+
+        itemDtos.forEach(itemDto -> this.createOrUpdate(itemDto, order));
+        }
+
 }

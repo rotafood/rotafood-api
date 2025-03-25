@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
+import br.com.rotafood.api.domain.entity.merchant.Merchant;
 import br.com.rotafood.api.domain.entity.order.Order;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -36,11 +37,13 @@ public class Command {
     private UUID id;
 
     @Column(nullable = false)
-    private Integer number;
+    private Integer merchantSequence;
 
-    @ManyToOne(fetch = FetchType.LAZY)    
-    @JoinColumn(name = "tableId")
-    private DinnerTable dinnerTable;
+    @Column()
+    private Integer tableIndex;
+
+    @Column()
+    private String name;
 
     @OneToMany(mappedBy = "command", orphanRemoval = false, cascade = CascadeType.ALL)
     private List<Order> orders;
@@ -51,5 +54,18 @@ public class Command {
     @Column(precision = 10, scale = 2)
     private BigDecimal prepaid;
 
+    @ManyToOne(fetch = FetchType.LAZY)    
+    @JoinColumn(name = "merchantId")
+    private Merchant merchant;
+
+    public void updateTotals() {
+        this.pending = this.orders.stream()
+            .map(o -> o.getPayment().getPending() != null ? o.getPayment().getPending() : BigDecimal.ZERO)
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+    
+        this.prepaid = this.orders.stream()
+            .map(o -> o.getPayment().getPrepaid() != null ? o.getPayment().getPrepaid() : BigDecimal.ZERO)
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
     
 }

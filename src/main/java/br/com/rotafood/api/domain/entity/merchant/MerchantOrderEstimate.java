@@ -29,8 +29,4 @@ public class MerchantOrderEstimate {
     @Column(nullable = false)
     private Integer deliveryMaxMinutes;
 
-
-    @ManyToOne(fetch = FetchType.LAZY)    
-    @JoinColumn(name = "merchantId", nullable = false)
-    private Merchant merchant;
 }

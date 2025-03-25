@@ -46,10 +46,10 @@ public class OptionGroup {
     @Enumerated(value = EnumType.STRING)
     private AvailabilityStatus status;
     
-    @OneToMany(mappedBy = "optionGroup", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "optionGroup", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Option> options = new ArrayList<>();
     
-    @ManyToOne(fetch = FetchType.LAZY)    
+    @ManyToOne(fetch = FetchType.LAZY)     
     @JoinColumn(name = "merchantId")
     private Merchant merchant;
 

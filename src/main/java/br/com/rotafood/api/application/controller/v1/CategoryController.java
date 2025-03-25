@@ -30,8 +30,6 @@ public class CategoryController {
 
     @Autowired 
     private CatalogCacheService catalogCacheService;
-
-
   
     @GetMapping
     public List<FullCategoryDto> getAll(

@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.*;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
+
+import br.com.rotafood.api.infra.rabbitmq.RabbitQueueManager;
 import br.com.rotafood.api.infra.security.TokenService;
 import br.com.rotafood.api.application.dto.merchant.MerchantUserDto;
 
@@ -19,6 +21,8 @@ public class CommandPrintWebSocketHandler extends TextWebSocketHandler {
     private TokenService tokenService;
     @Autowired
     private ConnectionFactory springConnectionFactory;
+    @Autowired
+    private RabbitQueueManager rabbitQueueManager;
 
     private ConcurrentHashMap<String, WebSocketSession> sessions = new ConcurrentHashMap<>();
 
@@ -32,6 +36,9 @@ public class CommandPrintWebSocketHandler extends TextWebSocketHandler {
         String merchantId = merchantUserDto.merchantId().toString();
 
         sessions.put(merchantId, session);
+
+        rabbitQueueManager.createMerchantQueue(merchantId);
+
 
         Connection rabbitConnection = springConnectionFactory.createConnection().getDelegate();
         Channel channel = rabbitConnection.createChannel();

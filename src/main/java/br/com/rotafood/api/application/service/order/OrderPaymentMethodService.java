@@ -27,13 +27,9 @@ public class OrderPaymentMethodService {
         method.setDescription(dto.description());
         method.setMethod(dto.method());
         method.setPrepaid(dto.prepaid());
-        method.setCurrency(dto.currency());
         method.setType(dto.type());
         method.setValue(dto.value());
         
-
-        method.setCurrency(dto.currency());
-
         return orderPaymentMethodRepository.save(method);
     }
 

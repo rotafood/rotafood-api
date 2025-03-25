@@ -39,6 +39,20 @@ services:
     volumes:
       - minio_data:/data
     restart: always
+  redis:
+    image: redis:7.2
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+
+  redis-insight:
+    image: redis/redisinsight:latest
+    container_name: redis-insight
+    restart: always
+    ports:
+      - "8001:8001"
 
 volumes:
   rabbitmq_data:

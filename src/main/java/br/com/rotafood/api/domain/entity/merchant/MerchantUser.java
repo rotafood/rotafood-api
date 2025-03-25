@@ -46,8 +46,6 @@ public class MerchantUser implements UserDetails  {
 
     private String phone;
 
-    private boolean hasOwner;
-
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)

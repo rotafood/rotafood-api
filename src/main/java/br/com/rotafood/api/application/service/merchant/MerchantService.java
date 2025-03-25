@@ -18,18 +18,25 @@ import br.com.rotafood.api.application.dto.address.AddressDto;
 import br.com.rotafood.api.application.dto.catalog.ShiftDto;
 import br.com.rotafood.api.application.dto.merchant.FullMerchantDto;
 import br.com.rotafood.api.application.dto.merchant.MerchantCreateDto;
+import br.com.rotafood.api.application.dto.merchant.MerchantLogisticSettingDto;
+import br.com.rotafood.api.application.dto.merchant.MerchantOrderEstimateDto;
 import br.com.rotafood.api.application.dto.merchant.MerchantOwnerCreationDto;
 import br.com.rotafood.api.application.dto.merchant.OwnerCreateDto;
 import br.com.rotafood.api.application.service.catalog.CatalogService;
 import br.com.rotafood.api.domain.entity.address.Address;
 import br.com.rotafood.api.domain.entity.catalog.Shift;
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
+import br.com.rotafood.api.domain.entity.merchant.MerchantLogisticSetting;
+import br.com.rotafood.api.domain.entity.merchant.MerchantOrderEstimate;
 import br.com.rotafood.api.domain.entity.merchant.MerchantUser;
 import br.com.rotafood.api.domain.entity.merchant.MerchantUserRole;
 import br.com.rotafood.api.domain.entity.order.OrderSalesChannel;
 import br.com.rotafood.api.domain.repository.AddressRepository;
+import br.com.rotafood.api.domain.repository.MerchantLogisticSettingRepository;
+import br.com.rotafood.api.domain.repository.MerchantOrderEstimateRepository;
 import br.com.rotafood.api.domain.repository.MerchantRepository;
 import br.com.rotafood.api.domain.repository.MerchantUserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -46,6 +53,12 @@ public class MerchantService {
 
     @Autowired
     private CatalogService catalogService;
+
+    @Autowired
+    private MerchantOrderEstimateRepository merchantOrderEstimateRepository;
+
+    @Autowired
+    private MerchantLogisticSettingRepository logisticSettingRepository;
 
     @Transactional
     public MerchantUser createMerchant(MerchantOwnerCreationDto merchantOwnerCreationDto) {
@@ -89,8 +102,8 @@ public class MerchantService {
     private Merchant createMerchantEntity(MerchantCreateDto merchantDto, Address address) {
         Merchant merchant = new Merchant(
             null, 
+            null,
             merchantDto.name(), 
-            merchantDto.corporateName(),
             null, 
             merchantDto.description(), 
             merchantDto.documentType(),
@@ -101,7 +114,8 @@ public class MerchantService {
             null,
             Instant.now(),
             address, 
-            null, 
+            null,
+            null,
             null
         );
         return merchantRepository.save(merchant);
@@ -119,7 +133,6 @@ public class MerchantService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Online name already in use");
         }
         merchant.setName(merchantDto.name());
-        merchant.setCorporateName(merchantDto.corporateName());
         merchant.setOnlineName(merchantDto.onlineName());
         merchant.setPhone(merchantDto.phone());
         merchant.setDescription(merchantDto.description());
@@ -128,18 +141,20 @@ public class MerchantService {
         merchant.setDocument(merchantDto.document());
         merchant.setMerchantType(merchantDto.merchantType());
 
-
         if (merchantDto.address() != null) {
-            Address currentAddress = merchant.getAddress();
+            Address currentAddress = merchantDto.address().id() != null ? 
+                this.addressRepository.findById(merchantDto.address().id())
+                .orElseThrow(() -> new EntityNotFoundException("Endereço não encontrado"))
+                : new Address(merchantDto.address());
+            addressRepository.save(currentAddress);
+        }
+        
+        if (merchantDto.logisticSetting() != null) {
+            this.createOrUpdateSettings(merchantDto.logisticSetting(), merchant);
+        }
 
-            if (currentAddress != null) {
-                currentAddress.updateFromDto(merchantDto.address());
-                addressRepository.save(currentAddress);
-            } else {
-                Address newAddress = new Address(merchantDto.address());
-                addressRepository.save(newAddress);
-                merchant.setAddress(newAddress);
-            }
+        if (merchantDto.orderEstimate() != null) {
+            this.createOrUpdateOrderEstimate(merchantDto.orderEstimate(), merchant);
         }
 
         if (merchantDto.openingHours() != null) {
@@ -149,15 +164,44 @@ public class MerchantService {
         return merchantRepository.save(merchant);
     }
 
+    public void createOrUpdateSettings(MerchantLogisticSettingDto settingDto, Merchant merchant) {
+
+        System.err.println(settingDto + "\n\n\n");
+
+
+        MerchantLogisticSetting setting = merchant.getLogisticSetting() != null
+            ? merchant.getLogisticSetting() : new MerchantLogisticSetting();
+
+        setting.setKmRadius(settingDto.kmRadius());
+        setting.setMinTax(settingDto.minTax());
+        setting.setTaxPerKm(settingDto.taxPerKm());
+        logisticSettingRepository.save(setting);
+        merchant.setLogisticSetting(setting);
+
+    }
+
+
+    public void createOrUpdateOrderEstimate(MerchantOrderEstimateDto estimateDto, Merchant merchant) {
+        MerchantOrderEstimate estimate = merchant.getOrderEstimate() != null 
+            ?   merchant.getOrderEstimate() : new MerchantOrderEstimate();
+  
+        estimate.setPickupMinMinutes(estimateDto.pickupMinMinutes());
+        estimate.setPickupMaxMinutes(estimateDto.pickupMaxMinutes());
+        estimate.setDeliveryMinMinutes(estimateDto.deliveryMinMinutes());
+        estimate.setDeliveryMaxMinutes(estimateDto.deliveryMaxMinutes());
+        merchantOrderEstimateRepository.save(estimate);
+        merchant.setOrderEstimate(estimate);
+    }
+
     private void updateOpeningHours(Merchant merchant, List<ShiftDto> openingHoursDtos) {
     
         List<UUID> incomingIds = openingHoursDtos.stream()
             .map(ShiftDto::id)
             .filter(Objects::nonNull)
             .toList();
-    
+
         merchant.getOpeningHours().removeIf(shift -> !incomingIds.contains(shift.getId()));
-    
+
         openingHoursDtos.forEach(dto -> {
                 Shift shift = merchant.getOpeningHours().stream()
                     .filter(existing -> existing.getId() != null && existing.getId().equals(dto.id()))
@@ -167,7 +211,6 @@ public class MerchantService {
                         merchant.addShift(newShift);
                         return newShift;
                     });
-    
                 shift.setStartTime(LocalTime.parse(dto.startTime()));
                 shift.setEndTime(LocalTime.parse(dto.endTime()));
                 shift.setMonday(dto.monday());
@@ -177,7 +220,6 @@ public class MerchantService {
                 shift.setFriday(dto.friday());
                 shift.setSaturday(dto.saturday());
                 shift.setSunday(dto.sunday());
-
                 merchant.addShift(shift);
                 });
     }
@@ -185,11 +227,11 @@ public class MerchantService {
 
     private MerchantUser createOwer(OwnerCreateDto ownerDto, Merchant merchant) {
         MerchantUser merchantUser = new MerchantUser();
+        merchant.setOwnerUser(merchantUser);
         merchantUser.setName(ownerDto.name());
         merchantUser.setEmail(ownerDto.email());
         merchantUser.setPassword(ownerDto.password());
         merchantUser.setPhone(ownerDto.phone());
-        merchantUser.setHasOwner(true);
         merchantUser.setRole(MerchantUserRole.ADMIN);
         merchantUser.setMerchant(merchant);
         return merchantUserRepository.save(merchantUser);

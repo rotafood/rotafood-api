@@ -30,7 +30,6 @@ public class OrderTotalService {
         orderTotal.setSubTotal(orderTotalDto.subTotal());
         orderTotal.setAdditionalFees(orderTotalDto.additionalFees());
 
-
         return orderTotalRepository.save(orderTotal);
     }
 

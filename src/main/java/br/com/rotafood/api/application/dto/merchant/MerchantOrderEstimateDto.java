@@ -9,8 +9,7 @@ public record MerchantOrderEstimateDto(
     Integer pickupMinMinutes,
     Integer pickupMaxMinutes,
     Integer deliveryMinMinutes,
-    Integer deliveryMaxMinutes,
-    UUID merchantId
+    Integer deliveryMaxMinutes
 ) {
     public MerchantOrderEstimateDto(MerchantOrderEstimate estimate) {
         this(
@@ -18,8 +17,7 @@ public record MerchantOrderEstimateDto(
             estimate.getPickupMinMinutes(),
             estimate.getPickupMaxMinutes(),
             estimate.getDeliveryMinMinutes(),
-            estimate.getDeliveryMaxMinutes(),
-            estimate.getMerchant().getId()
+            estimate.getDeliveryMaxMinutes()
         );
     }
 }

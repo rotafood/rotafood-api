@@ -41,7 +41,7 @@ public class ProductOptionGroup {
     @Column
     private Integer index;
 
-    @ManyToOne(fetch = FetchType.LAZY)    
+    @ManyToOne(fetch = FetchType.EAGER)    
     @JoinColumn(name = "optionGroupId")
     private OptionGroup optionGroup;
 

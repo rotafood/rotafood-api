@@ -12,7 +12,6 @@ public record OrderPaymentMethodDto(
     String description,
     OrderPaymentMethodType method,
     boolean prepaid,
-    String currency,
     OrderPaymentType type,
     BigDecimal value
 ) {
@@ -22,7 +21,6 @@ public record OrderPaymentMethodDto(
         method.getDescription(),
         method.getMethod(),
         method.isPrepaid(),
-        method.getCurrency(),
         method.getType(),
         method.getValue()
     );

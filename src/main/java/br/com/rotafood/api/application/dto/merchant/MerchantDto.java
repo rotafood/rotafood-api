@@ -12,7 +12,6 @@ import br.com.rotafood.api.domain.entity.merchant.MerchantType;
 public record MerchantDto (
     UUID id,
     String name,
-    String corporateName,
     String onlineName,
     String imagePath,
     String description,
@@ -28,7 +27,6 @@ public record MerchantDto (
     public MerchantDto(Merchant merchant) {
        this(merchant.getId(), 
        merchant.getName(), 
-       merchant.getCorporateName(), 
        merchant.getOnlineName(),
        merchant.getImagePath(),
        merchant.getDescription(), 

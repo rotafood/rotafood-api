@@ -40,9 +40,6 @@ public class OrderPaymentMethod {
     @Column(nullable = false)
     private boolean prepaid;
 
-    @Column(length = 3, nullable = false)
-    private String currency;
-
     @Enumerated(EnumType.STRING)
     @Column(length = 10, nullable = false)
     private OrderPaymentType type;

@@ -54,21 +54,6 @@ public class Address {
         this.complement = dto.complement();
         this.latitude = dto.latitude();
         this.longitude = dto.longitude();
-    }
-
-    public void updateFromDto(AddressDto dto) {
-        this.country = dto.country();
-        this.state = dto.state();
-        this.city = dto.city();
-        this.neighborhood = dto.neighborhood();
-        this.postalCode = dto.postalCode();
-        this.streetName = dto.streetName();
-        this.streetNumber = dto.streetNumber();
-        this.formattedAddress = dto.formattedAddress();
-        this.complement = dto.complement();
-        this.latitude = dto.latitude();
-        this.longitude = dto.longitude();
-    }
-    
+    } 
 
 }

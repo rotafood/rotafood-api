@@ -15,6 +15,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -42,11 +43,12 @@ public class Merchant {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ownerUserId")
+    private MerchantUser ownerUser;
+
     @Column(length = 64)
     private String name;
-    
-    @Column(length = 64)
-    private String corporateName;
     
     @Column
     private String onlineName;
@@ -73,7 +75,6 @@ public class Merchant {
     @Column
     private String imagePath;
 
-
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     private Instant lastOpenedUtc;
@@ -81,24 +82,17 @@ public class Merchant {
     @OneToOne
     @JoinColumn(name = "addressId")
     private Address address;
-    
 
-    @OneToMany(mappedBy = "merchant", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<MerchantUser> merchantUsers;
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "merchantLogisticSettingId")
+    private MerchantLogisticSetting logisticSetting;
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "merchantOrderEstimateId")
+    private MerchantOrderEstimate orderEstimate;
 
     @OneToMany(mappedBy = "merchant", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Shift> openingHours = new ArrayList<>();
-
-
-    public void addMerchantUser(MerchantUser user) {
-        this.merchantUsers.add(user);
-        user.setMerchant(this);
-    }
-
-    public void removeMerchantUser(MerchantUser user) {
-        this.merchantUsers.remove(user);
-        user.setMerchant(null);
-    }
 
     public void addShift(Shift shift) {
         this.openingHours.add(shift);

@@ -13,8 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.rotafood.api.application.dto.address.AddressDto;
 import br.com.rotafood.api.application.dto.logistic.VrpOriginDto;
 import br.com.rotafood.api.application.dto.logistic.VrpOutDto;
-import br.com.rotafood.api.application.service.catalog.LogisticService;
+import br.com.rotafood.api.application.service.logistic.LogisticService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ValidationException;
 
 
 @RestController
@@ -32,6 +33,9 @@ public class LogisticTestController {
             HttpServletRequest request
 
     ) {
+        if (pointsQuantity < 1) {
+            throw new ValidationException("Mínimo de 5 pontos");
+        }
         VrpOriginDto vrpOriginDto = new VrpOriginDto(UUID.randomUUID(), address);
         var vrpOutDto = this.logisticService.logisticRoutesTest(vrpOriginDto, pointsQuantity);
         return  ResponseEntity.ok().body(vrpOutDto);

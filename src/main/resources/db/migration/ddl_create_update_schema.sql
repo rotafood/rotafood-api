@@ -8,8 +8,8 @@ create table default_packagings (lenght_cm numeric(10,2) not null, thickness_cm 
 create table default_products (id uuid not null, name varchar(128) not null, ean varchar(256), description varchar(1024) not null, i_food_image_path varchar(255), image_path varchar(255), primary key (id));
 create table images (i_food_image_id uuid, id uuid not null, merchant_id uuid, i_food_image_path varchar(255), path varchar(255), primary key (id));
 create table items (index integer, category_id uuid, i_food_item_id uuid, id uuid not null, merchant_id uuid not null, product_id uuid unique, status varchar(255) check (status in ('AVAILIABLE','UNAVAILABLE')), type varchar(255) check (type in ('DEFAULT','PIZZA')), primary key (id));
-create table logistic_settings (km_radius numeric(10,2), min_tax numeric(10,2), tax_per_km numeric(10,2), id uuid not null, merchant_id uuid, primary key (id));
-create table merchant_order_estimates (delivery_max_minutes integer not null, delivery_min_minutes integer not null, pickup_max_minutes integer not null, pickup_min_minutes integer not null, id uuid not null, merchant_id uuid not null, primary key (id));
+create table merchant_logistic_settings (id uuid not null, km_radius numeric(10,2), min_tax numeric(10,2), tax_per_km numeric(10,2), primary key (id));
+create table merchant_order_estimates (delivery_max_minutes integer not null, delivery_min_minutes integer not null, pickup_max_minutes integer not null, pickup_min_minutes integer not null, id uuid not null, primary key (id));
 create table merchant_users (has_owner boolean not null, id uuid not null, merchant_id uuid, email varchar(255), name varchar(255), password varchar(255), phone varchar(255), role varchar(255) not null check (role in ('ADMIN','CHEF','GARSON','DRIVER')), primary key (id));
 create table merchants (created_at timestamp(6) not null, last_opened_utc timestamp(6) with time zone not null, address_id uuid unique, document varchar(16), id uuid not null, corporate_name varchar(64), name varchar(64), description varchar(256), document_type varchar(255) check (document_type in ('CPF','CNPJ')), image_path varchar(255), merchant_type varchar(255) check (merchant_type in ('RESTAURANT','STORE','GROUP')), online_name varchar(255), phone varchar(255), primary key (id));
 create table option_groups (i_food_option_group_id uuid, id uuid not null, merchant_id uuid, name varchar(255), option_group_type varchar(255) check (option_group_type in ('DEFAULT','SIZE','TOPPING','CRUST','EDGE')), status varchar(255) check (status in ('AVAILIABLE','UNAVAILABLE')), primary key (id));
@@ -55,7 +55,6 @@ alter table if exists items add constraint FKjcdcde7htb3tyjgouo4g9xbmr foreign k
 alter table if exists items add constraint FK4q5seic92w20pxqo49dc4s61o foreign key (merchant_id) references merchants;
 alter table if exists items add constraint FKmtk37pxnx7d5ck7fkq2xcna4i foreign key (product_id) references products;
 alter table if exists logistic_settings add constraint FK1ki3c4sist0r7swrvvqf5myul foreign key (merchant_id) references merchants;
-alter table if exists merchant_order_estimates add constraint FKng4captehkfouls2b50v3ib86 foreign key (merchant_id) references merchants;
 alter table if exists merchant_users add constraint FKqhms11g17dld2i65gaqw1jjah foreign key (merchant_id) references merchants;
 alter table if exists merchants add constraint FK63fsaqfa9t6fh74ww4xr8fpj1 foreign key (address_id) references addresses;
 alter table if exists option_groups add constraint FKirun1bkvvvtfv5y5l46upqrhe foreign key (merchant_id) references merchants;
@@ -94,3 +93,22 @@ alter table if exists subscriptions add constraint FKb1uf5qnxi6uj95se8ykydntl1 f
 alter table if exists subscriptions add constraint FKct7p82efq7u73jdxticea5csi foreign key (merchant_user_id) references merchant_users;
 alter table if exists tables add constraint FK93h113fq66u9y9drxd0f2nu66 foreign key (merchant_id) references merchants;
 alter table if exists weights add constraint FKimwah0owad2wrhqwd78iwbgnh foreign key (product_id) references products;
+alter table if exists merchants add column merchant_logistic_setting_id uuid;
+alter table if exists merchants add column merchant_order_estimate_id uuid;
+alter table if exists merchants add constraint UK_367apebrxak3qtrxwu9kt2f6f unique (merchant_logistic_setting_id);
+alter table if exists merchants add constraint UK_ja9g0ef1si44olo2mlqpc3liq unique (merchant_order_estimate_id);
+alter table if exists merchants add constraint FKgo85miohukd4wy5nde7o6f3uo foreign key (merchant_logistic_setting_id) references merchant_logistic_settings;
+alter table if exists merchants add constraint FK6dbkf4llbokml5c8o9vhfrbus foreign key (merchant_order_estimate_id) references merchant_order_estimates;
+alter table if exists merchants add column owner_user_id uuid;
+alter table if exists merchants drop constraint if exists UK_po72oqo2f5jskl7omcg1l6k0d;
+alter table if exists merchants add constraint UK_po72oqo2f5jskl7omcg1l6k0d unique (owner_user_id);
+alter table if exists merchants add constraint FK1qbe15kx1xcqr92w2vo39cdmq foreign key (owner_user_id) references merchant_users;
+
+
+
+
+alter table if exists commands add column merchant_sequence integer not null;
+alter table if exists commands add column name varchar(255);
+alter table if exists commands add column table_index integer;
+alter table if exists commands add column merchant_id uuid;
+alter table if exists commands add constraint FK8tam8en5va1n7655bvgmc2sv5 foreign key (merchant_id) references merchants;

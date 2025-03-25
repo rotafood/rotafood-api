@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.Optional;
 
+import br.com.rotafood.api.application.dto.command.CommandDto;
 import br.com.rotafood.api.domain.entity.order.*;
 import br.com.rotafood.api.infra.utils.DateUtils;
 import jakarta.validation.Valid;
@@ -28,31 +29,27 @@ public record FullOrderDto(
     @NotNull
     OrderTiming timing,
     String extraInfo,
-
-
     @NotNull
     UUID merchantId,
-
     OrderTotalDto total,
-
     @NotNull
     @Valid
     OrderCustomerDto customer,
+    @Valid
     OrderDeliveryDto delivery,
+    @Valid
     OrderScheduleDto schedule,
-    OrderDiveInDto indoor,
+    @Valid
     OrderTakeoutDto takeout,
-
+    @Valid
+    CommandDto command,
     @Valid
     @NotNull
     OrderPaymentDto payment,
-
     @Valid
     @NotEmpty
     List<OrderItemDto> items,
-
     List<OrderBenefitDto> benefits,
-    
     List<OrderAdditionalFeeDto> additionalFees
 ) {
     public FullOrderDto(Order order) {
@@ -71,8 +68,8 @@ public record FullOrderDto(
          Optional.ofNullable(order.getCustomer()).map(OrderCustomerDto::new).orElse(null),
          Optional.ofNullable(order.getDelivery()).map(OrderDeliveryDto::new).orElse(null),
          Optional.ofNullable(order.getSchedule()).map(OrderScheduleDto::new).orElse(null),
-         Optional.ofNullable(order.getDiveIn()).map(OrderDiveInDto::new).orElse(null),
          Optional.ofNullable(order.getTakeout()).map(OrderTakeoutDto::new).orElse(null),
+         Optional.ofNullable(order.getCommand()).map(CommandDto::new).orElse(null),
          Optional.ofNullable(order.getPayment()).map(OrderPaymentDto::new).orElse(null),
          order.getItems().stream().map(OrderItemDto::new).toList(),
          Optional.ofNullable(order.getBenefits()).map(benefits -> benefits.stream().map(OrderBenefitDto::new).toList()).orElse(List.of()),
@@ -93,8 +90,9 @@ public record FullOrderDto(
         sb.append("Cliente: ").append(customer.name()).append("\n");
         if (delivery != null) {
             sb.append("Entrega: ").append(delivery.address().formattedAddress()).append("\n");
-        } else if (indoor != null) {
-            sb.append("Mesa: ").append(indoor.id()).append("\n");
+        } else if (command() != null) {
+            sb.append("Mesa: ").append(command().tableIndex()).append("\n");
+            sb.append("Commanda: ").append(command().name()).append("\n");
         } else if (takeout != null) {
             sb.append("Retirada\n");
         }

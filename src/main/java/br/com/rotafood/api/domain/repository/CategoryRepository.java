@@ -18,6 +18,7 @@ public interface CategoryRepository extends JpaRepository<Category, UUID>  {
         LEFT JOIN FETCH c.items i
         LEFT JOIN FETCH i.product p
         WHERE c.merchant.id = :merchantId
+        ORDER BY c.index
         """)
     List<Category> findAllByMerchantIdWithItems(@Param("merchantId") UUID merchantId);
 

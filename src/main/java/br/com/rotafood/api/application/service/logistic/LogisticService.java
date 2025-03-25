@@ -1,4 +1,4 @@
-package br.com.rotafood.api.application.service.catalog;
+package br.com.rotafood.api.application.service.logistic;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -16,6 +16,8 @@ import org.springframework.web.client.RestTemplate;
 
 import br.com.rotafood.api.application.dto.address.AddressDto;
 import br.com.rotafood.api.application.dto.logistic.CoordinateDto;
+import br.com.rotafood.api.application.dto.logistic.DistanceInDto;
+import br.com.rotafood.api.application.dto.logistic.DistanceOutDto;
 import br.com.rotafood.api.application.dto.logistic.VrpInDto;
 import br.com.rotafood.api.application.dto.logistic.VrpOrderDto;
 import br.com.rotafood.api.application.dto.logistic.VrpOriginDto;
@@ -33,9 +35,13 @@ public class LogisticService {
 
     public VrpOutDto logisticRoutesTest(VrpOriginDto origin, Long pointsQuantity) {
         VrpInDto vrpData = generateDataForTest(origin, pointsQuantity, 0.010f);
-        String url = this.logisticServiceUrl + "/logistic/vrp/";
+        String url = this.logisticServiceUrl + "/logistic/vrp";
         ResponseEntity<VrpOutDto> response = restTemplate.postForEntity(url, vrpData, VrpOutDto.class);
-        return response.getBody();
+        if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
+            return response.getBody();
+        }
+
+        throw new RuntimeException("Erro ao buscar distância do serviço logístico");
     }
 
     public VrpInDto generateDataForTest(VrpOriginDto origin, Long pointsQuantity, float std) {
@@ -43,7 +49,6 @@ public class LogisticService {
 
         for (int i = 0; i < pointsQuantity; i++) {
             var coord = generateRandomCoordinates(origin.address().latitude(), origin.address().longitude(), std);
-            
             AddressDto randomAddress = new AddressDto(
                 UUID.randomUUID(),
                 origin.address().country(),
@@ -85,4 +90,20 @@ public class LogisticService {
     private double generateRandomVolume(double min, double max) {
         return ThreadLocalRandom.current().nextDouble(min, max);
     }
+
+
+    public DistanceOutDto calculateDistance(AddressDto origin, AddressDto destiny) {
+        DistanceInDto distanceIn = new DistanceInDto(UUID.randomUUID(), origin, destiny);
+        String url = this.logisticServiceUrl + "/logistic/distances";
+
+        ResponseEntity<DistanceOutDto> response = restTemplate.postForEntity(url, distanceIn, DistanceOutDto.class);
+
+        if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
+            return response.getBody();
+        }
+
+
+        throw new RuntimeException("Erro ao buscar distância do serviço logístico");
+    }
+
 }

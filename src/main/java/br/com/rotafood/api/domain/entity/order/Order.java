@@ -100,17 +100,12 @@ public class Order {
     private OrderTakeout takeout;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "orderDiveInId")
-    private OrderDiveIn DiveIn;
-
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "orderPaymentId")
     private OrderPayment payment;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "commandId")
     private Command command;
-
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "orderId")

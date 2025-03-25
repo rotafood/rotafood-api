@@ -57,7 +57,7 @@ public class Item {
     @JoinColumn(name = "merchantId", nullable = false)
     private Merchant merchant;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "productId")    
     private Product product;
     

@@ -43,16 +43,14 @@ public class CategoryService {
         if (category == null) {
             throw new EntityNotFoundException("Categoria não encontrada.");
         }
-
         categoryRepository.delete(category);
-
     }
-
 
 
     public List<Category> getAllByMerchantId(UUID merchantId) {
-        return categoryRepository.findAllByMerchantId(merchantId);
+        return categoryRepository.findAllByMerchantIdWithItems(merchantId);
     }
+
 
 
     @Transactional
@@ -105,7 +103,11 @@ public class CategoryService {
 
     @Transactional
     public void sortCategories(UUID merchantId, List<SortRequestDto> sortedCategories) {
+
         sortedCategories.forEach(dto -> 
-            categoryRepository.updateCategoryIndex(merchantId, dto.id(), dto.index()));
+            {
+                System.err.println(dto.index() + "\n\n");
+                categoryRepository.updateCategoryIndex(merchantId, dto.id(), dto.index());
+            });
     }
 }

@@ -18,13 +18,13 @@ public record OrderPaymentDto(
     BigDecimal prepaid
 ) {
     public OrderPaymentDto(OrderPayment payment) {
-    this(
-        payment.getId(),
-        payment.getDescription(),
-        payment.getMethods() != null ? payment.getMethods().stream().map(OrderPaymentMethodDto::new).toList() : List.of(),
-        payment.getPending(),
-        payment.getPrepaid()
-    );
-}
+        this(
+            payment.getId(),
+            payment.getDescription(),
+            payment.getMethods() != null ? payment.getMethods().stream().map(OrderPaymentMethodDto::new).toList() : List.of(),
+            payment.getPending(),
+            payment.getPrepaid()
+        );
+    }
 
 }

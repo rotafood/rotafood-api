@@ -2,21 +2,15 @@ package br.com.rotafood.api.application.service.order;
 
 
 import br.com.rotafood.api.application.dto.order.FullOrderDto;
-import br.com.rotafood.api.application.dto.order.OrderItemDto;
 import br.com.rotafood.api.domain.entity.order.Order;
-import br.com.rotafood.api.domain.entity.order.OrderPayment;
-import br.com.rotafood.api.domain.entity.order.OrderSalesChannel;
 import br.com.rotafood.api.domain.entity.order.OrderStatus;
-import br.com.rotafood.api.domain.entity.order.OrderTiming;
-import br.com.rotafood.api.domain.entity.order.OrderTotal;
+
 import br.com.rotafood.api.domain.entity.order.OrderType;
 import br.com.rotafood.api.domain.repository.OrderRepository;
-import br.com.rotafood.api.domain.repository.OrderTotalRepository;
 import br.com.rotafood.api.infra.rabbitmq.RabbitQueueManager;
 import br.com.rotafood.api.infra.twilio.TwilioService;
 import br.com.rotafood.api.infra.utils.DateUtils;
 import br.com.rotafood.api.domain.repository.MerchantRepository;
-import br.com.rotafood.api.domain.repository.OrderPaymentRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ValidationException;
@@ -28,10 +22,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -39,12 +31,6 @@ public class OrderService {
 
     @Autowired
     private OrderRepository orderRepository;
-
-    @Autowired
-    private OrderTotalRepository orderTotalRepository;
-
-    @Autowired
-    private OrderPaymentRepository orderPaymentRepository;
 
     @Autowired
     private MerchantRepository merchantRepository;
@@ -68,10 +54,13 @@ public class OrderService {
     private OrderPaymentService orderPaymentService;
 
     @Autowired
-    private OrderDiveInService orderDiveInService;
+    private OrderItemService orderItemService;
 
     @Autowired
-    private OrderItemService orderItemService;
+    private OrderAdditionalFeeService orderAdditionalFeeService;
+
+    @Autowired
+    private OrderBenefitService orderBenefitService;
 
     @Autowired
     private TwilioService twilioService;
@@ -147,23 +136,20 @@ public class OrderService {
 
         order.setCustomer(fullOrderDto.customer() != null ? this.orderCustomerService.createOrUpdate(fullOrderDto.customer()) : null);
 
-        order.setDiveIn(fullOrderDto.indoor() != null ? this.orderDiveInService.createOrUpdate(fullOrderDto.indoor()) : null);
-
         order.setPayment(fullOrderDto.payment() != null ? this.orderPaymentService.createOrUpdate(fullOrderDto.payment()) : null);
 
         orderRepository.save(order);
 
-        List<UUID> newItemIds = fullOrderDto.items().stream()
-            .map(OrderItemDto::id)
-            .filter(Objects::nonNull)
-            .toList();
+        orderItemService.synchronizeItems(fullOrderDto.items(), order);
 
-        order.getItems().removeIf(existingItem ->
-                existingItem.getId() != null && !newItemIds.contains(existingItem.getId()));
+        if (fullOrderDto.additionalFees() != null) {
+            orderAdditionalFeeService.synchronizeAdditionalFees(fullOrderDto.additionalFees(), order);
+        }
 
-        fullOrderDto.items().forEach(item -> {
-            this.orderItemService.createOrUpdate(item, order);
-        });
+        if (fullOrderDto.benefits() != null) {
+            orderBenefitService.synchronizeBenefits(fullOrderDto.benefits(), order);
+        }
+
         this.sendSmsNotification(order);
 
         return order;
@@ -252,44 +238,6 @@ public class OrderService {
         );
 
         twilioService.sendSms(ADMIN_PHONE_NUMBER, message);
-    }
-
-
-    @Transactional
-    public Order createTestOrder(UUID merchantId) {
-        var merchant = merchantRepository.findById(merchantId)
-                .orElseThrow(() -> new EntityNotFoundException("Merchant não encontrado."));
-
-
-        OrderTotal total = new OrderTotal();
-        total.setBenefits(BigDecimal.valueOf(5.00));
-        total.setDeliveryFee(BigDecimal.valueOf(10.00));
-        total.setOrderAmount(BigDecimal.valueOf(50.00));
-        total.setSubTotal(BigDecimal.valueOf(40.00));
-        total.setAdditionalFees(BigDecimal.valueOf(0.00));
-        this.orderTotalRepository.save(total);
-
-        OrderPayment payment = new OrderPayment();
-        payment.setDescription("Pagamento em dinheiro.");
-        payment.setPending(BigDecimal.ZERO);
-        payment.setPrepaid(BigDecimal.valueOf(50.00));
-        this.orderPaymentRepository.save(payment);
-
-        Order order = new Order();
-        order.setId(UUID.randomUUID());
-        order.setMerchant(merchant);
-        order.setCreatedAt(Instant.now());
-        order.setModifiedAt(Instant.now());
-        order.setPreparationStartDateTime(Instant.now());
-        order.setType(OrderType.DELIVERY);
-        order.setStatus(OrderStatus.CREATED);
-        order.setSalesChannel(OrderSalesChannel.ROTAFOOD);
-        order.setTiming(OrderTiming.IMMEDIATE);
-        order.setExtraInfo("Pedido de teste gerado automaticamente.");
-        order.setTotal(total);
-        order.setPayment(payment);
-
-        return orderRepository.save(order);
     }
 
 }
