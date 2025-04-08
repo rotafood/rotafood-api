@@ -14,14 +14,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import br.com.rotafood.api.application.dto.address.AddressDto;
+import br.com.rotafood.api.application.dto.AddressDto;
 import br.com.rotafood.api.application.dto.logistic.CoordinateDto;
 import br.com.rotafood.api.application.dto.logistic.DistanceInDto;
 import br.com.rotafood.api.application.dto.logistic.DistanceOutDto;
+import br.com.rotafood.api.application.dto.logistic.RouteDto;
 import br.com.rotafood.api.application.dto.logistic.VrpInDto;
 import br.com.rotafood.api.application.dto.logistic.VrpOrderDto;
 import br.com.rotafood.api.application.dto.logistic.VrpOriginDto;
 import br.com.rotafood.api.application.dto.logistic.VrpOutDto;
+import br.com.rotafood.api.domain.entity.logistic.MerchantLogisticSetting;
+import br.com.rotafood.api.infra.redis.RouteCacheService;
 
 
 @Service
@@ -32,6 +35,10 @@ public class LogisticService {
 
     @Autowired
     private RestTemplate restTemplate;
+
+
+    @Autowired
+    private RouteCacheService routeCacheService;
 
     public VrpOutDto logisticRoutesTest(VrpOriginDto origin, Long pointsQuantity) {
         VrpInDto vrpData = generateDataForTest(origin, pointsQuantity, 0.010f);
@@ -66,7 +73,7 @@ public class LogisticService {
 
             var order = new VrpOrderDto(
                 UUID.randomUUID(), 
-                this.generateRandomVolume(1.0, 10.0),
+                new BigDecimal(this.generateRandomVolume(5.0, 20.0)),
                 new java.util.Date(),
                 randomAddress
             );
@@ -74,7 +81,7 @@ public class LogisticService {
             orders.add(order);
         }
 
-        return new VrpInDto(UUID.randomUUID(), origin, orders, 45.0f, new Date(System.currentTimeMillis()));
+        return new VrpInDto(UUID.randomUUID(), origin, orders, new BigDecimal(45.0), new Date(System.currentTimeMillis()));
     }
 
     private CoordinateDto generateRandomCoordinates(BigDecimal lat, BigDecimal lng, float std) {
@@ -91,19 +98,71 @@ public class LogisticService {
         return ThreadLocalRandom.current().nextDouble(min, max);
     }
 
+    public VrpOutDto logisticRoutesForOrders(VrpInDto vrpInDto) {
+        String url = this.logisticServiceUrl + "/logistic/vrp";
+        ResponseEntity<VrpOutDto> response = restTemplate.postForEntity(url, vrpInDto, VrpOutDto.class);
+        if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
+            return response.getBody();
+        }
 
-    public DistanceOutDto calculateDistance(AddressDto origin, AddressDto destiny) {
+        throw new RuntimeException("Erro ao buscar distância do serviço logístico");
+    }
+
+
+
+    public RouteDto calculateDistance(AddressDto origin, AddressDto destiny, MerchantLogisticSetting logisticSetting) {
+        RouteDto cachedRoute = routeCacheService.getRouteFromCache(origin, destiny);
+
+        if (cachedRoute != null) {
+            return cachedRoute;
+        }
+
         DistanceInDto distanceIn = new DistanceInDto(UUID.randomUUID(), origin, destiny);
         String url = this.logisticServiceUrl + "/logistic/distances";
 
         ResponseEntity<DistanceOutDto> response = restTemplate.postForEntity(url, distanceIn, DistanceOutDto.class);
 
         if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
-            return response.getBody();
+            DistanceOutDto distanceDto = response.getBody();
+
+            RouteDto route = new RouteDto(
+                distanceDto.id(),
+                distanceDto.origin(),
+                distanceDto.destiny(),
+                distanceDto.routeLine(),
+                distanceDto.distanceMeters(),
+                this.calculateDeliveryFee(distanceDto.distanceMeters(), logisticSetting)
+            );
+
+            routeCacheService.saveRouteToCache(origin, destiny, route);
+
+            return route;
         }
 
-
         throw new RuntimeException("Erro ao buscar distância do serviço logístico");
+    }
+
+
+    public BigDecimal calculateDeliveryFee(BigDecimal distanceMeters, MerchantLogisticSetting logisticSetting) {
+        System.err.println(distanceMeters + "\n\n" + logisticSetting +  " OLA   \n\n\n\n");
+        if (distanceMeters == null || logisticSetting == null) {
+            return BigDecimal.ZERO;
+        }
+
+        BigDecimal distanceKm = distanceMeters
+                .divide(BigDecimal.valueOf(1000), 2, RoundingMode.UP);
+
+        BigDecimal fee = logisticSetting.getMinDeliveryFee()
+                .add(logisticSetting.getDeliveryFeePerKm().multiply(distanceKm));
+
+        BigDecimal half = new BigDecimal("0.50");
+        BigDecimal remainder = fee.remainder(half);
+
+        if (remainder.compareTo(BigDecimal.ZERO) > 0) {
+            fee = fee.add(half.subtract(remainder));
+        }
+
+        return fee.setScale(2, RoundingMode.UP);
     }
 
 }

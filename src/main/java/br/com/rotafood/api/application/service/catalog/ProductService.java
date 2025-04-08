@@ -25,9 +25,6 @@ public class ProductService {
     @Autowired
     private ProductPackagingService productPackagingService;
 
-    @Autowired
-    private ProductOptionGroupService productOptionGroupService;
-
 
 
     @Transactional
@@ -51,12 +48,8 @@ public class ProductService {
         productRepository.save(product);
     
     
-        if (productDto.packagings() != null) {
-            productPackagingService.createOrUpdateAll(productDto.packagings(), product, merchantId);
-        }
-
-        if (productDto.optionGroups() != null) {
-            productOptionGroupService.createOrUpdateAll(productDto.optionGroups(), product, merchantId);
+        if (productDto.packaging() != null) {
+            product.setProductPackaging(productPackagingService.createOrUpdate(productDto.packaging(), merchantId));
         }
     
         return product;

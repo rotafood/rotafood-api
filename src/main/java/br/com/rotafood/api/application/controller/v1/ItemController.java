@@ -1,5 +1,6 @@
 package br.com.rotafood.api.application.controller.v1;
 
+import br.com.rotafood.api.application.dto.catalog.FullItemDto;
 import br.com.rotafood.api.application.dto.catalog.ItemDto;
 import br.com.rotafood.api.application.service.catalog.CatalogCacheService;
 import br.com.rotafood.api.application.service.catalog.ItemService;
@@ -38,11 +39,22 @@ public class ItemController {
     }
 
     @PutMapping
-    public ResponseEntity<ItemDto> updateOrCreateItem(
+    public ResponseEntity<FullItemDto> updateOrCreateItem(
             @PathVariable UUID merchantId,
-            @RequestBody @Valid ItemDto itemDto) {
-        ItemDto updatedItem = new ItemDto(itemService.updateOrCreate(itemDto, merchantId));
+            @RequestBody @Valid FullItemDto itemDto) {
+        
+        FullItemDto updatedItem = new FullItemDto(itemService.updateOrCreate(itemDto, merchantId));
+        catalogCacheService.updateCatalogCache(merchantId);
 
+        return ResponseEntity.ok(updatedItem);
+    }
+
+    @PutMapping("/pizza")
+    public ResponseEntity<FullItemDto> updateOrCreatePizzaItem(
+            @PathVariable UUID merchantId,
+            @RequestBody @Valid FullItemDto itemDto) {
+        
+        FullItemDto updatedItem = new FullItemDto(itemService.updateOrCreatePizza(itemDto, merchantId));
         catalogCacheService.updateCatalogCache(merchantId);
 
         return ResponseEntity.ok(updatedItem);

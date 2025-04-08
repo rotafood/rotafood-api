@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import br.com.rotafood.api.domain.entity.merchant.MerchantLogisticSetting;
+import br.com.rotafood.api.domain.entity.logistic.MerchantLogisticSetting;
 
 public interface MerchantLogisticSettingRepository extends JpaRepository<MerchantLogisticSetting, UUID> {
 

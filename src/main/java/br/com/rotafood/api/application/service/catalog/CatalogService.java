@@ -2,9 +2,7 @@ package br.com.rotafood.api.application.service.catalog;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,14 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.rotafood.api.application.dto.catalog.CatalogDto;
 import br.com.rotafood.api.domain.entity.catalog.Catalog;
-import br.com.rotafood.api.domain.entity.catalog.CatalogCategory;
 import br.com.rotafood.api.domain.entity.catalog.CatalogContext;
-import br.com.rotafood.api.domain.entity.catalog.Category;
 import br.com.rotafood.api.domain.entity.catalog.AvailabilityStatus;
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
-import br.com.rotafood.api.domain.repository.CatalogCategoryRepository;
 import br.com.rotafood.api.domain.repository.CatalogRepository;
-import br.com.rotafood.api.domain.repository.CategoryRepository;
 import br.com.rotafood.api.domain.repository.MerchantRepository;
 import jakarta.persistence.EntityNotFoundException;
 
@@ -27,9 +21,7 @@ import jakarta.persistence.EntityNotFoundException;
 public class CatalogService {
 
     @Autowired private CatalogRepository catalogRepository;
-    @Autowired private CategoryRepository categoryRepository;
     @Autowired private MerchantRepository merchantRepository;
-    @Autowired private CatalogCategoryRepository catalogCategoryRepository;
 
     public List<CatalogDto> getAllByMerchantId(UUID merchantId) {
         return catalogRepository.findAllByMerchantId(merchantId)
@@ -69,21 +61,7 @@ public class CatalogService {
 
         catalog = catalogRepository.save(catalog);
 
-        associateAllCategoriesWithCatalog(catalog, merchantId);
-
         return catalog;
-    }
-
-    private void associateAllCategoriesWithCatalog(Catalog catalog, UUID merchantId) {
-        List<Category> categories = categoryRepository.findAllByMerchantId(merchantId);
-
-        catalogCategoryRepository.deleteByCatalogId(catalog.getId());
-
-        Set<CatalogCategory> catalogCategories = categories.stream()
-                .map(category -> new CatalogCategory(null, catalog, category))
-                .collect(Collectors.toSet());
-
-        catalogCategoryRepository.saveAll(catalogCategories);
     }
 
     @Transactional

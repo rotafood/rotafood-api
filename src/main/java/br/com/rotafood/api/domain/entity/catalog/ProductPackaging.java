@@ -33,9 +33,6 @@ public class ProductPackaging {
     @Column
     private Integer quantityPerPackage;
 
-    @ManyToOne(fetch = FetchType.LAZY)    
-    @JoinColumn(name = "productId") 
-    private Product product;
 
     @ManyToOne(fetch = FetchType.LAZY)    
     @JoinColumn(name = "packagingId") 

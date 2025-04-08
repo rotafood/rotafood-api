@@ -1,8 +1,6 @@
 package br.com.rotafood.api.application.dto.command;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import br.com.rotafood.api.application.dto.order.FullOrderDto;
@@ -13,9 +11,9 @@ public record FullCommandDto(
     String name,
     Integer merchantSequence,
     Integer tableIndex,
-    BigDecimal pending,
-    BigDecimal prepaid,
-    List<FullOrderDto> orders
+    BigDecimal total,
+    boolean paid,
+    FullOrderDto order
 ) {
 
     public FullCommandDto(Command command) {
@@ -24,9 +22,9 @@ public record FullCommandDto(
             command.getName(), 
             command.getMerchantSequence(), 
             command.getTableIndex(),
-            command.getPending(),
-            command.getPrepaid(),
-            Optional.ofNullable(command.getOrders()).map(orders -> orders.stream().map(FullOrderDto::new).toList()).orElse(List.of())
+            command.getTotal(),
+            command.isPaid(),
+            command.getOrder() != null ? new FullOrderDto(command.getOrder()) : null 
             );
     }
     

@@ -13,7 +13,7 @@ public record FullCategoryDto(
     String name, 
     TemplateType template,
     AvailabilityStatus status,
-    List<ItemDto> items
+    List<FullItemDto> items
 ) {
     public FullCategoryDto(Category category) {
         this(
@@ -22,7 +22,7 @@ public record FullCategoryDto(
             category.getName(),
             category.getTemplate(),
             category.getStatus(),
-            category.getItems().stream().map(ItemDto::new).toList()
+            category.getItems().stream().map(FullItemDto::new).toList()
         );
     }
 }

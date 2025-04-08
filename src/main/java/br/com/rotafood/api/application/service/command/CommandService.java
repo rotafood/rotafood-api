@@ -1,6 +1,7 @@
 package br.com.rotafood.api.application.service.command;
 
 import br.com.rotafood.api.application.dto.command.FullCommandDto;
+import br.com.rotafood.api.application.service.order.OrderService;
 import br.com.rotafood.api.domain.entity.command.Command;
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
 import br.com.rotafood.api.domain.repository.CommandRepository;
@@ -21,6 +22,9 @@ public class CommandService {
 
     @Autowired
     private MerchantRepository merchantRepository;
+
+    @Autowired
+    private OrderService orderService;
 
     public List<Command> getAllByMerchantId(UUID merchantId) {
         return commandRepository.findAllByMerchantId(merchantId);
@@ -47,10 +51,14 @@ public class CommandService {
             command.setMerchant(merchant);
             command.setMerchantSequence(nextSequence.intValue());
         }
-        command.setPending(commandDto.pending());
-        command.setPrepaid(commandDto.prepaid());
+        command.setTotal(commandDto.total());
+        command.setPaid(commandDto.paid());
         command.setName(commandDto.name());
         command.setTableIndex(commandDto.tableIndex());
+
+        if (commandDto.order() != null) {
+            this.orderService.createOrUpdate(commandDto.order(), merchantId);
+        }
 
         return commandRepository.save(command);
     }

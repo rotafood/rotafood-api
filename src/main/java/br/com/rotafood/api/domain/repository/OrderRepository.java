@@ -60,4 +60,19 @@ public interface OrderRepository extends JpaRepository<Order, UUID> {
 
 
 
+    @Query("""
+        SELECT o FROM Order o
+        WHERE o.merchant.id = :merchantId
+        AND o.status IN :statuses
+        AND o.createdAt >= :start
+    """)
+    List<Order> findRecentOrdersByStatus(
+        @Param("merchantId") UUID merchantId,
+        @Param("statuses") List<OrderStatus> statuses,
+        @Param("start") Instant start
+    );
+
+
+
+
 }

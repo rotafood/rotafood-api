@@ -1,9 +1,7 @@
 package br.com.rotafood.api.application.service.catalog;
 
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,12 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.rotafood.api.application.dto.SortRequestDto;
 import br.com.rotafood.api.application.dto.catalog.CategoryDto;
-import br.com.rotafood.api.domain.entity.catalog.Catalog;
-import br.com.rotafood.api.domain.entity.catalog.CatalogCategory;
 import br.com.rotafood.api.domain.entity.catalog.Category;
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
-import br.com.rotafood.api.domain.repository.CatalogCategoryRepository;
-import br.com.rotafood.api.domain.repository.CatalogRepository;
 import br.com.rotafood.api.domain.repository.CategoryRepository;
 import br.com.rotafood.api.domain.repository.ItemRepository;
 import br.com.rotafood.api.domain.repository.MerchantRepository;
@@ -25,11 +19,9 @@ import jakarta.persistence.EntityNotFoundException;
 @Service
 public class CategoryService {
 
-    @Autowired private CatalogRepository catalogRepository;
     @Autowired private CategoryRepository categoryRepository;
     @Autowired private MerchantRepository merchantRepository;
     @Autowired private ItemRepository itemRepository;
-    @Autowired private CatalogCategoryRepository catalogCategoryRepository;
 
 
     public Category getByIdAndMerchantId(UUID categoryId, UUID merchantId) {
@@ -66,7 +58,6 @@ public class CategoryService {
         category.setTemplate(categoryDto.template());
         category.setStatus(categoryDto.status());
         category.setMerchant(merchant);
-        category.setIFoodCategoryId(categoryDto.iFoodCategoryId());
 
         List<Category> categories = categoryRepository.findAllByMerchantId(merchantId);
 
@@ -78,21 +69,7 @@ public class CategoryService {
 
         Category savedCategory = categoryRepository.save(category);
 
-        associateCategoryWithAllCatalogs(savedCategory, merchantId);
-
         return savedCategory;
-    }
-
-    private void associateCategoryWithAllCatalogs(Category category, UUID merchantId) {
-        List<Catalog> catalogs = catalogRepository.findAllByMerchantId(merchantId);
-
-        catalogCategoryRepository.deleteByCategoryId(category.getId());
-
-        Set<CatalogCategory> catalogCategories = catalogs.stream()
-                .map(catalog -> new CatalogCategory(null, catalog, category))
-                .collect(Collectors.toSet());
-
-        catalogCategoryRepository.saveAll(catalogCategories);
     }
 
     @Transactional
@@ -106,7 +83,6 @@ public class CategoryService {
 
         sortedCategories.forEach(dto -> 
             {
-                System.err.println(dto.index() + "\n\n");
                 categoryRepository.updateCategoryIndex(merchantId, dto.id(), dto.index());
             });
     }

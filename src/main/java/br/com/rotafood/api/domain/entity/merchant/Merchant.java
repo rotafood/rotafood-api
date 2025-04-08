@@ -4,10 +4,10 @@ import java.util.UUID;
 
 import br.com.rotafood.api.domain.entity.address.Address;
 import br.com.rotafood.api.domain.entity.catalog.Shift;
+import br.com.rotafood.api.domain.entity.logistic.MerchantLogisticSetting;
 
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -15,7 +15,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -43,10 +42,6 @@ public class Merchant {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ownerUserId")
-    private MerchantUser ownerUser;
-
     @Column(length = 64)
     private String name;
     
@@ -65,19 +60,35 @@ public class Merchant {
     @Column
     private String phone;
 
+    @Column(nullable = false)
+    private String ownerEmail;
+
+
+    @Column
+    private String imagePath;
+
     @Enumerated(value = EnumType.STRING)
     private MerchantType merchantType;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
-    private Date createdAt;
-
-    @Column
-    private String imagePath;
+    private Instant createdAt;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     private Instant lastOpenedUtc;
+
+    @Column
+    private String stripeCustomerId;
+
+    @Column
+    private String stripeSubscriptionId;
+
+    @Column
+    private String stripeSessionId;
+
+    @Column
+    private Boolean isSubscriptionActive;
 
     @OneToOne
     @JoinColumn(name = "addressId")

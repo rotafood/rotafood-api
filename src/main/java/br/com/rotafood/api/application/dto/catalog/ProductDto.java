@@ -1,6 +1,5 @@
 package br.com.rotafood.api.application.dto.catalog;
 
-import java.util.List;
 import java.util.UUID;
 
 import br.com.rotafood.api.domain.entity.catalog.PackagingType;
@@ -21,9 +20,7 @@ public record ProductDto(
     Serving serving,
     String imagePath,
     PackagingType packagingType,
-    List<ProductPackagingDto> packagings,
-    List<ProductOptionGroupDto> optionGroups,
-    
+    ProductPackagingDto packaging,    
     Integer quantity
 ) {
     public ProductDto(Product product) {
@@ -36,12 +33,7 @@ public record ProductDto(
             product.getServing(),
             product.getImagePath(),
             product.getPackagingType(),
-            product.getProductPackagings() != null ? product.getProductPackagings().stream().map(ProductPackagingDto::new).toList() : null,
-            product.getProductOptionGroups() != null 
-            ? product.getProductOptionGroups().stream()
-                .map(ProductOptionGroupDto::new)
-                .toList()
-            : null,           
+            product.getProductPackaging() != null ? new ProductPackagingDto(product.getProductPackaging()) : null,         
             product.getQuantity()
         );
     }

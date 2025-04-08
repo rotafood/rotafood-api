@@ -67,9 +67,9 @@ public class OptionGroupService {
     private void updateOptions(OptionGroup optionGroup, List<OptionDto> optionDtos) {
     
         List<UUID> incomingOptionIds = optionDtos.stream()
-        .map(OptionDto::id)
-        .filter(Objects::nonNull)
-        .toList();
+            .map(OptionDto::id)
+            .filter(Objects::nonNull)
+            .toList();
 
         List<Option> optionsToRemove = optionGroup.getOptions().stream()
                 .filter(option -> !incomingOptionIds.contains(option.getId()))

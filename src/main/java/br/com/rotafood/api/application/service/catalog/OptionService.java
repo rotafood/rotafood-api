@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.rotafood.api.application.dto.catalog.OptionDto;
-import br.com.rotafood.api.application.dto.catalog.ProductOptionDto;
+import br.com.rotafood.api.application.dto.catalog.ProductDto;
 import br.com.rotafood.api.domain.entity.catalog.Option;
 import br.com.rotafood.api.domain.entity.catalog.OptionGroup;
 import br.com.rotafood.api.domain.entity.catalog.Product;
@@ -48,20 +48,15 @@ public class OptionService {
 
         option.setStatus(optionDto.status());
 
-        List<Option> options = optionGroup.getOptions().stream().toList();
-
-
-        int newIndex = optionDto.index() == -1 
-                ? options.stream().map(Option::getIndex).max(Integer::compareTo).orElse(0) + 1
-                : optionDto.index();
-
-        option.setIndex(newIndex);
+        option.setIndex(optionDto.index());
 
         option.setFractions(optionDto.fractions());
 
         option.setProduct(product);
-        
-        optionGroup.addOption(option);
+
+        if (!optionGroup.getOptions().contains(option)) {
+            optionGroup.addOption(option);
+        }
 
         optionRepository.save(option);
 
@@ -78,7 +73,7 @@ public class OptionService {
     }
 
     @Transactional
-    public Product updateOrCreateProductOption(ProductOptionDto productDto, UUID merchantId) {
+    public Product updateOrCreateProductOption(ProductDto productDto, UUID merchantId) {
         Merchant merchant = this.merchantRepository.getReferenceById(merchantId);
 
         Product product = productDto.id() != null

@@ -1,7 +1,5 @@
 package br.com.rotafood.api.domain.entity.catalog;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
@@ -16,7 +14,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -49,7 +47,6 @@ public class Product {
     @Column(length = 512)
     private String additionalInformation;
 
-
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private Serving serving = Serving.NOT_APPLICABLE; 
@@ -58,40 +55,17 @@ public class Product {
     
     @Column
     @Enumerated(value = EnumType.STRING)
-    private PackagingType packagingType;
+    private PackagingType packagingType = PackagingType.NOT_APPLICABLE;
 
     @Column
     private Integer quantity;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<ProductPackaging> productPackagings = new ArrayList<>();
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "productPackagingId")
+    private ProductPackaging productPackaging;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<ProductOptionGroup> productOptionGroups = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "merchantId", nullable = false)
     private Merchant merchant;
-
-    public void addProductPackaging(ProductPackaging packaging) {
-        this.productPackagings.add(packaging);
-        packaging.setProduct(this);
-    }
-
-    public void removeProductPackaging(ProductPackaging packaging) {
-        this.productPackagings.remove(packaging);
-        packaging.setProduct(null);
-    }
-
-
-
-    public void addProductOptionGroup(ProductOptionGroup productOptionGroup) {
-        this.productOptionGroups.add(productOptionGroup);
-        productOptionGroup.setProduct(this);
-    }
-
-    public void removeProductOptionGroup(ProductOptionGroup productOptionGroup) {
-        this.productOptionGroups.remove(productOptionGroup);
-        productOptionGroup.setProduct(null);
-    }
 }

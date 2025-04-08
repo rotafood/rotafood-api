@@ -2,7 +2,6 @@ package br.com.rotafood.api.domain.entity.command;
 
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.UUID;
 
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
@@ -16,7 +15,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -45,27 +44,18 @@ public class Command {
     @Column()
     private String name;
 
-    @OneToMany(mappedBy = "command", orphanRemoval = false, cascade = CascadeType.ALL)
-    private List<Order> orders;
+   @OneToOne(mappedBy = "command", cascade = CascadeType.ALL, orphanRemoval = false, fetch = FetchType.LAZY)
+    private Order order;
 
     @Column(precision = 10, scale = 2)
-    private BigDecimal pending;
+    private BigDecimal total;
     
-    @Column(precision = 10, scale = 2)
-    private BigDecimal prepaid;
+    @Column()
+    private boolean paid;
 
     @ManyToOne(fetch = FetchType.LAZY)    
     @JoinColumn(name = "merchantId")
     private Merchant merchant;
 
-    public void updateTotals() {
-        this.pending = this.orders.stream()
-            .map(o -> o.getPayment().getPending() != null ? o.getPayment().getPending() : BigDecimal.ZERO)
-            .reduce(BigDecimal.ZERO, BigDecimal::add);
-    
-        this.prepaid = this.orders.stream()
-            .map(o -> o.getPayment().getPrepaid() != null ? o.getPayment().getPrepaid() : BigDecimal.ZERO)
-            .reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
     
 }

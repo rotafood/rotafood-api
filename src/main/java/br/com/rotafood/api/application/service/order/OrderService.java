@@ -1,20 +1,21 @@
 package br.com.rotafood.api.application.service.order;
 
-
+import br.com.rotafood.api.application.dto.command.CommandDto;
 import br.com.rotafood.api.application.dto.order.FullOrderDto;
-import br.com.rotafood.api.domain.entity.order.Order;
-import br.com.rotafood.api.domain.entity.order.OrderStatus;
-
-import br.com.rotafood.api.domain.entity.order.OrderType;
+import br.com.rotafood.api.application.service.command.CommandService;
+import br.com.rotafood.api.application.service.customer.CustomerService;
+import br.com.rotafood.api.domain.entity.command.Command;
+import br.com.rotafood.api.domain.entity.merchant.Merchant;
+import br.com.rotafood.api.domain.entity.order.*;
+import br.com.rotafood.api.domain.repository.MerchantRepository;
 import br.com.rotafood.api.domain.repository.OrderRepository;
 import br.com.rotafood.api.infra.rabbitmq.RabbitQueueManager;
-import br.com.rotafood.api.infra.twilio.TwilioService;
+import br.com.rotafood.api.infra.redis.RecentOrderCacheService;
 import br.com.rotafood.api.infra.utils.DateUtils;
-import br.com.rotafood.api.domain.repository.MerchantRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ValidationException;
-
+import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,60 +24,33 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class OrderService {
 
-    @Autowired
-    private OrderRepository orderRepository;
-
-    @Autowired
-    private MerchantRepository merchantRepository;
-
-    @Autowired
-    private OrderTotalService orderTotalService;
-
-    @Autowired
-    private OrderCustomerService orderCustomerService;
-
-    @Autowired
-    private OrderScheduleService orderScheduleService;
-
-    @Autowired
-    private OrderDeliveryService orderDeliveryService;
-
-    @Autowired
-    private OrderTakeoutService orderTakeoutService;
-
-    @Autowired
-    private OrderPaymentService orderPaymentService;
-
-    @Autowired
-    private OrderItemService orderItemService;
-
-    @Autowired
-    private OrderAdditionalFeeService orderAdditionalFeeService;
-
-    @Autowired
-    private OrderBenefitService orderBenefitService;
-
-    @Autowired
-    private TwilioService twilioService;
-
-    @Autowired
-    private RabbitTemplate rabbitTemplate;
-
-    @Autowired
-    private RabbitQueueManager rabbitQueueManager;
-
+    
+    @Autowired private OrderRepository orderRepository;
+    @Autowired private MerchantRepository merchantRepository;
+    @Autowired private OrderTotalService orderTotalService;
+    @Autowired private CustomerService customerService;
+    @Autowired private OrderScheduleService orderScheduleService;
+    @Autowired private OrderDeliveryService orderDeliveryService;
+    @Autowired private OrderTakeoutService orderTakeoutService;
+    @Autowired private PaymentRecordService orderPaymentService;
+    @Autowired private OrderItemService orderItemService;
+    @Autowired private OrderAdditionalFeeService orderAdditionalFeeService;
+    @Autowired private OrderBenefitService orderBenefitService;
+    @Autowired private CommandService commandService;
+    @Autowired private RabbitTemplate rabbitTemplate;
+    @Autowired private RecentOrderCacheService recentOrderCacheService;
+    @Autowired private RabbitQueueManager rabbitQueueManager;
 
     @Value("${api.security.allowed.origin}")
     private String allowedOrigin;
-
-    private static final String ADMIN_PHONE_NUMBER = "+5519981859845";
-
 
 
     public List<Order> getAllByMerchantId(UUID merchantId) {
@@ -89,156 +63,160 @@ public class OrderService {
     }
 
     @Transactional
-    public Order createOrUpdate(FullOrderDto fullOrderDto, UUID merchantId) {
-        
-        var merchant = merchantRepository.findById(merchantId)
-            .orElseThrow(() -> new EntityNotFoundException("Merchant não encontrado."));
+    public Order createOrUpdate(FullOrderDto dto, UUID merchantId) {
+        var merchant = getOpenedMerchant(merchantId);
 
-        if (merchant.getLastOpenedUtc() == null || 
-            Instant.now().minusSeconds(30000).isAfter(merchant.getLastOpenedUtc())) {
-            throw new ValidationException("O restaurante não está aberto no momento.");
-        }
+        Order order = dto.id() != null
+                ? getByIdAndMerchantId(dto.id(), merchantId)
+                : new Order();
 
-        
-
-        Order order = fullOrderDto.id() != null
-            ? orderRepository.findByIdAndMerchantId(fullOrderDto.id(), merchantId)
-                .orElseThrow(() -> new EntityNotFoundException("Order não encontrado."))
-                    : new Order();
-                    
-        if (order.getMerchantSequence() == null) {
-            Long maxSequence = orderRepository.findMaxMerchantSequenceByMerchantId(merchantId);
-            Long nextSequence = (maxSequence == null) ? 1L : maxSequence + 1L;
-            order.setMerchantSequence(nextSequence);
-        }
-
-        order.setPreparationStartDateTime(
-            fullOrderDto.preparationStartDateTime() != null ? 
-            fullOrderDto.preparationStartDateTime().toInstant() : Instant.now()
-        );
-        order.setSalesChannel(fullOrderDto.salesChannel());
-        order.setTiming(fullOrderDto.timing());
-        order.setType(fullOrderDto.type());
-        order.setStatus(fullOrderDto.status());
-        order.setExtraInfo(fullOrderDto.extraInfo());
-
-        order.setMerchant(merchant);
-
-        order.setTotal(fullOrderDto.total() != null ? this.orderTotalService.createOrUpdate(fullOrderDto.total()) : null);
-
-        order.setCustomer(fullOrderDto.customer() != null ? this.orderCustomerService.createOrUpdate(fullOrderDto.customer()) : null);
-
-        order.setDelivery(fullOrderDto.delivery() != null ? this.orderDeliveryService.createOrUpdate(fullOrderDto.delivery()) : null);
-
-        order.setSchedule(fullOrderDto.schedule() != null ? this.orderScheduleService.createOrUpdate(fullOrderDto.schedule()) : null);
-
-        order.setTakeout(fullOrderDto.takeout() != null ? this.orderTakeoutService.createOrUpdate(fullOrderDto.takeout()) : null);
-
-        order.setCustomer(fullOrderDto.customer() != null ? this.orderCustomerService.createOrUpdate(fullOrderDto.customer()) : null);
-
-        order.setPayment(fullOrderDto.payment() != null ? this.orderPaymentService.createOrUpdate(fullOrderDto.payment()) : null);
-
+        updateOrderFields(order, dto, merchant);
         orderRepository.save(order);
+        synchronizeOrderDetails(dto, order);
 
-        orderItemService.synchronizeItems(fullOrderDto.items(), order);
 
-        if (fullOrderDto.additionalFees() != null) {
-            orderAdditionalFeeService.synchronizeAdditionalFees(fullOrderDto.additionalFees(), order);
+        if (shouldNotifyKitchen(dto.status())) {
+            notifyKitchen(order);
         }
-
-        if (fullOrderDto.benefits() != null) {
-            orderBenefitService.synchronizeBenefits(fullOrderDto.benefits(), order);
-        }
-
-        this.sendSmsNotification(order);
 
         return order;
     }
 
     @Transactional
+    public Order createFromCatalogOnline(FullOrderDto dto, UUID merchantId) {
+        if (dto.id() != null)
+            throw new ValidationException("Não é permitido enviar um ID na criação online.");
+
+        var merchant = getOpenedMerchant(merchantId);
+        Order order = new Order();
+        updateOrderFields(order, dto, merchant);
+        orderRepository.save(order);
+        synchronizeOrderDetails(dto, order);
+
+
+        return order;
+    }
+
+    private void updateOrderFields(Order order, FullOrderDto dto, Merchant merchant) {
+        order.setPreparationStartDateTime(dto.preparationStartDateTime() != null
+                ? dto.preparationStartDateTime().toInstant() : Instant.now());
+        order.setSalesChannel(dto.salesChannel());
+        order.setTiming(dto.timing());
+        order.setType(dto.type());
+        order.setStatus(dto.status());
+        order.setExtraInfo(dto.extraInfo());
+        order.setMerchant(merchant);
+        order.setTotal(dto.total() != null ? orderTotalService.validateAndCalculateTotal(dto, merchant) : null);
+        order.setDelivery(dto.delivery() != null ? orderDeliveryService.createOrUpdate(dto.delivery()) : null);
+        order.setSchedule(dto.schedule() != null ? orderScheduleService.createOrUpdate(dto.schedule()) : null);
+        order.setTakeout(dto.takeout() != null ? orderTakeoutService.createOrUpdate(dto.takeout()) : null);
+        order.setPayment(dto.payment() != null ? orderPaymentService.createOrUpdate(dto.payment()) : null);
+        order.setMerchantSequence(dto.merchantSequence() != null ? dto.merchantSequence() : getNextMerchantSequence(merchant.getId()));
+        order.setCustomer(dto.customer() != null
+                ? customerService.createOrUpdateWithAddressIfDelivery(dto.customer(), dto.delivery() != null ? dto.delivery().address() : null)
+                : null);
+        order.setCommand(dto.command() != null ? addOrderToCommand(order, dto.command()) : null);
+    }
+
+    private void synchronizeOrderDetails(FullOrderDto dto, Order order) {
+        orderItemService.synchronizeItems(dto.items(), order);
+        if (dto.additionalFees() != null)
+            orderAdditionalFeeService.synchronizeAdditionalFees(dto.additionalFees(), order);
+        if (dto.benefits() != null)
+            orderBenefitService.synchronizeBenefits(dto.benefits(), order);
+    }
+
+    @Transactional
+    public Command addOrderToCommand(Order order, CommandDto commandDto) {
+        var command = commandService.getByIdAndMerchantId(commandDto.id(), order.getMerchant().getId());
+        command.setOrder(order);
+        order.setCommand(command);
+        return command;
+    }
+
+    @Transactional
     public void updateOrderStatus(UUID merchantId, UUID orderId, OrderStatus status) {
-    
-        Order order = this.orderRepository.findByIdAndMerchantId(orderId, merchantId)
-                .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado"));
-    
+        Order order = getByIdAndMerchantId(orderId, merchantId);
         order.setStatus(status);
         orderRepository.save(order);
-    
-        if (status == OrderStatus.CONFIRMED || status == OrderStatus.PREPARATION_STARTED) {
-            FullOrderDto fullOrderDto = new FullOrderDto(order);
-            String message = fullOrderDto.toComandString();
-    
-            String queueName = "queue.merchant." + merchantId;
-    
-            rabbitQueueManager.createMerchantQueue(merchantId.toString());
-    
-            rabbitTemplate.convertAndSend(queueName, message);
-        }
-    }
-    
 
+        recentOrderCacheService.addOrUpdateRecentOrder(merchantId, new FullOrderDto(order));
+        if (shouldNotifyKitchen(status))
+            notifyKitchen(order);
+    }
 
     @Transactional
     public void deleteByIdAndMerchantId(UUID orderId, UUID merchantId) {
-        Order order = orderRepository.findByIdAndMerchantId(orderId, merchantId)
-                .orElseThrow(() -> new EntityNotFoundException("Order não encontrado."));
+        Order order = getByIdAndMerchantId(orderId, merchantId);
         orderRepository.delete(order);
     }
 
-    public Page<Order> getAllByFilters(
-        UUID merchantId, 
-        List<OrderType> orderTypes, 
-        List<OrderStatus> orderStatus,
-        String startDate, 
-        String endDate,
-        Pageable pageable
-    ) {
+    public Page<Order> getAllByFilters(UUID merchantId, List<OrderType> orderTypes, List<OrderStatus> orderStatus,
+                                       String startDate, String endDate, Pageable pageable) {
         Instant start = DateUtils.parseDateStringToInstant(startDate, false);
         Instant end = DateUtils.parseDateStringToInstant(endDate, true);
-
         return orderRepository.findAllByFilters(merchantId, orderTypes, orderStatus, start, end, pageable);
     }
 
-    public Page<Order> polling(
-        UUID merchantId, 
-        List<OrderType> orderTypes, 
-        List<OrderStatus> orderStatus,
-        String startDate, 
-        String endDate,
-        Pageable pageable
-    ) {
-        Instant start = DateUtils.parseDateStringToInstant(startDate, false);
-        Instant end = DateUtils.parseDateStringToInstant(endDate, true);
+    public List<FullOrderDto> polling(UUID merchantId) {
+        merchantRepository.updateLastOpenedUtc(merchantId, Instant.now());
 
+        List<FullOrderDto> cachedOrders = recentOrderCacheService.getCachedRecentOrders(merchantId);
+        if (cachedOrders == null) {
+            Instant twoHoursAgo = Instant.now().minus(2, ChronoUnit.HOURS);
+            List<OrderStatus> activeStatuses = List.of(
+                    OrderStatus.CREATED, OrderStatus.CONFIRMED, OrderStatus.PREPARATION_STARTED,
+                    OrderStatus.READY_TO_PICKUP, OrderStatus.DISPATCHED
+            );
+            cachedOrders = orderRepository
+                    .findRecentOrdersByStatus(merchantId, activeStatuses, twoHoursAgo)
+                    .stream().map(FullOrderDto::new).toList();
 
-        this.merchantRepository.updateLastOpenedUtc(merchantId, Instant.now());
+            recentOrderCacheService.cacheRecentOrders(merchantId, cachedOrders);
+        }
 
-        return orderRepository.findAllByFilters(merchantId, orderTypes, orderStatus, start, end, pageable);
+        return cachedOrders;
     }
 
-    private void sendSmsNotification(Order order) {
-        String orderLink = String.format("%s/cardapios/%s/pedidos/%s", 
-            allowedOrigin, 
-            order.getMerchant().getOnlineName(), 
-            order.getId()
-        );
+    private Long getNextMerchantSequence(UUID merchantId) {
+        List<FullOrderDto> cachedOrders = recentOrderCacheService.getCachedRecentOrders(merchantId);
 
-        String message = String.format(
-            "🛒 *Novo Pedido Criado!*\n\n" +
-            "📌 *ID:* %s\n" +
-            "📍 *Canal de Venda:* %s\n" +
-            "⌚ *Criado em:* %s\n" +
-            "💰 *Total:* R$ %.2f\n\n" +
-            "🔗 *Veja mais detalhes:* %s",
-            order.getId(),
-            order.getSalesChannel(),
-            DateUtils.formatToBrazilianTime(order.getCreatedAt()),
-            order.getTotal().getOrderAmount(),
-            orderLink
-        );
+        if (cachedOrders != null && !cachedOrders.isEmpty()) {
+            return cachedOrders.stream()
+                    .map(FullOrderDto::merchantSequence)
+                    .filter(seq -> seq != null)
+                    .max(Long::compareTo)
+                    .orElse(0L) + 1;
+        }
 
-        twilioService.sendSms(ADMIN_PHONE_NUMBER, message);
+        Long lastSeq = orderRepository.findMaxMerchantSequenceByMerchantId(merchantId);
+        return (lastSeq == null) ? 1L : lastSeq + 1;
     }
 
+    private boolean shouldNotifyKitchen(OrderStatus status) {
+        return status == OrderStatus.CONFIRMED || status == OrderStatus.PREPARATION_STARTED;
+    }
+
+    private void notifyKitchen(Order order) {
+        String queueName = "queue.merchant." + order.getMerchant().getId();
+        rabbitQueueManager.createMerchantQueue(order.getMerchant().getId().toString());
+        rabbitTemplate.convertAndSend(queueName, new FullOrderDto(order).toComandString());
+        order.getItems().forEach(oi -> {
+            oi.setPrinted(true);
+        });
+    }
+
+
+    private Merchant getOpenedMerchant(UUID merchantId) {
+        var merchant = merchantRepository.findById(merchantId)
+                .orElseThrow(() -> new EntityNotFoundException("Merchant não encontrado."));
+
+        boolean openedRecently = merchant.getLastOpenedUtc() != null
+                && Instant.now().minusSeconds(30000).isBefore(merchant.getLastOpenedUtc());
+
+        if (!openedRecently)
+            throw new ValidationException("O restaurante não está aberto no momento.");
+
+        return merchant;
+    }
 }
-

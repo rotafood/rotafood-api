@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
-import br.com.rotafood.api.domain.entity.catalog.CatalogContext;
 import br.com.rotafood.api.domain.entity.order.OrderItem;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
@@ -16,8 +15,11 @@ public record OrderItemDto(
     int quantity,
     @Min(0)
     BigDecimal totalPrice,
+    @Min(0)
+    BigDecimal optionsPrice,
+    Boolean printed,
     @NotNull
-    CatalogContext catalogContext,
+    UUID contextModifierId,
     @NotNull
     @Valid
     OrderItemDetailDto item,
@@ -30,8 +32,10 @@ public record OrderItemDto(
         orderItem.getId(),
         orderItem.getQuantity(),
         orderItem.getTotalPrice(),
-        orderItem.getCatalogContext(),
-        new OrderItemDetailDto(orderItem.getItem(), orderItem.getCatalogContext()),
+        orderItem.getOptionsPrice(),
+        orderItem.getPrinted() != null ? orderItem.getPrinted() : false,
+        orderItem.getContextModifier().getId(),
+        new OrderItemDetailDto(orderItem.getItem()),
         orderItem.getOptions() != null ? orderItem.getOptions().stream().map(OrderItemOptionDto::new).toList() : null
     );
 }

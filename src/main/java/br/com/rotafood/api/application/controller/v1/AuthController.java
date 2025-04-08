@@ -1,5 +1,6 @@
 package br.com.rotafood.api.application.controller.v1;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -48,7 +49,6 @@ public class AuthController {
         
         return ResponseEntity.ok().body(tokenJwtDto);
     }
-
-    
+ 
 
 }

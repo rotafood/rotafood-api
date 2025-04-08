@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import br.com.rotafood.api.domain.entity.command.Command;
+import br.com.rotafood.api.domain.entity.customer.Customer;
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -84,8 +85,8 @@ public class Order {
     private OrderTotal total;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "orderCustomerId")
-    private OrderCustomer customer;
+    @JoinColumn(name = "customerId")
+    private Customer customer;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "orderDeliveryId")
@@ -100,8 +101,8 @@ public class Order {
     private OrderTakeout takeout;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "orderPaymentId")
-    private OrderPayment payment;
+    @JoinColumn(name = "paymentRecordId")
+    private PaymentRecord payment;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "commandId")

@@ -3,7 +3,6 @@ package br.com.rotafood.api.application.dto.order;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-import br.com.rotafood.api.domain.entity.catalog.CatalogContext;
 import br.com.rotafood.api.domain.entity.order.OrderItemOption;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
@@ -16,11 +15,11 @@ public record OrderItemOptionDto(
     @Min(0)
     BigDecimal totalPrice,
     @NotNull
-    CatalogContext catalogContext,
-    @NotNull
-    String groupName,
+    UUID contextModifierId,
     @NotNull
     UUID groupId,
+    @NotNull
+    String groupName,
     @NotNull
     @Valid
     OrderOptionDetailDto option
@@ -30,10 +29,10 @@ public record OrderItemOptionDto(
             orderItemOption.getId(),
             orderItemOption.getQuantity(),
             orderItemOption.getTotalPrice(),
-            orderItemOption.getCatalogContext(),
-            orderItemOption.getOption() != null ? orderItemOption.getOption().getOptionGroup().getName() : null,
+            orderItemOption.getContextModifier().getId(),
             orderItemOption.getOption() != null ? orderItemOption.getOption().getOptionGroup().getId() : null,
-            orderItemOption.getOption() != null ? new OrderOptionDetailDto(orderItemOption.getOption(), orderItemOption.getCatalogContext()) : null
+            orderItemOption.getOption() != null ? orderItemOption.getOption().getOptionGroup().getName() : null,
+            orderItemOption.getOption() != null ? new OrderOptionDetailDto(orderItemOption.getOption()) : null
         );
     }
 

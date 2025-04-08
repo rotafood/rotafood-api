@@ -46,7 +46,6 @@ public class MerchantUser implements UserDetails  {
 
     private String phone;
 
-
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private MerchantUserRole role;

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.rotafood.api.application.dto.address.AddressDto;
+import br.com.rotafood.api.application.dto.AddressDto;
 import br.com.rotafood.api.application.dto.logistic.VrpOriginDto;
 import br.com.rotafood.api.application.dto.logistic.VrpOutDto;
 import br.com.rotafood.api.application.service.logistic.LogisticService;

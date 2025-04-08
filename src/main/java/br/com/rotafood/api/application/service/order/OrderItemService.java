@@ -87,7 +87,7 @@ public class OrderItemService {
 
         orderItemOption.setTotalPrice(optionDto.totalPrice());
 
-        orderItemOption.setCatalogContext(optionDto.catalogContext());
+        // orderItemOption.setContextModifier(this.contextModifierRepository.findById(optionDto.contextModifierId()));
 
         orderItemOption.setOption(option);
 

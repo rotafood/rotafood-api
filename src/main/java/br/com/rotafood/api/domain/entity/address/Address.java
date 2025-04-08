@@ -3,7 +3,7 @@ package br.com.rotafood.api.domain.entity.address;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-import br.com.rotafood.api.application.dto.address.AddressDto;
+import br.com.rotafood.api.application.dto.AddressDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -41,7 +41,6 @@ public class Address {
     @Column(scale = 6, precision = 9)
     private BigDecimal longitude;
 
-
     public Address(AddressDto dto) {
         this.country = dto.country();
         this.state = dto.state();
@@ -55,5 +54,19 @@ public class Address {
         this.latitude = dto.latitude();
         this.longitude = dto.longitude();
     } 
+
+    public void updateFromAddressDto(AddressDto dto) {
+        this.country = dto.country();
+        this.state = dto.state();
+        this.city = dto.city();
+        this.neighborhood = dto.neighborhood();
+        this.postalCode = dto.postalCode();
+        this.streetName = dto.streetName();
+        this.streetNumber = dto.streetNumber();
+        this.formattedAddress = dto.formattedAddress();
+        this.complement = dto.complement();
+        this.latitude = dto.latitude();
+        this.longitude = dto.longitude();
+    }
 
 }

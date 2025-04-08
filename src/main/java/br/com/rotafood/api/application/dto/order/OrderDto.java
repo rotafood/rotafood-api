@@ -9,6 +9,7 @@ import br.com.rotafood.api.infra.utils.DateUtils;
 
 public record OrderDto(
     UUID id,
+    Long merchantSequence,
     Date modifiedAt,
     Date createdAt,
     Date preparationStartDateTime,
@@ -23,6 +24,7 @@ public record OrderDto(
     public OrderDto(Order order) {
         this(
             order.getId(),
+            order.getMerchantSequence(),
             DateUtils.convertInstantToDate(order.getModifiedAt()),
             DateUtils.convertInstantToDate(order.getCreatedAt()),
             DateUtils.convertInstantToDate(order.getPreparationStartDateTime()),

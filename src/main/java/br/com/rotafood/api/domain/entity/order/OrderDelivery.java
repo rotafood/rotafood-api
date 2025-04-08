@@ -1,5 +1,6 @@
 package br.com.rotafood.api.domain.entity.order;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.UUID;
 
@@ -52,8 +53,11 @@ public class OrderDelivery {
     @Temporal(TemporalType.TIMESTAMP)
     private Date deliveryDateTime;
 
+    @Column()
+    private BigDecimal volumeMl;
+
     @OneToOne
-    @JoinColumn(name = "addressId")
+    @JoinColumn(name = "addressId") 
     private Address address;
 
 }

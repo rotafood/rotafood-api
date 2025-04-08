@@ -15,7 +15,7 @@ public record OptionDto (
     Integer index,
     List<ContextModifierDto> contextModifiers,
     List<Integer> fractions,
-    ProductOptionDto product
+    ProductDto product
 ) {
     public OptionDto(Option option) {
         this(
@@ -24,7 +24,7 @@ public record OptionDto (
             option.getIndex(),
             option.getContextModifiers() != null ? option.getContextModifiers().stream().map(ContextModifierDto::new).toList() : null,
             option.getFractions() != null ? option.getFractions() : null,
-            option.getProduct() != null ? new ProductOptionDto(option.getProduct()) : null
+            option.getProduct() != null ? new ProductDto(option.getProduct()) : null
         );
     }
 }

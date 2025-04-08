@@ -43,7 +43,6 @@ public class CatalogCacheService {
                                     .toList();
 
             String json = objectMapper.writeValueAsString(categories);
-
             ByteArrayInputStream inputStream = new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8));
 
             String objectName = "catalogs/" + merchantId + ".json";

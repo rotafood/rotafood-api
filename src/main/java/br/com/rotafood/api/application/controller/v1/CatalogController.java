@@ -53,19 +53,6 @@ public class CatalogController {
     ) { 
         return new CatalogDto(this.catalogService.getByIdAndMerchantId(catalogId, merchantId));
     }
-
-
-
-  
-    @PutMapping
-    public CatalogDto updateOrCreate(
-        @PathVariable UUID merchantId,
-        @PathVariable UUID catalogId,
-        @RequestBody @Valid CatalogDto catalogDto
-    ) {
-        return new CatalogDto(this.catalogService.updateOrCreate(catalogDto, merchantId));
-    }
-
   
     @PutMapping("/{catalogId}/{status}")
     public CatalogDto changeStatus(

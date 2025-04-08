@@ -1,13 +1,14 @@
 package br.com.rotafood.api.application.dto.logistic;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.UUID;
 
-import br.com.rotafood.api.application.dto.address.AddressDto;
+import br.com.rotafood.api.application.dto.AddressDto;
 
 public record VrpOrderDto (
     UUID id,
-    double volumeLiters,
+    BigDecimal volumeLiters,
     Date createdAt,
     AddressDto address
 ) {}

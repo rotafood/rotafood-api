@@ -37,9 +37,8 @@ public class OrderDeliveryService {
         Address address = orderDeliveryDto.address() != null
                 ? addressRepository.save(new Address(orderDeliveryDto.address()))
                 : new Address(orderDeliveryDto.address());
-
-        orderDelivery.setMode(orderDeliveryDto.mode());
         orderDelivery.setDeliveryBy(orderDeliveryDto.deliveryBy());
+        orderDelivery.setMode(orderDeliveryDto.mode());
         orderDelivery.setDescription(orderDeliveryDto.description());
         orderDelivery.setPickupCode(orderDeliveryDto.pickupCode());
         orderDelivery.setDeliveryDateTime(orderDeliveryDto.deliveryDateTime());

@@ -6,6 +6,7 @@ import java.util.UUID;
 import java.util.Optional;
 
 import br.com.rotafood.api.application.dto.command.CommandDto;
+import br.com.rotafood.api.application.dto.customer.CustomerDto;
 import br.com.rotafood.api.domain.entity.order.*;
 import br.com.rotafood.api.infra.utils.DateUtils;
 import jakarta.validation.Valid;
@@ -32,9 +33,8 @@ public record FullOrderDto(
     @NotNull
     UUID merchantId,
     OrderTotalDto total,
-    @NotNull
     @Valid
-    OrderCustomerDto customer,
+    CustomerDto customer,
     @Valid
     OrderDeliveryDto delivery,
     @Valid
@@ -45,7 +45,7 @@ public record FullOrderDto(
     CommandDto command,
     @Valid
     @NotNull
-    OrderPaymentDto payment,
+    PaymentRecordDto payment,
     @Valid
     @NotEmpty
     List<OrderItemDto> items,
@@ -65,12 +65,12 @@ public record FullOrderDto(
          order.getExtraInfo(),
          order.getMerchant().getId(),
          Optional.ofNullable(order.getTotal()).map(OrderTotalDto::new).orElse(null),
-         Optional.ofNullable(order.getCustomer()).map(OrderCustomerDto::new).orElse(null),
+         Optional.ofNullable(order.getCustomer()).map(CustomerDto::new).orElse(null),
          Optional.ofNullable(order.getDelivery()).map(OrderDeliveryDto::new).orElse(null),
          Optional.ofNullable(order.getSchedule()).map(OrderScheduleDto::new).orElse(null),
          Optional.ofNullable(order.getTakeout()).map(OrderTakeoutDto::new).orElse(null),
          Optional.ofNullable(order.getCommand()).map(CommandDto::new).orElse(null),
-         Optional.ofNullable(order.getPayment()).map(OrderPaymentDto::new).orElse(null),
+         Optional.ofNullable(order.getPayment()).map(PaymentRecordDto::new).orElse(null),
          order.getItems().stream().map(OrderItemDto::new).toList(),
          Optional.ofNullable(order.getBenefits()).map(benefits -> benefits.stream().map(OrderBenefitDto::new).toList()).orElse(List.of()),
          Optional.ofNullable(order.getAdditionalFees()).map(fees -> fees.stream().map(OrderAdditionalFeeDto::new).toList()).orElse(List.of())
@@ -143,7 +143,6 @@ public record FullOrderDto(
         if (type == null) return "Desconhecido";
         return switch (type) {
             case DELIVERY -> "Entrega";
-            case DINE_IN -> "No local IFOOD";
             case SCHEDULE -> "Agendado";
             case TAKEOUT -> "Retirada";
             case COMMAND -> "Comanda";

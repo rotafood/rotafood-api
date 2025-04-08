@@ -1,6 +1,7 @@
 package br.com.rotafood.api.application.controller.v1;
 
 
+import br.com.rotafood.api.application.dto.command.CommandDto;
 import br.com.rotafood.api.application.dto.command.FullCommandDto;
 import br.com.rotafood.api.application.service.command.CommandService;
 import jakarta.validation.Valid;
@@ -24,6 +25,21 @@ public class CommandController {
         return commandService.getAllByMerchantId(merchantId)
                 .stream()
                 .map(FullCommandDto::new)
+                .toList();
+    }
+
+    @GetMapping("/simplified")
+    public List<CommandDto> getAllSimplified(
+        @PathVariable UUID merchantId
+    ) {
+
+        System.err.println(commandService.getAllByMerchantId(merchantId)
+        .stream()
+        .map(CommandDto::new)
+        .toList());
+        return commandService.getAllByMerchantId(merchantId)
+                .stream()
+                .map(CommandDto::new)
                 .toList();
     }
 

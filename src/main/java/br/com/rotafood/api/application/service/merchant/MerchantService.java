@@ -1,10 +1,7 @@
 package br.com.rotafood.api.application.service.merchant;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -14,7 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import br.com.rotafood.api.application.dto.address.AddressDto;
+import br.com.rotafood.api.application.dto.AddressDto;
 import br.com.rotafood.api.application.dto.catalog.ShiftDto;
 import br.com.rotafood.api.application.dto.merchant.FullMerchantDto;
 import br.com.rotafood.api.application.dto.merchant.MerchantCreateDto;
@@ -25,8 +22,8 @@ import br.com.rotafood.api.application.dto.merchant.OwnerCreateDto;
 import br.com.rotafood.api.application.service.catalog.CatalogService;
 import br.com.rotafood.api.domain.entity.address.Address;
 import br.com.rotafood.api.domain.entity.catalog.Shift;
+import br.com.rotafood.api.domain.entity.logistic.MerchantLogisticSetting;
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
-import br.com.rotafood.api.domain.entity.merchant.MerchantLogisticSetting;
 import br.com.rotafood.api.domain.entity.merchant.MerchantOrderEstimate;
 import br.com.rotafood.api.domain.entity.merchant.MerchantUser;
 import br.com.rotafood.api.domain.entity.merchant.MerchantUserRole;
@@ -66,7 +63,7 @@ public class MerchantService {
 
         Address address = createAddress(merchantOwnerCreationDto.merchant().address());
         
-        Merchant merchant = createMerchantEntity(merchantOwnerCreationDto.merchant(), address);
+        Merchant merchant = createMerchantEntity(merchantOwnerCreationDto.merchant(), address, merchantOwnerCreationDto.owner().email());
 
         MerchantUser merchantUser = createOwer(merchantOwnerCreationDto.owner(), merchant);
 
@@ -99,24 +96,29 @@ public class MerchantService {
         return addressRepository.save(new Address(addressDto));
     }
 
-    private Merchant createMerchantEntity(MerchantCreateDto merchantDto, Address address) {
+    private Merchant createMerchantEntity(MerchantCreateDto merchantDto, Address address, String ownerEmail) {
         Merchant merchant = new Merchant(
-            null, 
             null,
-            merchantDto.name(), 
-            null, 
-            merchantDto.description(), 
+            merchantDto.name(),
+            null,
+            merchantDto.description(),
             merchantDto.documentType(),
-            merchantDto.document(), 
+            merchantDto.document(),
             merchantDto.phone(),
-            merchantDto.merchantType(), 
-            Date.from(LocalDateTime.now().atZone(ZoneId.of("America/Sao_Paulo")).toInstant()), 
+            ownerEmail,
             null,
+            merchantDto.merchantType(),
             Instant.now(),
-            address, 
+            Instant.now(),
+            null,
+            null,
+            null,
+            false, 
+            address,
             null,
             null,
             null
+
         );
         return merchantRepository.save(merchant);
     }
@@ -146,6 +148,7 @@ public class MerchantService {
                 this.addressRepository.findById(merchantDto.address().id())
                 .orElseThrow(() -> new EntityNotFoundException("Endereço não encontrado"))
                 : new Address(merchantDto.address());
+            currentAddress.updateFromAddressDto(merchantDto.address());
             addressRepository.save(currentAddress);
         }
         
@@ -172,9 +175,11 @@ public class MerchantService {
         MerchantLogisticSetting setting = merchant.getLogisticSetting() != null
             ? merchant.getLogisticSetting() : new MerchantLogisticSetting();
 
-        setting.setKmRadius(settingDto.kmRadius());
-        setting.setMinTax(settingDto.minTax());
-        setting.setTaxPerKm(settingDto.taxPerKm());
+        setting.setMaxDeliveryRadiusKm(settingDto.maxDeliveryRadiusKm());
+        setting.setMinDeliveryFee(settingDto.minDeliveryFee());
+        setting.setDeliveryFeePerKm(settingDto.deliveryFeePerKm());
+        setting.setFreeDeliveryRadiusKm(settingDto.freeDeliveryRadiusKm());
+
         logisticSettingRepository.save(setting);
         merchant.setLogisticSetting(setting);
 
@@ -227,12 +232,11 @@ public class MerchantService {
 
     private MerchantUser createOwer(OwnerCreateDto ownerDto, Merchant merchant) {
         MerchantUser merchantUser = new MerchantUser();
-        merchant.setOwnerUser(merchantUser);
         merchantUser.setName(ownerDto.name());
         merchantUser.setEmail(ownerDto.email());
         merchantUser.setPassword(ownerDto.password());
         merchantUser.setPhone(ownerDto.phone());
-        merchantUser.setRole(MerchantUserRole.ADMIN);
+        merchantUser.setRole(MerchantUserRole.OWNER);
         merchantUser.setMerchant(merchant);
         return merchantUserRepository.save(merchantUser);
     }

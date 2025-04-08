@@ -11,17 +11,15 @@ public record CategoryDto(
     Integer index,
     String name,
     TemplateType template,
-    AvailabilityStatus status,
-    UUID iFoodCategoryId
-) {
+    AvailabilityStatus status
+    ) {
     public CategoryDto(Category category) {
         this(
             category.getId(),
             category.getIndex(),
             category.getName(),
             category.getTemplate(),
-            category.getStatus(),
-            category.getIFoodCategoryId() 
-        );
+            category.getStatus()        
+            );
     }
 }

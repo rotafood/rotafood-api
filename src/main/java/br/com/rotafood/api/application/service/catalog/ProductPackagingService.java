@@ -1,8 +1,6 @@
 package br.com.rotafood.api.application.service.catalog;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.rotafood.api.application.dto.catalog.ProductPackagingDto;
 import br.com.rotafood.api.domain.entity.catalog.ProductPackaging;
 import br.com.rotafood.api.domain.entity.catalog.Packaging;
-import br.com.rotafood.api.domain.entity.catalog.Product;
 import br.com.rotafood.api.domain.repository.ProductPackagingRepository;
 import jakarta.persistence.EntityNotFoundException;
 
@@ -27,49 +24,18 @@ public class ProductPackagingService {
 
 
     @Transactional
-    public List<ProductPackaging> createOrUpdateAll(List<ProductPackagingDto> productPackagingDtos, Product product, UUID merchantId) {
-        if (productPackagingDtos == null || productPackagingDtos.isEmpty()) {
-            List<ProductPackaging> toRemove = new ArrayList<>(product.getProductPackagings());
-            product.getProductPackagings().clear();
-            this.deleteAll(toRemove);
-            return List.of();
-        }
+    public ProductPackaging createOrUpdate(ProductPackagingDto productPackagingDto, UUID merchantId) {
+        Packaging packaging = packagingService.updateOrCreate(productPackagingDto.packaging(), merchantId);
 
-        List<UUID> incomingIds = productPackagingDtos.stream()
-            .map(ProductPackagingDto::id)
-            .filter(Objects::nonNull)
-            .toList();
+        ProductPackaging productPackaging = productPackagingDto.id() != null
+            ? productPackagingRepository.findById(productPackagingDto.id())
+                .orElse(new ProductPackaging())
+            : new ProductPackaging();
 
+        productPackaging.setPackaging(packaging);
+        productPackaging.setQuantityPerPackage(productPackagingDto.quantityPerPackage());
 
-        List<ProductPackaging> toRemove = product.getProductPackagings().stream()
-            .filter(pp -> !incomingIds.contains(pp.getId()))
-            .toList();
-
-        product.getProductPackagings().removeAll(toRemove);
-        this.deleteAll(toRemove);
-
-        List<ProductPackaging> updatedProductPackagings = productPackagingDtos.stream().map(productPackagingDto -> {
-            Packaging packaging = packagingService.updateOrCreate(productPackagingDto.packaging(), merchantId);
-
-            ProductPackaging productPackaging = productPackagingDto.id() != null
-                ? productPackagingRepository.findById(productPackagingDto.id())
-                    .orElse(new ProductPackaging())
-                : new ProductPackaging();
-
-            productPackaging.setPackaging(packaging);
-            productPackaging.setProduct(product);
-            productPackaging.setQuantityPerPackage(productPackagingDto.quantityPerPackage());
-
-            return productPackagingRepository.save(productPackaging);
-        }).toList();
-
-        updatedProductPackagings.forEach(updated -> {
-            if (!product.getProductPackagings().contains(updated)) {
-                product.getProductPackagings().add(updated);
-            }
-        });
-
-        return updatedProductPackagings;
+        return productPackagingRepository.save(productPackaging);
     }
 
 

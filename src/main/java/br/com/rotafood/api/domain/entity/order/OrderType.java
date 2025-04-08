@@ -4,6 +4,5 @@ public enum OrderType {
     DELIVERY, 
     SCHEDULE, 
     TAKEOUT,
-    DINE_IN,
     COMMAND
 }

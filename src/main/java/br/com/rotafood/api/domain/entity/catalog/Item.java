@@ -70,6 +70,18 @@ public class Item {
 
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Shift> shifts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<ItemOptionGroup> itemOptionGroups = new ArrayList<>();
+    public void addItemOptionGroup(ItemOptionGroup itemOptionGroup) {
+        this.itemOptionGroups.add(itemOptionGroup);
+        itemOptionGroup.setItem(this);
+    }
+
+    public void removeItemOptionGroup(ItemOptionGroup itemOptionGroup) {
+        this.itemOptionGroups.remove(itemOptionGroup);
+        itemOptionGroup.setItem(null);
+    }
     
 
     public void addContextModifier(ContextModifier modifier) {

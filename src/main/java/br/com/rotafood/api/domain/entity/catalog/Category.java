@@ -2,7 +2,6 @@ package br.com.rotafood.api.domain.entity.catalog;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
@@ -51,15 +50,12 @@ public class Category {
     @Enumerated(EnumType.STRING)
     private TemplateType template;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Item> items = new ArrayList<>();    
 
     @ManyToOne(fetch = FetchType.LAZY)    
     @JoinColumn(name = "merchantId")
     private Merchant merchant;
-
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<CatalogCategory> catalogCategories;
 
     @Column(nullable = true)
     private UUID iFoodCategoryId;

@@ -40,7 +40,7 @@ public class OrderController {
         @RequestParam(required = false) String startDate,
         @RequestParam(required = false) String endDate,
         @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "10") int size,
+        @RequestParam(defaultValue = "100") int size,
         @RequestParam(defaultValue = "createdAt") String sortBy,
         @RequestParam(defaultValue = "desc") String sortDirection) {
         
@@ -60,38 +60,14 @@ public class OrderController {
         @PathVariable UUID merchantId,
         @RequestParam(defaultValue = "ROTAFOOD") List<OrderSalesChannel> sources) {
 
-        List<OrderStatus> orderStatuses = List.of(
-            OrderStatus.CREATED, OrderStatus.CONFIRMED, OrderStatus.PREPARATION_STARTED, OrderStatus.READY_TO_PICKUP
-        );
-
         merchantService.updateMerchantOpened(merchantId, sources);
 
         List<FullOrderDto> orders = orderService.polling(
-            merchantId, null, orderStatuses, null, null, Pageable.unpaged()
-        ).map(FullOrderDto::new).toList();
+            merchantId
+        );
 
         return ResponseEntity.ok(orders);
     }
-
-    // @GetMapping("/prints")
-    // public ResponseEntity<List<String>> prints(
-    //     @PathVariable UUID merchantId) {
-
-    //     List<OrderStatus> orderStatuses = List.of(
-    //         OrderStatus.CREATED, OrderStatus.CONFIRMED, OrderStatus.PREPARATION_STARTED
-    //     );
-
-    //     List<String> orders = orderService.getAllByFilters(
-    //         merchantId, null, orderStatuses, null, null, Pageable.unpaged()
-    //     )
-    //         .map(FullOrderDto::new)
-    //         .map(FullOrderDto::toComandString)
-    //         .toList();
-
-    //     return ResponseEntity.ok(orders);
-    // }
-
-
 
     @PutMapping("/{orderId}/status/{status}")
     public ResponseEntity<Void> updateOrderStatus(
