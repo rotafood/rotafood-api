@@ -38,7 +38,7 @@ public class PaymentRecordMethod {
     private PaymentRecordMethodType method;
 
     @Column(nullable = false)
-    private boolean prepaid;
+    private boolean paid;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 10, nullable = false)

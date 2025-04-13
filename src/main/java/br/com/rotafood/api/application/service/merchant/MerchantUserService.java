@@ -44,14 +44,9 @@ public class MerchantUserService {
         user.setEmail(dto.email());
         user.setPhone(dto.phone());
         user.setPassword(dto.password());
-        try {
-            MerchantUserRole role = MerchantUserRole.valueOf(dto.role().name());
-            if (role == MerchantUserRole.OWNER) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Não é permitido criar usuários com papel OWNER");
-            }
-            user.setRole(role);
-        } catch (IllegalArgumentException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Papel inválido");
+
+        if (dto.role() != MerchantUserRole.OWNER) {
+            user.setRole(dto.role()); 
         }
         user.setMerchant(merchant);
 
@@ -69,7 +64,10 @@ public class MerchantUserService {
 
         user.setName(dto.name());
         user.setPhone(dto.phone());
-        user.setRole(dto.role());
+
+        if (dto.role() != MerchantUserRole.OWNER) {
+            user.setRole(dto.role()); 
+        }
 
         return merchantUserRepository.save(user);
     }
@@ -78,4 +76,16 @@ public class MerchantUserService {
         return merchantUserRepository.findByMerchantId(merchantId);
     }
 
+    @Transactional
+    public MerchantUser deleteMerchantUser(UUID merchantId, UUID userId) {
+        MerchantUser user = merchantUserRepository.findById(userId)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
+    
+        if (user.getRole() == MerchantUserRole.OWNER) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Usuário com papel OWNER não pode ser deletado");
+        }
+    
+        merchantUserRepository.delete(user);
+        return user;
+    }
 }

@@ -23,7 +23,7 @@ import br.com.rotafood.api.application.dto.logistic.VrpInDto;
 import br.com.rotafood.api.application.dto.logistic.VrpOrderDto;
 import br.com.rotafood.api.application.dto.logistic.VrpOriginDto;
 import br.com.rotafood.api.application.dto.logistic.VrpOutDto;
-import br.com.rotafood.api.domain.entity.logistic.MerchantLogisticSetting;
+import br.com.rotafood.api.domain.entity.merchant.MerchantLogisticSetting;
 import br.com.rotafood.api.infra.redis.RouteCacheService;
 
 
@@ -129,9 +129,9 @@ public class LogisticService {
                 distanceDto.id(),
                 distanceDto.origin(),
                 distanceDto.destiny(),
-                distanceDto.routeLine(),
                 distanceDto.distanceMeters(),
-                this.calculateDeliveryFee(distanceDto.distanceMeters(), logisticSetting)
+                this.calculateDeliveryFee(distanceDto.distanceMeters(), logisticSetting),
+                distanceDto.routeLine()
             );
 
             routeCacheService.saveRouteToCache(origin, destiny, route);
@@ -143,26 +143,32 @@ public class LogisticService {
     }
 
 
+    
     public BigDecimal calculateDeliveryFee(BigDecimal distanceMeters, MerchantLogisticSetting logisticSetting) {
-        System.err.println(distanceMeters + "\n\n" + logisticSetting +  " OLA   \n\n\n\n");
         if (distanceMeters == null || logisticSetting == null) {
             return BigDecimal.ZERO;
         }
-
+    
         BigDecimal distanceKm = distanceMeters
                 .divide(BigDecimal.valueOf(1000), 2, RoundingMode.UP);
-
-        BigDecimal fee = logisticSetting.getMinDeliveryFee()
-                .add(logisticSetting.getDeliveryFeePerKm().multiply(distanceKm));
-
-        BigDecimal half = new BigDecimal("0.50");
-        BigDecimal remainder = fee.remainder(half);
-
+    
+        BigDecimal fee = logisticSetting.getDeliveryFeePerKm().multiply(distanceKm);
+    
+        BigDecimal roundingFactor = new BigDecimal("0.50");
+        BigDecimal remainder = fee.remainder(roundingFactor);
+    
         if (remainder.compareTo(BigDecimal.ZERO) > 0) {
-            fee = fee.add(half.subtract(remainder));
+            fee = fee.add(roundingFactor.subtract(remainder));
         }
-
+    
+        if (fee.compareTo(logisticSetting.getMinDeliveryFee()) < 0) {
+            fee = logisticSetting.getMinDeliveryFee();
+        }
+    
         return fee.setScale(2, RoundingMode.UP);
     }
+    
+    
+    
 
 }

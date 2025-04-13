@@ -7,6 +7,7 @@ import br.com.rotafood.api.domain.entity.catalog.Option;
 import br.com.rotafood.api.domain.entity.order.Order;
 import br.com.rotafood.api.domain.entity.order.OrderItem;
 import br.com.rotafood.api.domain.entity.order.OrderItemOption;
+import br.com.rotafood.api.domain.repository.ContextModifierRepository;
 import br.com.rotafood.api.domain.repository.ItemRepository;
 import br.com.rotafood.api.domain.repository.OptionRepository;
 import br.com.rotafood.api.domain.repository.OrderItemOptionRepository;
@@ -15,6 +16,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 
 import java.util.List;
 import java.util.Objects;
@@ -35,6 +37,9 @@ public class OrderItemService {
     @Autowired
     private OptionRepository optionRepository;
 
+    @Autowired
+    private ContextModifierRepository contextModifierRepository;
+
     @Transactional
     public OrderItem createOrUpdate(OrderItemDto orderItemDto, Order order) {
 
@@ -47,6 +52,11 @@ public class OrderItemService {
                 : new OrderItem();
 
         orderItem.setItem(catalogItem);
+
+        orderItem.setContextModifier(
+                this.contextModifierRepository.findById(orderItemDto.contextModifierId())
+                        .orElseThrow(() -> new EntityNotFoundException("Context modifier não encontrado!"))
+                );
 
         orderItem.setQuantity(orderItemDto.quantity());
 
@@ -73,21 +83,24 @@ public class OrderItemService {
     }
 
     @Transactional
-    public OrderItemOption createOrUpdateOption(OrderItemOptionDto optionDto, OrderItem orderItem) {
+    public OrderItemOption createOrUpdateOption(OrderItemOptionDto orderItemOptionDto, OrderItem orderItem) {
 
-        OrderItemOption orderItemOption = optionDto.id() != null
-                ? orderItemOptionRepository.findById(optionDto.id())
+        OrderItemOption orderItemOption = orderItemOptionDto.id() != null
+                ? orderItemOptionRepository.findById(orderItemOptionDto.id())
                         .orElse(new OrderItemOption())
                 : new OrderItemOption();
 
-        Option option = optionRepository.findById(optionDto.option().id())
+        Option option = optionRepository.findById(orderItemOptionDto.option().id())
                 .orElseThrow(() -> new EntityNotFoundException("Option not found."));
 
-        orderItemOption.setQuantity(optionDto.quantity());
+        orderItemOption.setQuantity(orderItemOptionDto.quantity());
 
-        orderItemOption.setTotalPrice(optionDto.totalPrice());
+        orderItemOption.setTotalPrice(orderItemOptionDto.totalPrice());
 
-        // orderItemOption.setContextModifier(this.contextModifierRepository.findById(optionDto.contextModifierId()));
+        orderItemOption.setContextModifier(
+                this.contextModifierRepository.findById(orderItemOptionDto.contextModifierId())
+                        .orElseThrow(() -> new EntityNotFoundException("Context modifier não encontrado!"))
+                );
 
         orderItemOption.setOption(option);
 

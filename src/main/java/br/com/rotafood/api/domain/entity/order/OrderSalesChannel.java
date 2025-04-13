@@ -4,5 +4,6 @@ public enum OrderSalesChannel {
     CALL,
     WHATSAPP,
     ROTAFOOD,
-    IFOOD
+    IFOOD,
+    TABLE
 }

@@ -1,4 +1,4 @@
-package br.com.rotafood.api.domain.entity.logistic;
+package br.com.rotafood.api.domain.entity.merchant;
 
 import java.math.BigDecimal;
 import java.util.UUID;

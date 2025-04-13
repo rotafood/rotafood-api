@@ -22,8 +22,8 @@ import br.com.rotafood.api.application.dto.merchant.OwnerCreateDto;
 import br.com.rotafood.api.application.service.catalog.CatalogService;
 import br.com.rotafood.api.domain.entity.address.Address;
 import br.com.rotafood.api.domain.entity.catalog.Shift;
-import br.com.rotafood.api.domain.entity.logistic.MerchantLogisticSetting;
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
+import br.com.rotafood.api.domain.entity.merchant.MerchantLogisticSetting;
 import br.com.rotafood.api.domain.entity.merchant.MerchantOrderEstimate;
 import br.com.rotafood.api.domain.entity.merchant.MerchantUser;
 import br.com.rotafood.api.domain.entity.merchant.MerchantUserRole;
@@ -100,7 +100,7 @@ public class MerchantService {
         Merchant merchant = new Merchant(
             null,
             merchantDto.name(),
-            null,
+            UUID.randomUUID().toString(),
             merchantDto.description(),
             merchantDto.documentType(),
             merchantDto.document(),
@@ -161,7 +161,7 @@ public class MerchantService {
         }
 
         if (merchantDto.openingHours() != null) {
-            this.updateOpeningHours(merchant, merchantDto.openingHours());
+            this.updateOpeningHours(merchantDto.openingHours(), merchant);
         }
 
         return merchantRepository.save(merchant);
@@ -169,7 +169,6 @@ public class MerchantService {
 
     public void createOrUpdateSettings(MerchantLogisticSettingDto settingDto, Merchant merchant) {
 
-        System.err.println(settingDto + "\n\n\n");
 
 
         MerchantLogisticSetting setting = merchant.getLogisticSetting() != null
@@ -198,7 +197,7 @@ public class MerchantService {
         merchant.setOrderEstimate(estimate);
     }
 
-    private void updateOpeningHours(Merchant merchant, List<ShiftDto> openingHoursDtos) {
+    private void updateOpeningHours(List<ShiftDto> openingHoursDtos, Merchant merchant) {
     
         List<UUID> incomingIds = openingHoursDtos.stream()
             .map(ShiftDto::id)

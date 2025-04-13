@@ -83,7 +83,7 @@ public class ItemService {
 
         Category category = itemDto.categoryId() != null ?
                 categoryService.getByIdAndMerchantId(itemDto.categoryId(), merchantId) :
-                categoryService.updateOrCreate(new CategoryDto(null, 0, itemDto.product().name(), TemplateType.PIZZA, AvailabilityStatus.AVAILIABLE), merchantId);
+                categoryService.updateOrCreate(new CategoryDto(null, 1, itemDto.product().name(), TemplateType.PIZZA, AvailabilityStatus.AVAILIABLE), merchantId);
 
         item.setMerchant(merchant);
         item.setCategory(category);

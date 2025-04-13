@@ -35,6 +35,9 @@ public class OrderTotal {
     private BigDecimal deliveryFee;
 
     @Column(precision = 10, scale = 2)
+    private BigDecimal serviceFee;
+
+    @Column(precision = 10, scale = 2)
     private BigDecimal orderAmount;
 
     @Column(precision = 10, scale = 2)

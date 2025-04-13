@@ -33,10 +33,6 @@ public class CommandController {
         @PathVariable UUID merchantId
     ) {
 
-        System.err.println(commandService.getAllByMerchantId(merchantId)
-        .stream()
-        .map(CommandDto::new)
-        .toList());
         return commandService.getAllByMerchantId(merchantId)
                 .stream()
                 .map(CommandDto::new)
@@ -57,6 +53,16 @@ public class CommandController {
         @RequestBody @Valid FullCommandDto commandDto
     ) {
         return new FullCommandDto(commandService.createOrUpdate(commandDto, merchantId));
+    }
+
+    @PutMapping("/{commandId}/close")
+    public void closeCommand(
+        @PathVariable UUID merchantId,
+        @PathVariable UUID commandId,
+        @RequestBody @Valid FullCommandDto commandDto
+
+    ) {
+        commandService.closeCommand(commandDto, merchantId);
     }
 
     @DeleteMapping("/{commandId}")

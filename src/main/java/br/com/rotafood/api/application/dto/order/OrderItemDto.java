@@ -17,7 +17,6 @@ public record OrderItemDto(
     BigDecimal totalPrice,
     @Min(0)
     BigDecimal optionsPrice,
-    Boolean printed,
     @NotNull
     UUID contextModifierId,
     @NotNull
@@ -33,7 +32,6 @@ public record OrderItemDto(
         orderItem.getQuantity(),
         orderItem.getTotalPrice(),
         orderItem.getOptionsPrice(),
-        orderItem.getPrinted() != null ? orderItem.getPrinted() : false,
         orderItem.getContextModifier().getId(),
         new OrderItemDetailDto(orderItem.getItem()),
         orderItem.getOptions() != null ? orderItem.getOptions().stream().map(OrderItemOptionDto::new).toList() : null

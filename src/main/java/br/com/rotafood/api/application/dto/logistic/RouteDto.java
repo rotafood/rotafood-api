@@ -14,9 +14,9 @@ public record RouteDto(
     @NotNull
     AddressDto destiny,
     @NotNull
-    List<CoordinateDto> routeLine,
-    @NotNull
     BigDecimal distanceMeters,
     @NotNull
-    BigDecimal deliveryFee
+    BigDecimal deliveryFee,
+    @NotNull
+    List<CoordinateDto> routeLine
 ) { }

@@ -47,9 +47,6 @@ public class OrderItem {
     @Column(precision = 10, scale = 2)
     private BigDecimal optionsPrice;
 
-    @Column()
-    private Boolean printed = false;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "contextModifierId", nullable = false)
     private ContextModifier contextModifier;

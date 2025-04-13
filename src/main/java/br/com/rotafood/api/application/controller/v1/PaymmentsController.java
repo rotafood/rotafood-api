@@ -17,6 +17,8 @@ import org.springframework.web.server.ResponseStatusException;
 import com.stripe.exception.StripeException;
 import br.com.rotafood.api.application.dto.payment.StripePaymentStatusDto;
 import br.com.rotafood.api.application.service.payment.StripePaymentService;
+import br.com.rotafood.api.domain.entity.merchant.MerchantUserRole;
+import br.com.rotafood.api.infra.security.MerchantRoleAllowed;
 
 @RestController
 @RequestMapping(ApiVersion.VERSION + "/merchants/{merchantId}")
@@ -25,6 +27,7 @@ public class PaymmentsController {
     @Autowired
     private StripePaymentService stripePaymentService;
 
+    @MerchantRoleAllowed(MerchantUserRole.OWNER)
     @GetMapping("/payments")
     public ResponseEntity<StripePaymentStatusDto> listPayments(
             @PathVariable UUID merchantId,
@@ -37,10 +40,12 @@ public class PaymmentsController {
         }
     }
 
+    @MerchantRoleAllowed(MerchantUserRole.OWNER)
     @PostMapping("/payments/cancel-subscription")
     public ResponseEntity<StripePaymentStatusDto> cancelSubscription(
             @PathVariable UUID merchantId,
-            @RequestParam String subscriptionId) {
+            @RequestParam String subscriptionId
+            ) {
         try {
             StripePaymentStatusDto canceledStatus =
                     stripePaymentService.cancelSubscription(merchantId, subscriptionId);

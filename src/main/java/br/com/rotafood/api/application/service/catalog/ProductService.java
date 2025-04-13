@@ -60,8 +60,6 @@ public class ProductService {
     @Transactional
     public void deleteById(UUID productId, UUID merchantId) {
             Product product = productRepository.findByIdAndMerchantId(productId, merchantId);
-            System.err.println(product);
-
             productRepository.delete(product);
     }
 

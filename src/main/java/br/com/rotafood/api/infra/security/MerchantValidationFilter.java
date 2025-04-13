@@ -34,7 +34,6 @@ public class MerchantValidationFilter extends OncePerRequestFilter {
         Matcher matcher = MERCHANT_ID_PATTERN.matcher(requestURI);
         if (matcher.matches()) {
             String merchantIdFromUrl = matcher.group(1);
-            log.debug("Merchant ID encontrado na URL: {}", merchantIdFromUrl);
 
             try {
                 UUID merchantId = UUID.fromString(merchantIdFromUrl);

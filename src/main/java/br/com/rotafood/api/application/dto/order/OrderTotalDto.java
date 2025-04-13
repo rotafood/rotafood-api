@@ -10,6 +10,7 @@ public record OrderTotalDto(
     BigDecimal benefits,
     BigDecimal deliveryFee,
     BigDecimal orderAmount,
+    BigDecimal serviceFee,
     BigDecimal subTotal,
     BigDecimal additionalFees
 ) {
@@ -20,6 +21,7 @@ public record OrderTotalDto(
             total.getDeliveryFee(),
             total.getOrderAmount(),
             total.getSubTotal(),
+            total.getServiceFee(),
             total.getAdditionalFees()
         );
     }

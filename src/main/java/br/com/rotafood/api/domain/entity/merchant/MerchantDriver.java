@@ -1,8 +1,7 @@
-package br.com.rotafood.api.domain.entity.logistic;
+package br.com.rotafood.api.domain.entity.merchant;
 
 import java.util.UUID;
 
-import br.com.rotafood.api.domain.entity.merchant.Merchant;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -32,6 +31,8 @@ public class MerchantDriver  {
     private String name;
 
     private String phone;
+
+    private String email;
 
     @ManyToOne(fetch = FetchType.LAZY)    
     @JoinColumn(name = "merchantId")

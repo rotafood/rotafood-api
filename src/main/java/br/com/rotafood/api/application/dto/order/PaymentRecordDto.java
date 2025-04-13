@@ -15,7 +15,7 @@ public record PaymentRecordDto(
     @NotNull
     BigDecimal pending,
     @NotNull
-    BigDecimal prepaid
+    BigDecimal paid
 ) {
     public PaymentRecordDto(PaymentRecord payment) {
         this(
@@ -23,7 +23,7 @@ public record PaymentRecordDto(
             payment.getDescription(),
             payment.getMethods() != null ? payment.getMethods().stream().map(PaymentRecordMethodDto::new).toList() : List.of(),
             payment.getPending(),
-            payment.getPrepaid()
+            payment.getPaid()
         );
     }
 

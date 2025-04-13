@@ -45,7 +45,7 @@ public record FullOrderDto(
     CommandDto command,
     @Valid
     @NotNull
-    PaymentRecordDto payment,
+    PaymentRecordDto payment, 
     @Valid
     @NotEmpty
     List<OrderItemDto> items,
@@ -87,7 +87,10 @@ public record FullOrderDto(
         sb.append("Status: ").append(translateStatus(status)).append("\n");
         sb.append("-------------------\n");
         
-        sb.append("Cliente: ").append(customer.name()).append("\n");
+        if (command != null) {
+            sb.append("Mesa: ").append(command.tableIndex() != null ? command.tableIndex() : "-").append("\n");
+            sb.append("Comanda: ").append(command.name() != null ? command.name() : "-").append("\n");
+        }
         if (delivery != null) {
             sb.append("Entrega: ").append(delivery.address().formattedAddress()).append("\n");
         } else if (command() != null) {

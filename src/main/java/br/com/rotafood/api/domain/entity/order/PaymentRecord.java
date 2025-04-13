@@ -39,7 +39,7 @@ public class PaymentRecord {
     private BigDecimal pending;
     
     @Column(precision = 10, scale = 2)
-    private BigDecimal prepaid;
+    private BigDecimal paid;
     
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "paymentRecordMethodId")

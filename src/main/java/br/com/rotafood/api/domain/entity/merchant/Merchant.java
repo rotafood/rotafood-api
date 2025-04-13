@@ -4,7 +4,6 @@ import java.util.UUID;
 
 import br.com.rotafood.api.domain.entity.address.Address;
 import br.com.rotafood.api.domain.entity.catalog.Shift;
-import br.com.rotafood.api.domain.entity.logistic.MerchantLogisticSetting;
 
 import java.time.Instant;
 import java.util.ArrayList;

@@ -28,7 +28,7 @@ public class PaymentRecordService {
     
         payment.setDescription(dto.description());
         payment.setPending(dto.pending());
-        payment.setPrepaid(dto.prepaid());
+        payment.setPaid(dto.paid());
 
         orderPaymentRepository.save(payment);
 

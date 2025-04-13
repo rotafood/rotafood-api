@@ -4797,6 +4797,18 @@
             "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202502020957_avbuts7z3d7.jpeg"
         },
         "productEan": "SM00201037409"
+    },
+
+    {
+        "id": "5f951048-280d-480d-b8fb-f018b9d91409",
+        "name": "Refrigerante H2O Limoneto Pet 500ml",
+        "description": "Garrafa 500ml",
+        "imageResource": {
+            "baseUrl": "https://static-images.ifood.com.br/pratos/",
+            "path": "820af392-002c-47b1-bfae-d7ef31743c7f/202210192314_4txx6jh01yc.jpg"
+        },
+        "productEan": "17892840812850"
+
     }
 
 

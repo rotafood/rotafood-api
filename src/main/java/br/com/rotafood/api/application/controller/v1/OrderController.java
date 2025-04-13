@@ -5,9 +5,11 @@ import br.com.rotafood.api.application.dto.order.FullOrderDto;
 import br.com.rotafood.api.application.dto.order.OrderDto;
 import br.com.rotafood.api.application.service.merchant.MerchantService;
 import br.com.rotafood.api.application.service.order.OrderService;
+import br.com.rotafood.api.domain.entity.merchant.MerchantUserRole;
 import br.com.rotafood.api.domain.entity.order.OrderSalesChannel;
 import br.com.rotafood.api.domain.entity.order.OrderStatus;
 import br.com.rotafood.api.domain.entity.order.OrderType;
+import br.com.rotafood.api.infra.security.MerchantRoleAllowed;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -32,6 +34,7 @@ public class OrderController {
     @Autowired
     private MerchantService merchantService;
 
+    @MerchantRoleAllowed({MerchantUserRole.OWNER, MerchantUserRole.ADMIN})
     @GetMapping
     public ResponseEntity<PaginationDto<OrderDto>> getAllOrders(            
         @PathVariable UUID merchantId,
@@ -68,6 +71,7 @@ public class OrderController {
 
         return ResponseEntity.ok(orders);
     }
+
 
     @PutMapping("/{orderId}/status/{status}")
     public ResponseEntity<Void> updateOrderStatus(

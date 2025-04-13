@@ -49,17 +49,6 @@ public class ItemController {
         return ResponseEntity.ok(updatedItem);
     }
 
-    @PutMapping("/pizza")
-    public ResponseEntity<FullItemDto> updateOrCreatePizzaItem(
-            @PathVariable UUID merchantId,
-            @RequestBody @Valid FullItemDto itemDto) {
-        
-        FullItemDto updatedItem = new FullItemDto(itemService.updateOrCreatePizza(itemDto, merchantId));
-        catalogCacheService.updateCatalogCache(merchantId);
-
-        return ResponseEntity.ok(updatedItem);
-    }
-
     @DeleteMapping("/{itemId}")
     public ResponseEntity<Void> deleteItem(@PathVariable UUID merchantId, @PathVariable UUID itemId) {
         itemService.deleteByIdAndMerchantId(itemId, merchantId);

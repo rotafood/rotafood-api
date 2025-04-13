@@ -26,7 +26,7 @@ public class PaymentRecordMethodService {
 
         method.setDescription(dto.description());
         method.setMethod(dto.method());
-        method.setPrepaid(dto.prepaid());
+        method.setPaid(dto.paid());
         method.setType(dto.type());
         method.setValue(dto.value());
         method.setChangeFor(dto.changeFor());

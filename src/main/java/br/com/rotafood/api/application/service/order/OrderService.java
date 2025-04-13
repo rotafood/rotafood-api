@@ -2,11 +2,11 @@ package br.com.rotafood.api.application.service.order;
 
 import br.com.rotafood.api.application.dto.command.CommandDto;
 import br.com.rotafood.api.application.dto.order.FullOrderDto;
-import br.com.rotafood.api.application.service.command.CommandService;
 import br.com.rotafood.api.application.service.customer.CustomerService;
 import br.com.rotafood.api.domain.entity.command.Command;
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
 import br.com.rotafood.api.domain.entity.order.*;
+import br.com.rotafood.api.domain.repository.CommandRepository;
 import br.com.rotafood.api.domain.repository.MerchantRepository;
 import br.com.rotafood.api.domain.repository.OrderRepository;
 import br.com.rotafood.api.infra.rabbitmq.RabbitQueueManager;
@@ -44,7 +44,7 @@ public class OrderService {
     @Autowired private OrderItemService orderItemService;
     @Autowired private OrderAdditionalFeeService orderAdditionalFeeService;
     @Autowired private OrderBenefitService orderBenefitService;
-    @Autowired private CommandService commandService;
+    @Autowired private CommandRepository commandRepository;
     @Autowired private RabbitTemplate rabbitTemplate;
     @Autowired private RecentOrderCacheService recentOrderCacheService;
     @Autowired private RabbitQueueManager rabbitQueueManager;
@@ -70,14 +70,17 @@ public class OrderService {
                 ? getByIdAndMerchantId(dto.id(), merchantId)
                 : new Order();
 
-        updateOrderFields(order, dto, merchant);
+        this.updateOrderFields(order, dto, merchant);
         orderRepository.save(order);
-        synchronizeOrderDetails(dto, order);
+        this.synchronizeOrderDetails(dto, order);
 
 
-        if (shouldNotifyKitchen(dto.status())) {
-            notifyKitchen(order);
+        if (this.shouldNotifyKitchen(dto.status())) {
+            this.notifyKitchen(order);
         }
+
+        this.recentOrderCacheService.addOrUpdateRecentOrder(merchantId, new FullOrderDto(order));
+
 
         return order;
     }
@@ -93,6 +96,9 @@ public class OrderService {
         orderRepository.save(order);
         synchronizeOrderDetails(dto, order);
 
+        if (this.shouldNotifyKitchen(dto.status())) {
+            this.notifyKitchen(order);
+        }
 
         return order;
     }
@@ -128,8 +134,9 @@ public class OrderService {
 
     @Transactional
     public Command addOrderToCommand(Order order, CommandDto commandDto) {
-        var command = commandService.getByIdAndMerchantId(commandDto.id(), order.getMerchant().getId());
-        command.setOrder(order);
+        var command = commandRepository.findByIdAndMerchantId(commandDto.id(), order.getMerchant().getId()).orElseThrow(
+            () -> new EntityNotFoundException("Comanda não encontrada"));
+        command.getOrders().add(order);
         order.setCommand(command);
         return command;
     }
@@ -162,7 +169,8 @@ public class OrderService {
         merchantRepository.updateLastOpenedUtc(merchantId, Instant.now());
 
         List<FullOrderDto> cachedOrders = recentOrderCacheService.getCachedRecentOrders(merchantId);
-        if (cachedOrders == null) {
+
+        if (cachedOrders.isEmpty()) {
             Instant twoHoursAgo = Instant.now().minus(2, ChronoUnit.HOURS);
             List<OrderStatus> activeStatuses = List.of(
                     OrderStatus.CREATED, OrderStatus.CONFIRMED, OrderStatus.PREPARATION_STARTED,
@@ -201,9 +209,6 @@ public class OrderService {
         String queueName = "queue.merchant." + order.getMerchant().getId();
         rabbitQueueManager.createMerchantQueue(order.getMerchant().getId().toString());
         rabbitTemplate.convertAndSend(queueName, new FullOrderDto(order).toComandString());
-        order.getItems().forEach(oi -> {
-            oi.setPrinted(true);
-        });
     }
 
 
