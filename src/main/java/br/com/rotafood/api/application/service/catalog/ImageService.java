@@ -34,11 +34,8 @@ public class ImageService {
     @Value("${minio.bucket.name}")
     private String bucketName;
 
-    @Value("${minio.public.url}")
-    private String minioPublicUrl;
-
-    @Value("${minio.private.url}")
-    private String minioPrivateUrl;
+    @Value("${minio.url}")
+    private String minioUrl;
 
     @Transactional
     public Image uploadImage(MultipartFile file, UUID merchantId) {
@@ -60,7 +57,7 @@ public class ImageService {
 
             Merchant merchant = this.merchantRepository.getReferenceById(merchantId);
             Image image = new Image();
-            image.setPath(minioPublicUrl + "/" + bucketName + "/" + fileName);
+            image.setPath(minioUrl + "/" + bucketName + "/" + fileName);
             image.setId(id);
             image.setMerchant(merchant);
 
@@ -84,7 +81,7 @@ public class ImageService {
             throw new IllegalArgumentException("Caminho da imagem não encontrado.");
         }
 
-        String fileKey = imagePath.replace(minioPrivateUrl + "/" + bucketName + "/", "");
+        String fileKey = imagePath.replace(minioUrl + "/" + bucketName + "/", "");
 
         minioStorageService.deleteFile(bucketName, fileKey);
 
