@@ -87,15 +87,12 @@ public record FullOrderDto(
         sb.append("Status: ").append(translateStatus(status)).append("\n");
         sb.append("-------------------\n");
         
-        if (command != null) {
-            sb.append("Mesa: ").append(command.tableIndex() != null ? command.tableIndex() : "-").append("\n");
-            sb.append("Comanda: ").append(command.name() != null ? command.name() : "-").append("\n");
-        }
+        
         if (delivery != null) {
             sb.append("Entrega: ").append(delivery.address().formattedAddress()).append("\n");
-        } else if (command() != null) {
-            sb.append("Mesa: ").append(command().tableIndex()).append("\n");
-            sb.append("Commanda: ").append(command().name()).append("\n");
+        } else if (command != null) {
+            sb.append("Mesa: ").append(command.tableIndex() != null ? command.tableIndex() : "-").append("\n");
+            sb.append("Comanda: ").append(command.name() != null ? command.name() : "-").append("\n");
         } else if (takeout != null) {
             sb.append("Retirada\n");
         }

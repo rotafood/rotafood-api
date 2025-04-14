@@ -109,6 +109,7 @@ public class OrderService {
         order.setSalesChannel(dto.salesChannel());
         order.setTiming(dto.timing());
         order.setType(dto.type());
+        order.setCreatedAt(Instant.now());
         order.setStatus(dto.status());
         order.setExtraInfo(dto.extraInfo());
         order.setMerchant(merchant);
