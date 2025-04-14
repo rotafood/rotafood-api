@@ -31,8 +31,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping( ApiVersion.VERSION + "/catalogs/online")
 public class CatalogOnlineController {
 
-    @Value("${minio.url}")
-    private String minioUrl;
+    @Value("${minio.public.url}")
+    private String minioPublicUrl;
 
     @Value("${minio.bucket.name}")
     private String minioBucketName;
@@ -62,7 +62,7 @@ public class CatalogOnlineController {
         var merchant = new FullMerchantDto(this.merchantRepository.findByOnlineName(onlineName)
         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Merchant not found")));
         
-        var menuUrl = this.minioUrl + "/" + this.minioBucketName + "/catalogs/" + merchant.id().toString() + ".json";
+        var menuUrl = this.minioPublicUrl + "/" + this.minioBucketName + "/catalogs/" + merchant.id().toString() + ".json";
 
         return new MerchantAndMenuUrlDto(merchant, menuUrl);
     }
