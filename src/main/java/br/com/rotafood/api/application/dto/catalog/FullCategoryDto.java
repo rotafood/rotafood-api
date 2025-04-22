@@ -22,7 +22,15 @@ public record FullCategoryDto(
             category.getName(),
             category.getTemplate(),
             category.getStatus(),
-            category.getItems().stream().map(FullItemDto::new).toList()
-        );
+            category.getItems().stream()
+            .sorted((a, b) -> {
+                if (a.getIndex() == null && b.getIndex() == null) return 0;
+                if (a.getIndex() == null) return 1;
+                if (b.getIndex() == null) return -1;
+                return Integer.compare(a.getIndex(), b.getIndex());
+            })
+            .map(FullItemDto::new)
+            .toList()
+    );
     }
 }

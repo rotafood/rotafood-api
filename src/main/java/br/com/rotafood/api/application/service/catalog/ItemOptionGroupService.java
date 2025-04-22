@@ -42,19 +42,22 @@ public class ItemOptionGroupService {
             ItemOptionGroup group = dto.id() != null ? 
                 itemOptionGroupRepository.findById(dto.id()).orElseThrow(() -> new EntityNotFoundException("Grupo não encontrado: " + dto.id()))
                 : new ItemOptionGroup();
+                
+            group.setOptionGroup(optionGroupService.getByIdAndMerchantId(dto.optionGroup().id(), merchantId));
+            group.setItem(item);
+            group.setIndex(dto.index());
+            group.setMin(dto.min());
+            group.setMax(dto.max());
 
             if (!item.getItemOptionGroups().contains(group)) {
                 item.addItemOptionGroup(group);
             }
-            if (updateOptionGroups) {
-                group.setOptionGroup(optionGroupService.updateOrCreate(dto.optionGroup(), merchantId));
-            }
-            if (!updateOptionGroups) {
-                group.setOptionGroup(optionGroupService.getByIdAndMerchantId(dto.optionGroup().id(), merchantId));
-            }
-            group.setIndex(dto.index());
-            group.setMin(dto.min());
-            group.setMax(dto.max());
+
+            this.itemOptionGroupRepository.save(group);
+
+
+
+
         });
 
         return item.getItemOptionGroups();
