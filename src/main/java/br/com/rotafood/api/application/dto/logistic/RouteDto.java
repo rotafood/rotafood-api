@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
-import br.com.rotafood.api.application.dto.AddressDto;
+import br.com.rotafood.api.application.dto.address.AddressDto;
 import jakarta.validation.constraints.NotNull;
 
 public record RouteDto(

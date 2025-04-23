@@ -17,7 +17,7 @@ import br.com.rotafood.api.domain.entity.catalog.Image;
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
 import br.com.rotafood.api.domain.repository.ImageRepository;
 import br.com.rotafood.api.domain.repository.MerchantRepository;
-import br.com.rotafood.api.infra.minio.MinioStorageService;
+import br.com.rotafood.api.infra.config.minio.MinioStorageService;
 
 @Service
 public class ImageService {

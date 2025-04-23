@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import br.com.rotafood.api.application.dto.AddressDto;
+import br.com.rotafood.api.application.dto.address.AddressDto;
 import br.com.rotafood.api.application.dto.logistic.CoordinateDto;
 import br.com.rotafood.api.application.dto.logistic.DistanceInDto;
 import br.com.rotafood.api.application.dto.logistic.DistanceOutDto;
@@ -24,7 +24,7 @@ import br.com.rotafood.api.application.dto.logistic.VrpOrderDto;
 import br.com.rotafood.api.application.dto.logistic.VrpOriginDto;
 import br.com.rotafood.api.application.dto.logistic.VrpOutDto;
 import br.com.rotafood.api.domain.entity.merchant.MerchantLogisticSetting;
-import br.com.rotafood.api.infra.redis.RouteCacheService;
+import br.com.rotafood.api.infra.config.redis.RouteCacheService;
 
 
 @Service

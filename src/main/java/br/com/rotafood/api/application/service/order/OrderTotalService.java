@@ -1,6 +1,6 @@
 package br.com.rotafood.api.application.service.order;
 
-import br.com.rotafood.api.application.dto.AddressDto;
+import br.com.rotafood.api.application.dto.address.AddressDto;
 import br.com.rotafood.api.application.dto.logistic.RouteDto;
 import br.com.rotafood.api.application.dto.order.FullOrderDto;
 import br.com.rotafood.api.application.dto.order.OrderItemDto;

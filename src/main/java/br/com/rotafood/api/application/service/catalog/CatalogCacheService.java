@@ -2,7 +2,7 @@ package br.com.rotafood.api.application.service.catalog;
 
 import br.com.rotafood.api.application.dto.catalog.FullCategoryDto;
 import br.com.rotafood.api.domain.repository.CategoryRepository;
-import br.com.rotafood.api.infra.minio.MinioStorageService;
+import br.com.rotafood.api.infra.config.minio.MinioStorageService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;

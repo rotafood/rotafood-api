@@ -1,4 +1,4 @@
-package br.com.rotafood.api.infra.redis;
+package br.com.rotafood.api.infra.config.redis;
 
 import java.time.Duration;
 import java.util.List;

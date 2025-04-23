@@ -1,4 +1,4 @@
-package br.com.rotafood.api.infra.minio;
+package br.com.rotafood.api.infra.config.minio;
 
 import java.io.InputStream;
 

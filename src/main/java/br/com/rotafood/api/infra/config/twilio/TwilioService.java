@@ -1,4 +1,4 @@
-package br.com.rotafood.api.infra.twilio;
+package br.com.rotafood.api.infra.config.twilio;
 
 import com.twilio.Twilio;
 import com.twilio.type.PhoneNumber;

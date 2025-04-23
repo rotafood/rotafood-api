@@ -3,7 +3,7 @@ package br.com.rotafood.api.application.dto.merchant;
 import java.time.Instant;
 import java.util.UUID;
 
-import br.com.rotafood.api.application.dto.AddressDto;
+import br.com.rotafood.api.application.dto.address.AddressDto;
 import br.com.rotafood.api.domain.entity.merchant.DocumentType;
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
 import br.com.rotafood.api.domain.entity.merchant.MerchantType;

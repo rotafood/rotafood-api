@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import br.com.rotafood.api.application.dto.AddressDto;
+import br.com.rotafood.api.application.dto.address.AddressDto;
 import br.com.rotafood.api.application.dto.catalog.ShiftDto;
 import br.com.rotafood.api.application.dto.merchant.FullMerchantDto;
 import br.com.rotafood.api.application.dto.merchant.MerchantCreateDto;

@@ -1,6 +1,7 @@
 package br.com.rotafood.api.application.controller.v1;
 
 import br.com.rotafood.api.application.dto.catalog.ContextModifierDto;
+import br.com.rotafood.api.application.service.catalog.CatalogCacheService;
 import br.com.rotafood.api.application.service.catalog.ContextModifierService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +17,16 @@ public class ContextModifierController {
     @Autowired
     private ContextModifierService contextModifierService;
 
+    @Autowired 
+    private CatalogCacheService catalogCacheService;
+
     @PutMapping
     public ContextModifierDto updateOrCreate(
             @PathVariable UUID merchantId,
             @RequestBody @Valid ContextModifierDto contextModifierDto) {
-        return new ContextModifierDto(contextModifierService.updateOrCreate(contextModifierDto, null, null, null));
+        var cm = new ContextModifierDto(contextModifierService.updateOrCreate(contextModifierDto, null, null, null));
+        catalogCacheService.updateCatalogCache(merchantId);
+        return cm;
     }
 
 }

@@ -1,6 +1,6 @@
 package br.com.rotafood.api.application.service.customer;
 
-import br.com.rotafood.api.application.dto.AddressDto;
+import br.com.rotafood.api.application.dto.address.AddressDto;
 import br.com.rotafood.api.application.dto.customer.CustomerDto;
 import br.com.rotafood.api.domain.entity.address.Address;
 import br.com.rotafood.api.domain.entity.customer.Customer;

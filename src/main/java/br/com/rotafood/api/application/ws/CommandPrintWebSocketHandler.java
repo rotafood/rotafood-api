@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.socket.*;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import br.com.rotafood.api.infra.rabbitmq.RabbitQueueManager;
+import br.com.rotafood.api.infra.config.rabbitmq.RabbitQueueManager;
 import br.com.rotafood.api.infra.security.TokenService;
 import br.com.rotafood.api.application.dto.merchant.MerchantUserDto;
 

@@ -1,6 +1,6 @@
 package br.com.rotafood.api.application.dto.merchant;
 
-import br.com.rotafood.api.application.dto.AddressDto;
+import br.com.rotafood.api.application.dto.address.AddressDto;
 import br.com.rotafood.api.domain.entity.merchant.DocumentType;
 import br.com.rotafood.api.domain.entity.merchant.MerchantType;
 import jakarta.validation.constraints.NotBlank;

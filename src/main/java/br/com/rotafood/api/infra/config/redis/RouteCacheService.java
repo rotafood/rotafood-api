@@ -1,7 +1,7 @@
 
-package br.com.rotafood.api.infra.redis;
+package br.com.rotafood.api.infra.config.redis;
 
-import br.com.rotafood.api.application.dto.AddressDto;
+import br.com.rotafood.api.application.dto.address.AddressDto;
 import br.com.rotafood.api.application.dto.logistic.RouteDto;
 
 import org.springframework.beans.factory.annotation.Autowired;

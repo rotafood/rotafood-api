@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import br.com.rotafood.api.application.dto.AddressDto;
+import br.com.rotafood.api.application.dto.address.AddressDto;
 import br.com.rotafood.api.application.dto.logistic.RouteDto;
 import br.com.rotafood.api.application.dto.merchant.FullMerchantDto;
 import br.com.rotafood.api.application.service.logistic.LogisticService;

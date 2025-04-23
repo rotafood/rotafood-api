@@ -1,4 +1,4 @@
-package br.com.rotafood.api.infra.stripe;
+package br.com.rotafood.api.infra.config.stripe;
 
 import com.stripe.Stripe;
 import org.springframework.beans.factory.annotation.Value;

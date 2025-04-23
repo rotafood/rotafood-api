@@ -1,4 +1,4 @@
-package br.com.rotafood.api.application.dto;
+package br.com.rotafood.api.application.dto.address;
 
 import java.math.BigDecimal;
 import java.util.UUID;

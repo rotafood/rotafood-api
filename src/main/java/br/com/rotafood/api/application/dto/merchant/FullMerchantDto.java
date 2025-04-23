@@ -5,7 +5,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
-import br.com.rotafood.api.application.dto.AddressDto;
+import br.com.rotafood.api.application.dto.address.AddressDto;
 import br.com.rotafood.api.application.dto.catalog.ShiftDto;
 import br.com.rotafood.api.domain.entity.merchant.DocumentType;
 import br.com.rotafood.api.domain.entity.merchant.Merchant;

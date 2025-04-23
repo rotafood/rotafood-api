@@ -1,4 +1,4 @@
-package br.com.rotafood.api.infra.rabbitmq;
+package br.com.rotafood.api.infra.config.rabbitmq;
 
 
 import org.springframework.amqp.core.Queue;
