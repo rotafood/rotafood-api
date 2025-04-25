@@ -74,16 +74,17 @@ public class OrderService {
         orderRepository.save(order);
         this.synchronizeOrderDetails(dto, order);
 
-
         if (this.shouldNotifyKitchen(dto.status())) {
             this.notifyKitchen(order);
         }
 
-        this.recentOrderCacheService.addOrUpdateRecentOrder(merchantId, new FullOrderDto(order));
+        orderRepository.save(order);
 
+        this.recentOrderCacheService.addOrUpdateRecentOrder(merchantId, new FullOrderDto(order));
 
         return order;
     }
+
 
     @Transactional
     public Order createFromCatalogOnline(FullOrderDto dto, UUID merchantId) {
