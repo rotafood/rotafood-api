@@ -63,7 +63,7 @@ public class OrderController {
         @PathVariable UUID merchantId,
         @RequestParam(defaultValue = "ROTAFOOD") List<OrderSalesChannel> sources) {
 
-        merchantService.updateMerchantOpened(merchantId, sources);
+        merchantService.updateMerchantOpened(merchantId, sources, true);
 
         List<FullOrderDto> orders = orderService.polling(
             merchantId
@@ -71,6 +71,18 @@ public class OrderController {
 
         return ResponseEntity.ok(orders);
     }
+
+    @GetMapping("/polling/stop")
+    public ResponseEntity<Void> stopPolling(
+        @PathVariable UUID merchantId,
+        @RequestParam(defaultValue = "ROTAFOOD") List<OrderSalesChannel> sources) {
+
+        merchantService.updateMerchantOpened(merchantId, sources, false);
+
+
+        return ResponseEntity.noContent().build();
+    }
+
 
 
     @PutMapping("/{orderId}/status/{status}")

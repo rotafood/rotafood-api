@@ -75,15 +75,17 @@ public class MerchantService {
     }
 
     @Transactional
-    public void updateMerchantOpened(UUID merchantId, List<OrderSalesChannel> sources) {
+    public void updateMerchantOpened(UUID merchantId, List<OrderSalesChannel> sources, boolean open) {
         Merchant merchant = merchantRepository.findById(merchantId)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Merchant not found"));
 
         if (sources.contains(OrderSalesChannel.ROTAFOOD)) {
-            merchant.setLastOpenedUtc(Instant.now());
+            Instant timestamp = open
+                ? Instant.now()                    
+                : Instant.now().minusSeconds(30); 
+            merchant.setLastOpenedUtc(timestamp);
+            merchantRepository.save(merchant);
         }
-
-        merchantRepository.save(merchant);
     }
 
     private void validateOwnerEmail(String email) {

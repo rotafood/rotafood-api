@@ -48,6 +48,7 @@ public class SecurityConfigurations {
                     "/*/auth/**", 
                     "*/logistic-test/routes/*",
                     "/*/api-docs/**",  
+                    "/*/places/**",  
                     "/*/logs/**", 
                     "/*/ws/print/**",
                     "/*/catalogs/online/**",

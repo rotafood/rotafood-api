@@ -1,4 +1,5 @@
 package br.com.rotafood.api.domain.repository;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -8,5 +9,11 @@ import br.com.rotafood.api.domain.entity.address.Address;
 
 public interface AddressRepository extends JpaRepository<Address, UUID> {
     Optional<Address> findByPostalCode(String postalCode);
+
+    Optional<Address> findFirstByFormattedAddressContainingIgnoreCase(String q);
+
+    List<Address> findByFormattedAddressContainingIgnoreCase(String q);
+
+
 }
 
