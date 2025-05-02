@@ -93,12 +93,13 @@ public class OrderTotalService {
                     .reduce(BigDecimal.ZERO, BigDecimal::add);
         }
 
-        if (orderDto.delivery() != null && orderDto.delivery().address() != null) {
-            AddressDto origin = new AddressDto(merchant.getAddress());
-            AddressDto destination = orderDto.delivery().address();
-            RouteDto route = logisticService.calculateDistance(origin, destination, merchant.getLogisticSetting());
-            deliveryFee = route.deliveryFee();
-        }
+        // if (orderDto.delivery() != null && orderDto.delivery().address() != null) {
+        //     AddressDto origin = new AddressDto(merchant.getAddress());
+        //     AddressDto destination = orderDto.delivery().address();
+        //     RouteDto route = logisticService.calculateDistance(origin, destination, merchant.getLogisticSetting());
+        // }
+        deliveryFee = orderDto.total().deliveryFee();
+
 
         BigDecimal totalAmount = subtotal.add(additionalFees).add(deliveryFee).subtract(benefits);
 

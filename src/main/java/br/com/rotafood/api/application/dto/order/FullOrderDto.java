@@ -79,6 +79,7 @@ public record FullOrderDto(
 
     public String toComandString() {
         StringBuilder sb = new StringBuilder();
+        sb.append(" - \n - \n");
         sb.append("--- COMANDA ---\n");
         sb.append("Pedido: ").append(merchantSequence).append("\n");
         sb.append("Data: ").append(DateUtils.formatDateToBrazilianTime(createdAt)).append("\n");
