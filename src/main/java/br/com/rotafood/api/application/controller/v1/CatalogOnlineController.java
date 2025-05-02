@@ -1,10 +1,10 @@
 package br.com.rotafood.api.application.controller.v1;
 
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,10 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import br.com.rotafood.api.application.dto.address.AddressDto;
-import br.com.rotafood.api.application.dto.catalog.MerchantAndMenuUrlDto;
+import br.com.rotafood.api.application.dto.catalog.FullCategoryDto;
 import br.com.rotafood.api.application.dto.logistic.RouteDto;
 import br.com.rotafood.api.application.dto.merchant.FullMerchantDto;
 import br.com.rotafood.api.application.dto.order.FullOrderDto;
+import br.com.rotafood.api.application.service.catalog.CategoryService;
 import br.com.rotafood.api.application.service.logistic.LogisticService;
 import br.com.rotafood.api.application.service.order.OrderService;
 import br.com.rotafood.api.domain.repository.MerchantRepository;
@@ -31,12 +32,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping( ApiVersion.VERSION + "/catalogs/online")
 public class CatalogOnlineController {
 
-    @Value("${minio.url}")
-    private String minioUrl;
-
-    @Value("${minio.bucket.name}")
-    private String minioBucketName;
-
     @Autowired
     private LogisticService logisticService;
 
@@ -45,6 +40,9 @@ public class CatalogOnlineController {
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private CategoryService categoryService;
 
     @GetMapping("/{onlineName}")
     public FullMerchantDto getMerchant(
@@ -56,15 +54,15 @@ public class CatalogOnlineController {
 
 
     @GetMapping("/{onlineName}/categories")
-    public MerchantAndMenuUrlDto getAllDelivery(
+    public List<FullCategoryDto> getCategories(
         @PathVariable String onlineName
     ) {
-        var merchant = new FullMerchantDto(this.merchantRepository.findByOnlineName(onlineName)
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Merchant not found")));
-        
-        var menuUrl = this.minioUrl + "/" + this.minioBucketName + "/catalogs/" + merchant.id().toString() + ".json";
+        var merchant = merchantRepository
+            .findByOnlineName(onlineName)
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, "Merchant not found"));
 
-        return new MerchantAndMenuUrlDto(merchant, menuUrl);
+        return categoryService.getAllByMerchantIdFromBucket(merchant.getId());
     }
 
     @GetMapping("/{onlineName}/orders/{orderId}")

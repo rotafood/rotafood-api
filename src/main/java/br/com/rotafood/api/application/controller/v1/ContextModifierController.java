@@ -25,7 +25,7 @@ public class ContextModifierController {
             @PathVariable UUID merchantId,
             @RequestBody @Valid ContextModifierDto contextModifierDto) {
         var cm = new ContextModifierDto(contextModifierService.updateOrCreate(contextModifierDto, null, null, null));
-        catalogCacheService.updateCatalogCache(merchantId);
+        catalogCacheService.updateOrCreateContextModifier(merchantId, cm);
         return cm;
     }
 

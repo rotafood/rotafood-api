@@ -35,9 +35,7 @@ public class CategoryController {
     public List<FullCategoryDto> getAll(
         @PathVariable UUID merchantId
     ) {
-        return  categoryService.getAllByMerchantId(merchantId).stream()
-            .map(FullCategoryDto::new)
-            .toList();
+        return categoryService.getAllByMerchantIdFromBucket(merchantId);
     }
 
   

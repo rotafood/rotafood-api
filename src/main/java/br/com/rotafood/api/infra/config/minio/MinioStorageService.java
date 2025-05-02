@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import io.minio.BucketExistsArgs;
+import io.minio.GetObjectArgs;
 import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
@@ -48,6 +49,20 @@ public class MinioStorageService {
             );
         } catch (Exception e) {
             throw new RuntimeException("Erro ao excluir arquivo do MinIO: " + e.getMessage(), e);
+        }
+    }
+
+
+     public InputStream download(String bucketName, String objectName) {
+        try {
+            return minioClient.getObject(
+                GetObjectArgs.builder()
+                    .bucket(bucketName)
+                    .object(objectName)
+                    .build()
+            );
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao baixar do MinIO: " + e.getMessage(), e);
         }
     }
 }

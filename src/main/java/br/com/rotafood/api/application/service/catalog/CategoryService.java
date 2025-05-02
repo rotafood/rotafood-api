@@ -1,27 +1,52 @@
 package br.com.rotafood.api.application.service.catalog;
 
+import java.io.InputStream;
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import br.com.rotafood.api.application.dto.SortRequestDto;
 import br.com.rotafood.api.application.dto.catalog.CategoryDto;
+import br.com.rotafood.api.application.dto.catalog.FullCategoryDto;
 import br.com.rotafood.api.domain.entity.catalog.Category;
 import br.com.rotafood.api.domain.entity.merchant.Merchant;
 import br.com.rotafood.api.domain.repository.CategoryRepository;
 import br.com.rotafood.api.domain.repository.ItemRepository;
 import br.com.rotafood.api.domain.repository.MerchantRepository;
+import br.com.rotafood.api.infra.config.minio.MinioStorageService;
 import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class CategoryService {
 
-    @Autowired private CategoryRepository categoryRepository;
-    @Autowired private MerchantRepository merchantRepository;
-    @Autowired private ItemRepository itemRepository;
+    @Autowired 
+    private CategoryRepository categoryRepository;
+    
+    @Autowired 
+    private MerchantRepository merchantRepository;
+    
+    @Autowired 
+    private ItemRepository itemRepository;
+    
+    @Autowired 
+    private MinioStorageService  minioService;
+    
+    @Autowired 
+    private ObjectMapper  objectMapper;
+    
+    @Value("${minio.url}") 
+    private String minioUrl;
+    
+    @Value("${minio.bucket.name}") 
+    private String minioBucketName;
+
 
 
     public Category getByIdAndMerchantId(UUID categoryId, UUID merchantId) {
@@ -41,6 +66,21 @@ public class CategoryService {
 
     public List<Category> getAllByMerchantId(UUID merchantId) {
         return categoryRepository.findAllByMerchantIdWithItems(merchantId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<FullCategoryDto> getAllByMerchantIdFromBucket(UUID merchantId) {
+        String objectName = "catalogs/" + merchantId + ".json";
+        try (InputStream is = minioService.download(minioBucketName, objectName)) {
+            return objectMapper.readValue(
+                is,
+                new TypeReference<List<FullCategoryDto>>() {}
+            );
+        } catch (Exception e) {
+            throw new EntityNotFoundException(
+                "Não foi possível ler o catálogo para merchant " + merchantId + ": " + e.getMessage()
+            );
+        }
     }
 
 
