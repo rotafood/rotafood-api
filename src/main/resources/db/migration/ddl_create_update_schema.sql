@@ -166,6 +166,3 @@ alter table if exists products add constraint FKnjoatbanxmxpmlwpv8nslcbmo foreig
 alter table if exists selling_options add constraint FKpngv5jnjwj1a3i8tndh32xn06 foreign key (product_id) references products;
 alter table if exists shifts add constraint FKj37msba48037erxhxp0xyh7qr foreign key (item_id) references items;
 alter table if exists shifts add constraint FK6bx4ph95hwbebowtse3o5ldu7 foreign key (merchant_id) references merchants;
-
-
-ALTER TABLE orders DROP CONSTRAINT orders_customer_id_key;

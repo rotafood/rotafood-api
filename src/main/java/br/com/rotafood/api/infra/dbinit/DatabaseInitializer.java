@@ -5,8 +5,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import br.com.rotafood.api.application.service.catalog.DefaultPackagingPopulateService;
-import br.com.rotafood.api.application.service.catalog.DefaultProductPopulateService;
+import br.com.rotafood.api.catalog.application.service.DefaultPackagingPopulateService;
+import br.com.rotafood.api.catalog.application.service.DefaultProductPopulateService;
 
 @Component
 public class DatabaseInitializer implements CommandLineRunner {

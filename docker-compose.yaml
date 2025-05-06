@@ -26,6 +26,17 @@ services:
   #     - postgres_data:/var/lib/postgresql/data
   #   restart: always
 
+
+  rotafood-ms-logistic:
+    container_name: rotafood-ms-logistic
+    build:
+      context: ../rotafood-ms-logistic
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./rotafood-ms-logistic:/usr/src/app
+
   rabbitmq:
     image: rabbitmq:3-management
     container_name: rabbitmq

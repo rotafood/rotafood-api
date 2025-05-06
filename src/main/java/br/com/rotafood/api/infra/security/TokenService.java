@@ -17,9 +17,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference; 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.com.rotafood.api.application.dto.merchant.MerchantUserDto;
-import br.com.rotafood.api.domain.entity.merchant.MerchantUser;
 import br.com.rotafood.api.infra.security.dtos.TokenJwtDto;
+import br.com.rotafood.api.merchant.application.dto.MerchantUserDto;
+import br.com.rotafood.api.merchant.domain.entity.MerchantUser;
 
 @Service 
 public class TokenService {

@@ -1,8 +1,9 @@
 package br.com.rotafood.api.infra.security;
 
 
-import br.com.rotafood.api.application.dto.merchant.MerchantUserDto;
-import br.com.rotafood.api.domain.entity.merchant.MerchantUserRole;
+import br.com.rotafood.api.merchant.application.dto.MerchantUserDto;
+import br.com.rotafood.api.merchant.domain.entity.MerchantUserRole;
+
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
