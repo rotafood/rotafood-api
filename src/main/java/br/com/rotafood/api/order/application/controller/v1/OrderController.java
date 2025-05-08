@@ -72,6 +72,15 @@ public class OrderController {
         return ResponseEntity.ok(orders);
     }
 
+    @PutMapping("/{orderId}/print")
+    public ResponseEntity<Void> print(
+            @PathVariable UUID merchantId,
+            @PathVariable UUID orderId) {
+        orderService.notifyKitchen(orderService.getByIdAndMerchantId(orderId, merchantId));
+        return ResponseEntity.ok().build();
+    }
+
+
     @GetMapping("/polling/stop")
     public ResponseEntity<Void> stopPolling(
         @PathVariable UUID merchantId,

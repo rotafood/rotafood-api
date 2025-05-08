@@ -209,7 +209,7 @@ public class OrderService {
         return status == OrderStatus.CONFIRMED || status == OrderStatus.PREPARATION_STARTED;
     }
 
-    private void notifyKitchen(Order order) {
+    public void notifyKitchen(Order order) {
         String queueName = "queue.merchant." + order.getMerchant().getId();
         rabbitQueueManager.createMerchantQueue(order.getMerchant().getId().toString());
         rabbitTemplate.convertAndSend(queueName, new FullOrderDto(order).toComandString());
