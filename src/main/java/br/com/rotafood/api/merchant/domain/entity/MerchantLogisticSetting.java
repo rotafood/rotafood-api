@@ -40,4 +40,5 @@ public class MerchantLogisticSetting {
     @Column(precision = 10, scale = 2)
     private BigDecimal freeDeliveryRadiusKm;
 
+
 }

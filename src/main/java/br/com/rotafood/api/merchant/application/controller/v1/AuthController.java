@@ -21,6 +21,7 @@ import br.com.rotafood.api.infra.security.dtos.LoginDto;
 import br.com.rotafood.api.infra.security.dtos.TokenJwtDto;
 import br.com.rotafood.api.merchant.application.dto.MerchantOwnerCreationDto;
 import br.com.rotafood.api.merchant.application.service.MerchantService;
+import br.com.rotafood.api.merchant.application.service.MerchantUserService;
 import br.com.rotafood.api.merchant.domain.entity.MerchantUser;
 import jakarta.validation.Valid;
 
@@ -30,6 +31,9 @@ public class AuthController {
 
     @Autowired
     private MerchantService merchantService;
+
+    @Autowired
+    private MerchantUserService merchantUserService;
 
     @Autowired
     private TokenService tokenService;
@@ -55,6 +59,17 @@ public class AuthController {
         var tokenJwtDto = tokenService.generateToken(merchantUser);
         
         return ResponseEntity.ok().body(tokenJwtDto);
+    }
+
+    @PostMapping("/refresh")
+    @Transactional
+    public ResponseEntity<TokenJwtDto> refreshToken(
+            @RequestBody @Valid TokenJwtDto dto) throws JsonProcessingException {
+        var merchantUserDto = tokenService.getMerchantUser(dto.accessToken());
+        var merchantUser = this.merchantUserService.getByIdAndMerchantId(merchantUserDto.id(), merchantUserDto.merchantId());
+        TokenJwtDto token = tokenService.generateToken(merchantUser);
+        
+        return ResponseEntity.ok(token);
     }
 
 

@@ -15,6 +15,7 @@ import br.com.rotafood.api.merchant.domain.entity.MerchantUser;
 import br.com.rotafood.api.merchant.domain.entity.MerchantUserRole;
 import br.com.rotafood.api.merchant.domain.repository.MerchantRepository;
 import br.com.rotafood.api.merchant.domain.repository.MerchantUserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -87,5 +88,10 @@ public class MerchantUserService {
     
         merchantUserRepository.delete(user);
         return user;
+    }
+
+    @Transactional
+    public MerchantUser getByIdAndMerchantId(UUID merchantId, UUID userId) {
+        return this.merchantUserRepository.findByIdAndMerchantId(merchantId, userId).orElseThrow(() -> new EntityNotFoundException("Usuário não ecnontrado"));
     }
 }
