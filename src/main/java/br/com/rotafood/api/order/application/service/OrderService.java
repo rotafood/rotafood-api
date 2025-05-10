@@ -66,7 +66,8 @@ public class OrderService {
 
     @Transactional
     public Order createOrUpdate(FullOrderDto dto, UUID merchantId) {
-        var merchant = getOpenedMerchant(merchantId);
+        var merchant = merchantRepository.findById(merchantId)
+                .orElseThrow(() -> new EntityNotFoundException("Merchant não encontrado."));
 
         Order order = dto.id() != null
                 ? getByIdAndMerchantId(dto.id(), merchantId)
