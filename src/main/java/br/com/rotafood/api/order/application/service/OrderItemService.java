@@ -62,6 +62,8 @@ public class OrderItemService {
 
         orderItem.setTotalPrice(orderItemDto.totalPrice());
 
+        orderItem.setObservations(orderItemDto.observations());
+
         order.getItems().add(orderItem);
 
         orderItemRepository.save(orderItem);

@@ -50,6 +50,9 @@ public class OrderItem {
     @Column(precision = 10, scale = 2)
     private BigDecimal optionsPrice;
 
+    @Column(length = 512, nullable = true)
+    private String observations;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "contextModifierId")
     @OnDelete(action = OnDeleteAction.CASCADE)

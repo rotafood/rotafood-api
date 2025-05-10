@@ -17,9 +17,9 @@ public record OrderItemDto(
     BigDecimal totalPrice,
     @Min(0)
     BigDecimal optionsPrice,
+    String observations,
     @NotNull
     UUID contextModifierId,
-    @NotNull
     @Valid
     OrderItemDetailDto item,
     @Valid
@@ -32,8 +32,9 @@ public record OrderItemDto(
         orderItem.getQuantity(),
         orderItem.getTotalPrice(),
         orderItem.getOptionsPrice(),
+        orderItem.getObservations(),
         orderItem.getContextModifier().getId(),
-        new OrderItemDetailDto(orderItem.getItem()),
+        orderItem.getItem() != null ? new OrderItemDetailDto(orderItem.getItem()) : null,
         orderItem.getOptions() != null ? orderItem.getOptions().stream().map(OrderItemOptionDto::new).toList() : null
     );
 }

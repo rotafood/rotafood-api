@@ -82,7 +82,6 @@ public record FullOrderDto(
 
     public String toComandString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(" - \n - \n");
         sb.append("--- COMANDA ---\n");
         sb.append("Pedido: ").append(merchantSequence).append("\n");
         sb.append("Data: ").append(DateUtils.formatDateToBrazilianTime(createdAt)).append("\n");
@@ -116,6 +115,9 @@ public record FullOrderDto(
               .append("  R$ ")
               .append(itemPrice)
               .append("\n");
+            if (item.observations() != null) {
+                sb.append(item.observations()).append("\n");
+            }
     
             if (item.options() != null && !item.options().isEmpty()) {
                 for (OrderItemOptionDto option : item.options()) {
@@ -134,10 +136,9 @@ public record FullOrderDto(
         
         sb.append("-------------------\n");
         sb.append("Total: R$ ").append(total.orderAmount()).append("\n");
-        if (extraInfo != null && !extraInfo.isEmpty()) {
+        if (extraInfo != null) {
             sb.append("Info extra: ").append(extraInfo).append("\n");
         }
-        sb.append(" - \n - \n");
         
         return sb.toString();
     }

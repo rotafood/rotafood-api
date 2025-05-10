@@ -1,0 +1,1 @@
+alter table if exists order_items add column observations varchar(512);
