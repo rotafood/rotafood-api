@@ -85,7 +85,6 @@ public record FullOrderDto(
         sb.append("--- COMANDA ---\n");
         sb.append("Pedido: ").append(merchantSequence).append("\n");
         sb.append("Data: ").append(DateUtils.formatDateToBrazilianTime(createdAt)).append("\n");
-        sb.append("Canal: ").append(salesChannel).append("\n");
         sb.append("Tipo: ").append(translateType(type)).append("\n");
         sb.append("Status: ").append(translateStatus(status)).append("\n");
         sb.append("-------------------\n");
