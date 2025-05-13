@@ -1,6 +1,7 @@
 package br.com.rotafood.api.order.domain.entity;
 
 
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -57,6 +58,10 @@ public class Command {
     @ManyToOne(fetch = FetchType.LAZY)    
     @JoinColumn(name = "merchantId")
     private Merchant merchant;
+
+
+    @Column(nullable = false, updatable = false)
+    private Instant createdAt = Instant.now();
 
     
 }

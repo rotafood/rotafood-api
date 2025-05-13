@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import br.com.rotafood.api.order.domain.entity.Command;
 import br.com.rotafood.api.order.domain.entity.CommandStatus;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -22,5 +23,9 @@ public interface CommandRepository extends JpaRepository<Command, UUID> {
          WHERE c.merchant.id = :merchantId
     """)
     Long findMaxMerchantSequenceByMerchantId(UUID merchantId);
+
+
+    List<Command> findByCreatedAtBeforeAndStatusNot(Instant cutoff, CommandStatus status);
+
 
 }
