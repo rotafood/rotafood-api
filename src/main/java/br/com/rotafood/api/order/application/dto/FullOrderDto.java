@@ -82,14 +82,16 @@ public record FullOrderDto(
 
     public String toComandString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("--- COMANDA ---\n");
+        sb.append("--- ").append(translateType(type)).append(" ---\\n");
         sb.append("Pedido: ").append(merchantSequence).append("\n");
         sb.append("Data: ").append(DateUtils.formatDateToBrazilianTime(createdAt)).append("\n");
         sb.append("Tipo: ").append(translateType(type)).append("\n");
         sb.append("Status: ").append(translateStatus(status)).append("\n");
         sb.append("-------------------\n");
         
-        
+        if (customer != null) {
+            sb.append("Nome: ").append(customer.name());
+        }
         if (delivery != null) {
             sb.append("Entrega: ").append(delivery.address().formattedAddress()).append("\n");
         } else if (command != null) {
