@@ -1,5 +1,6 @@
 package br.com.rotafood.api.order.application.dto;
 
+import java.text.Normalizer;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -82,7 +83,7 @@ public record FullOrderDto(
 
     public String toComandString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("--- ").append(translateType(type)).append(" ---\\n");
+        sb.append("--- ").append(translateType(type)).append(" ---\n");
         sb.append("Pedido: ").append(merchantSequence).append("\n");
         sb.append("Data: ").append(DateUtils.formatDateToBrazilianTime(createdAt)).append("\n");
         sb.append("Tipo: ").append(translateType(type)).append("\n");
@@ -90,7 +91,7 @@ public record FullOrderDto(
         sb.append("-------------------\n");
         
         if (customer != null) {
-            sb.append("Nome: ").append(customer.name());
+            sb.append("Nome: ").append(customer.name()).append("\n");
         }
         if (delivery != null) {
             sb.append("Entrega: ").append(delivery.address().formattedAddress()).append("\n");
@@ -140,8 +141,18 @@ public record FullOrderDto(
         if (extraInfo != null) {
             sb.append("Info extra: ").append(extraInfo).append("\n");
         }
-        
-        return sb.toString();
+
+
+        String printable = sb.toString()
+                .replace("Ç", "C")
+                .replace("ç", "c")
+                .replace("ã", "a")
+                .replace("Ã", "A")
+                .replace("á", "a")
+                .replace("Á", "A");
+
+        System.err.println(printable);
+        return printable;
     }
 
 

@@ -214,7 +214,6 @@ public class OrderService {
         String queueName = "queue.merchant." + order.getMerchant().getId();
         rabbitQueueManager.createMerchantQueue(order.getMerchant().getId().toString());
         rabbitTemplate.convertAndSend(queueName, new FullOrderDto(order).toComandString());
-        System.err.println("\n\n\n\n OLOKINHO");
 
     }
 
