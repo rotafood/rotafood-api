@@ -1,6 +1,5 @@
 package br.com.rotafood.api.order.application.dto;
 
-import java.text.Normalizer;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
