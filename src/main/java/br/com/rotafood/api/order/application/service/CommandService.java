@@ -98,6 +98,7 @@ public class CommandService {
                                 orderDto.salesChannel(),
                                 orderDto.timing(),
                                 orderDto.extraInfo(),
+                                orderDto.printed(),
                                 orderDto.merchantId(),
                                 orderDto.total(),
                                 orderDto.customer(),

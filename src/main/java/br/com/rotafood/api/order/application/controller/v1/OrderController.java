@@ -104,6 +104,17 @@ public class OrderController {
     }
 
 
+    @PutMapping("/{orderId}/printed/{printed}")
+    public ResponseEntity<Void> updateOrderPrinted(
+            @PathVariable UUID merchantId,
+            @PathVariable UUID orderId,
+            @PathVariable boolean printed) {
+        System.err.println("\n\n  PRINNNNTEDDD \n\n");
+        orderService.updateOrderPrinted(merchantId, orderId, printed);
+        return ResponseEntity.ok().build();
+    }
+
+
     @GetMapping("/{orderId}")
     public FullOrderDto getOrderById(@PathVariable UUID merchantId, @PathVariable UUID orderId) {
         return new FullOrderDto(orderService.getByIdAndMerchantId(orderId, merchantId));

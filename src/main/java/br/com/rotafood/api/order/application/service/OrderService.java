@@ -146,16 +146,6 @@ public class OrderService {
         return command;
     }
 
-    @Transactional
-    public void updateOrderStatus(UUID merchantId, UUID orderId, OrderStatus status) {
-        Order order = getByIdAndMerchantId(orderId, merchantId);
-        order.setStatus(status);
-        orderRepository.save(order);
-
-        recentOrderCacheService.addOrUpdateRecentOrder(merchantId, new FullOrderDto(order));
-        if (shouldNotifyKitchen(status))
-            notifyKitchen(order);
-    }
 
     @Transactional
     public void deleteByIdAndMerchantId(UUID orderId, UUID merchantId) {
@@ -191,7 +181,74 @@ public class OrderService {
         return cachedOrders;
     }
 
-    private Long getNextMerchantSequence(UUID merchantId) {
+
+
+    public void notifyKitchen(Order order) {
+        String queueName = "queue.merchant." + order.getMerchant().getId();
+        rabbitQueueManager.createMerchantQueue(order.getMerchant().getId().toString());
+        rabbitTemplate.convertAndSend(queueName, new FullOrderDto(order).toComandString());
+    }
+
+    @Transactional
+    public void updateOrderPrinted(UUID merchantId, UUID orderId, boolean printed) {
+
+        int rows = orderRepository.updateOrderPrinted(merchantId, orderId, printed);
+        if (rows == 0) {
+            throw new EntityNotFoundException("Pedido não encontrado ou não pertence ao merchant.");
+        }
+
+        List<FullOrderDto> cached = recentOrderCacheService.getCachedRecentOrders(merchantId);
+        if (!cached.isEmpty()) {
+            List<FullOrderDto> updated = cached.stream()
+                .map(o -> o.id().equals(orderId) ? o.withPrinted(true) : o)
+                .toList();
+
+            recentOrderCacheService.cacheRecentOrders(merchantId, updated);
+        }
+    }
+
+
+    @Transactional
+    public void updateOrderStatus(UUID merchantId, UUID orderId, OrderStatus status) {
+
+        int rows = orderRepository.updateOrderStatus(merchantId, orderId, status);
+        if (rows == 0) {
+            throw new EntityNotFoundException("Pedido não encontrado ou não pertence ao merchant.");
+        }
+
+        List<FullOrderDto> cached = recentOrderCacheService.getCachedRecentOrders(merchantId);
+        if (!cached.isEmpty()) {
+            List<FullOrderDto> updated = cached.stream()
+                .map(o -> o.id().equals(orderId) ? o.withStatus(status) : o)
+                .toList();
+
+            recentOrderCacheService.cacheRecentOrders(merchantId, updated);
+        } else {
+            Order order = getByIdAndMerchantId(orderId, merchantId);
+            recentOrderCacheService.addOrUpdateRecentOrder(merchantId, new FullOrderDto(order));
+        }
+
+        if (shouldNotifyKitchen(status)) {
+            Order order = getByIdAndMerchantId(orderId, merchantId);
+            notifyKitchen(order);
+        }
+    }
+
+
+    private Merchant getOpenedMerchant(UUID merchantId) {
+        var merchant = merchantRepository.findById(merchantId)
+                .orElseThrow(() -> new EntityNotFoundException("Merchant não encontrado."));
+
+        boolean openedRecently = merchant.getLastOpenedUtc() != null
+                && Instant.now().minusSeconds(30000).isBefore(merchant.getLastOpenedUtc());
+
+        if (!openedRecently)
+            throw new ValidationException("O restaurante não está aberto no momento.");
+
+        return merchant;
+    }
+
+        private Long getNextMerchantSequence(UUID merchantId) {
         List<FullOrderDto> cachedOrders = recentOrderCacheService.getCachedRecentOrders(merchantId);
 
         if (cachedOrders != null && !cachedOrders.isEmpty()) {
@@ -208,26 +265,5 @@ public class OrderService {
 
     private boolean shouldNotifyKitchen(OrderStatus status) {
         return status == OrderStatus.CONFIRMED || status == OrderStatus.PREPARATION_STARTED;
-    }
-
-    public void notifyKitchen(Order order) {
-        String queueName = "queue.merchant." + order.getMerchant().getId();
-        rabbitQueueManager.createMerchantQueue(order.getMerchant().getId().toString());
-        rabbitTemplate.convertAndSend(queueName, new FullOrderDto(order).toComandString());
-
-    }
-
-
-    private Merchant getOpenedMerchant(UUID merchantId) {
-        var merchant = merchantRepository.findById(merchantId)
-                .orElseThrow(() -> new EntityNotFoundException("Merchant não encontrado."));
-
-        boolean openedRecently = merchant.getLastOpenedUtc() != null
-                && Instant.now().minusSeconds(30000).isBefore(merchant.getLastOpenedUtc());
-
-        if (!openedRecently)
-            throw new ValidationException("O restaurante não está aberto no momento.");
-
-        return merchant;
     }
 }

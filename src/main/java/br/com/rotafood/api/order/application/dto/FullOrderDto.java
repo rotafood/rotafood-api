@@ -33,6 +33,7 @@ public record FullOrderDto(
     @NotNull
     OrderTiming timing,
     String extraInfo,
+    boolean printed,
     @NotNull
     UUID merchantId,
     OrderTotalDto total,
@@ -66,6 +67,7 @@ public record FullOrderDto(
          order.getSalesChannel(),
          order.getTiming(),
          order.getExtraInfo(),
+         order.isPrinted(),
          order.getMerchant().getId(),
          Optional.ofNullable(order.getTotal()).map(OrderTotalDto::new).orElse(null),
          Optional.ofNullable(order.getCustomer()).map(CustomerDto::new).orElse(null),
@@ -79,6 +81,28 @@ public record FullOrderDto(
          Optional.ofNullable(order.getAdditionalFees()).map(fees -> fees.stream().map(OrderAdditionalFeeDto::new).toList()).orElse(List.of())
          );
     }
+
+    public FullOrderDto withPrinted(boolean printed) {
+    return new FullOrderDto(
+        id, merchantSequence, modifiedAt, createdAt, preparationStartDateTime,
+        type, status, salesChannel, timing, extraInfo,
+        printed,                    
+        merchantId, total, customer, delivery, schedule,
+        takeout, command, payment, items, benefits, additionalFees
+    );
+}
+
+    public FullOrderDto withStatus(OrderStatus newStatus) {
+        return new FullOrderDto(
+            id, merchantSequence, modifiedAt, createdAt, preparationStartDateTime,
+            type, newStatus,          
+            salesChannel, timing, extraInfo, printed,
+            merchantId, total, customer, delivery, schedule,
+            takeout, command, payment, items, benefits, additionalFees
+        );
+    }
+
+
 
     public String toComandString() {
         StringBuilder sb = new StringBuilder();

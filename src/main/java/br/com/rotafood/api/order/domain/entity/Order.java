@@ -75,6 +75,9 @@ public class Order {
     @Column(columnDefinition = "TEXT")
     private String extraInfo;
 
+    @Column()
+    private boolean printed = false;
+
     @ManyToOne(fetch = FetchType.LAZY)    
     @JoinColumn(name = "merchantId")
     private Merchant merchant;
@@ -119,5 +122,6 @@ public class Order {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "orderId")
     private List<OrderAdditionalFee> additionalFees = new ArrayList<>();
+    
 
 }

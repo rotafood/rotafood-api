@@ -77,9 +77,14 @@ public class CategoryService {
                 new TypeReference<List<FullCategoryDto>>() {}
             );
         } catch (Exception e) {
-            throw new EntityNotFoundException(
-                "Não foi possível ler o catálogo para merchant " + merchantId + ": " + e.getMessage()
-            );
+            System.err.println("Não foi possível ler o catálogo para merchant " + merchantId + ": " + e.getMessage());
+
+             return categoryRepository
+                    .findAllByMerchantIdWithItems(merchantId)
+                    .stream()
+                    .map(FullCategoryDto::new)
+                    .toList();
+
         }
     }
 

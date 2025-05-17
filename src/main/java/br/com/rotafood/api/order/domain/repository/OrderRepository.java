@@ -47,6 +47,14 @@ public interface OrderRepository extends JpaRepository<Order, UUID> {
                           @Param("status") OrderStatus status);
 
 
+    @Modifying
+    @Transactional
+    @Query("UPDATE Order o SET o.printed = :printed WHERE o.id = :orderId AND o.merchant.id = :merchantId")
+    int updateOrderPrinted(@Param("merchantId") UUID merchantId, 
+                          @Param("orderId") UUID orderId, 
+                          @Param("printed") boolean printed);
+
+
     List<Order> findByPreparationStartDateTimeBeforeAndStatusNotAndTiming(
             Instant cutoffTime, 
             OrderStatus status, 
