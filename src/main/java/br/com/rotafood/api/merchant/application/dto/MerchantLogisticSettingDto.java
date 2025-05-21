@@ -21,7 +21,9 @@ public record MerchantLogisticSettingDto(
     BigDecimal maxDeliveryRadiusKm,
     @NotNull
     @Min(0)
-    BigDecimal freeDeliveryRadiusKm
+    BigDecimal freeDeliveryRadiusKm,
+    BigDecimal latitude,
+    BigDecimal longitude
 
 ) {
 
@@ -31,7 +33,9 @@ public record MerchantLogisticSettingDto(
             logisticSetting.getMinDeliveryFee(), 
             logisticSetting.getDeliveryFeePerKm(), 
             logisticSetting.getMaxDeliveryRadiusKm(),
-            logisticSetting.getFreeDeliveryRadiusKm()
+            logisticSetting.getFreeDeliveryRadiusKm(),
+            logisticSetting.getLatitude(),
+            logisticSetting.getLongitude()
             );
     }
     

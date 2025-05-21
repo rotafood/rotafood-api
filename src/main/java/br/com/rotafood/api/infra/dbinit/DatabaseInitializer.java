@@ -24,7 +24,7 @@ public class DatabaseInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         if (databaseInit) {
-            String jsonFilePathProduct = "src/main/resources/db/populate/populateDbDefaultProduct.json";
+            String jsonFilePathProduct = "src/main/resources/db/populate/populateDbDefaultProduct2.json";
             defaultProductPopulateService.populateDatabase(jsonFilePathProduct);
             System.out.println("Database default products populated successfully!");
     

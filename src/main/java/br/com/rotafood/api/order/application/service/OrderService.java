@@ -1,7 +1,6 @@
 package br.com.rotafood.api.order.application.service;
 
 import br.com.rotafood.api.common.application.service.CustomerService;
-import br.com.rotafood.api.infra.config.rabbitmq.RabbitQueueManager;
 import br.com.rotafood.api.infra.config.redis.RecentOrderCacheService;
 import br.com.rotafood.api.infra.utils.DateUtils;
 import br.com.rotafood.api.merchant.domain.entity.Merchant;
@@ -18,7 +17,6 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -47,9 +45,7 @@ public class OrderService {
     @Autowired private OrderAdditionalFeeService orderAdditionalFeeService;
     @Autowired private OrderBenefitService orderBenefitService;
     @Autowired private CommandRepository commandRepository;
-    @Autowired private RabbitTemplate rabbitTemplate;
     @Autowired private RecentOrderCacheService recentOrderCacheService;
-    @Autowired private RabbitQueueManager rabbitQueueManager;
 
     @Value("${api.security.allowed.origin}")
     private String allowedOrigin;
@@ -77,10 +73,6 @@ public class OrderService {
         orderRepository.save(order);
         this.synchronizeOrderDetails(dto, order);
 
-        if (this.shouldNotifyKitchen(dto.status())) {
-            this.notifyKitchen(order);
-        }
-
         orderRepository.save(order);
 
         this.recentOrderCacheService.addOrUpdateRecentOrder(merchantId, new FullOrderDto(order));
@@ -99,10 +91,6 @@ public class OrderService {
         updateOrderFields(order, dto, merchant, true);
         orderRepository.save(order);
         synchronizeOrderDetails(dto, order);
-
-        if (this.shouldNotifyKitchen(dto.status())) {
-            this.notifyKitchen(order);
-        }
 
         return order;
     }
@@ -183,12 +171,6 @@ public class OrderService {
 
 
 
-    public void notifyKitchen(Order order) {
-        String queueName = "queue.merchant." + order.getMerchant().getId();
-        rabbitQueueManager.createMerchantQueue(order.getMerchant().getId().toString());
-        rabbitTemplate.convertAndSend(queueName, new FullOrderDto(order).toComandString());
-    }
-
     @Transactional
     public void updateOrderPrinted(UUID merchantId, UUID orderId, boolean printed) {
 
@@ -227,11 +209,6 @@ public class OrderService {
             Order order = getByIdAndMerchantId(orderId, merchantId);
             recentOrderCacheService.addOrUpdateRecentOrder(merchantId, new FullOrderDto(order));
         }
-
-        if (shouldNotifyKitchen(status)) {
-            Order order = getByIdAndMerchantId(orderId, merchantId);
-            notifyKitchen(order);
-        }
     }
 
 
@@ -261,9 +238,5 @@ public class OrderService {
 
         Long lastSeq = orderRepository.findMaxMerchantSequenceByMerchantId(merchantId);
         return (lastSeq == null) ? 1L : lastSeq + 1;
-    }
-
-    private boolean shouldNotifyKitchen(OrderStatus status) {
-        return status == OrderStatus.CONFIRMED || status == OrderStatus.PREPARATION_STARTED;
     }
 }

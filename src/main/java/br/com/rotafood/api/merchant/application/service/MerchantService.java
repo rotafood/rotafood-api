@@ -180,6 +180,8 @@ public class MerchantService {
         setting.setMinDeliveryFee(settingDto.minDeliveryFee());
         setting.setDeliveryFeePerKm(settingDto.deliveryFeePerKm());
         setting.setFreeDeliveryRadiusKm(settingDto.freeDeliveryRadiusKm());
+        setting.setLatitude(settingDto.latitude());
+        setting.setLongitude(settingDto.longitude());
 
         logisticSettingRepository.save(setting);
         merchant.setLogisticSetting(setting);

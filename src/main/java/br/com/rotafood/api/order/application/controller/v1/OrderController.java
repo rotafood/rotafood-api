@@ -72,15 +72,6 @@ public class OrderController {
         return ResponseEntity.ok(orders);
     }
 
-    @PutMapping("/{orderId}/print")
-    public ResponseEntity<Void> print(
-            @PathVariable UUID merchantId,
-            @PathVariable UUID orderId) {
-        orderService.notifyKitchen(orderService.getByIdAndMerchantId(orderId, merchantId));
-        return ResponseEntity.ok().build();
-    }
-
-
     @GetMapping("/polling/stop")
     public ResponseEntity<Void> stopPolling(
         @PathVariable UUID merchantId,
@@ -91,8 +82,6 @@ public class OrderController {
 
         return ResponseEntity.noContent().build();
     }
-
-
 
     @PutMapping("/{orderId}/status/{status}")
     public ResponseEntity<Void> updateOrderStatus(
@@ -109,7 +98,6 @@ public class OrderController {
             @PathVariable UUID merchantId,
             @PathVariable UUID orderId,
             @PathVariable boolean printed) {
-        System.err.println("\n\n  PRINNNNTEDDD \n\n");
         orderService.updateOrderPrinted(merchantId, orderId, printed);
         return ResponseEntity.ok().build();
     }

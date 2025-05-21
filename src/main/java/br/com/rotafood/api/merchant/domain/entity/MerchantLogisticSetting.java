@@ -40,5 +40,10 @@ public class MerchantLogisticSetting {
     @Column(precision = 10, scale = 2)
     private BigDecimal freeDeliveryRadiusKm;
 
+    @Column(precision = 9, scale = 6)
+    private BigDecimal latitude;
+
+    @Column(precision = 9, scale = 6)
+    private BigDecimal longitude;
 
 }
