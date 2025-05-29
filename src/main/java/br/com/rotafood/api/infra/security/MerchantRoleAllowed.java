@@ -6,7 +6,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import br.com.rotafood.api.merchant.domain.entity.MerchantUserRole;
+import br.com.rotafood.api.modules.merchant.domain.entity.MerchantUserRole;
 
 
 

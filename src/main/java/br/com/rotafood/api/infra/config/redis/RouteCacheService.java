@@ -1,8 +1,8 @@
 
 package br.com.rotafood.api.infra.config.redis;
 
-import br.com.rotafood.api.common.application.dto.AddressDto;
-import br.com.rotafood.api.logistic.application.dto.RouteDto;
+import br.com.rotafood.api.modules.common.application.dto.AddressDto;
+import br.com.rotafood.api.modules.logistic.application.dto.RouteDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;

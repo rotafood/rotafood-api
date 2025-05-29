@@ -1,9 +1,6 @@
 package br.com.rotafood.api.infra.security;
 
 
-import br.com.rotafood.api.merchant.application.dto.MerchantUserDto;
-import br.com.rotafood.api.merchant.domain.entity.MerchantUserRole;
-
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -11,6 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
+
+import br.com.rotafood.api.modules.merchant.application.dto.MerchantUserDto;
+import br.com.rotafood.api.modules.merchant.domain.entity.MerchantUserRole;
 
 import java.util.Arrays;
 

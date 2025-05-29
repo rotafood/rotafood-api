@@ -12,7 +12,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.com.rotafood.api.order.application.dto.FullOrderDto;
+import br.com.rotafood.api.modules.order.application.dto.FullOrderDto;
 
 @Service
 public class RecentOrderCacheService {
