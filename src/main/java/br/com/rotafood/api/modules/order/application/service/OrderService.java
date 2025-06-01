@@ -7,6 +7,7 @@ import br.com.rotafood.api.modules.merchant.domain.entity.Merchant;
 import br.com.rotafood.api.modules.merchant.domain.repository.MerchantRepository;
 import br.com.rotafood.api.modules.order.application.dto.CommandDto;
 import br.com.rotafood.api.modules.order.application.dto.FullOrderDto;
+import br.com.rotafood.api.modules.order.application.validator.OrderValidationEngine;
 import br.com.rotafood.api.modules.order.domain.entity.Command;
 import br.com.rotafood.api.modules.order.domain.entity.Order;
 import br.com.rotafood.api.modules.order.domain.entity.OrderStatus;
@@ -18,7 +19,6 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -46,9 +46,7 @@ public class OrderService {
     @Autowired private OrderBenefitService orderBenefitService;
     @Autowired private CommandRepository commandRepository;
     @Autowired private RecentOrderCacheService recentOrderCacheService;
-
-    @Value("${api.security.allowed.origin}")
-    private String allowedOrigin;
+    @Autowired private OrderValidationEngine validationEngine;
 
 
     public List<Order> getAllByMerchantId(UUID merchantId) {
@@ -69,8 +67,10 @@ public class OrderService {
                 ? getByIdAndMerchantId(dto.id(), merchantId)
                 : new Order();
 
-        this.updateOrderFields(order, dto, merchant, false);
+        this.updateOrderFields(order, dto, merchant);
+
         orderRepository.save(order);
+
         this.synchronizeOrderDetails(dto, order);
 
         orderRepository.save(order);
@@ -87,15 +87,21 @@ public class OrderService {
             throw new ValidationException("Não é permitido enviar um ID na criação online.");
 
         var merchant = getOpenedMerchant(merchantId);
+
+        validationEngine.validate(dto, merchant);
+
         Order order = new Order();
-        updateOrderFields(order, dto, merchant, true);
+
+        updateOrderFields(order, dto, merchant);
+
         orderRepository.save(order);
+        
         synchronizeOrderDetails(dto, order);
 
         return order;
     }
 
-    private void updateOrderFields(Order order, FullOrderDto dto, Merchant merchant, boolean validateRoute) {
+    private void updateOrderFields(Order order, FullOrderDto dto, Merchant merchant) {
         order.setPreparationStartDateTime(dto.preparationStartDateTime() != null
                 ? dto.preparationStartDateTime().toInstant() : Instant.now());
         order.setSalesChannel(dto.salesChannel());
@@ -105,7 +111,7 @@ public class OrderService {
         order.setStatus(dto.status());
         order.setExtraInfo(dto.extraInfo());
         order.setMerchant(merchant);
-        order.setTotal(orderTotalService.validateAndCalculateTotal(dto, merchant, validateRoute));
+        order.setTotal(orderTotalService.createOrUpdate(dto.total()));
         order.setDelivery(dto.delivery() != null ? orderDeliveryService.createOrUpdate(dto.delivery()) : null);
         order.setSchedule(dto.schedule() != null ? orderScheduleService.createOrUpdate(dto.schedule()) : null);
         order.setTakeout(dto.takeout() != null ? orderTakeoutService.createOrUpdate(dto.takeout()) : null);

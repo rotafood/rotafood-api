@@ -78,7 +78,7 @@ public class CatalogOnlineController {
         @PathVariable String onlineName, 
         @RequestBody @Valid FullOrderDto orderDto
     ) {
-        return new FullOrderDto(this.orderService.createOrUpdate(orderDto, orderDto.merchantId()));
+        return new FullOrderDto(this.orderService.createFromCatalogOnline(orderDto, orderDto.merchantId()));
     }
 
     @PostMapping("/{onlineName}/distances")

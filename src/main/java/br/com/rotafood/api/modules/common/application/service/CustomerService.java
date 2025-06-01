@@ -10,6 +10,7 @@ import br.com.rotafood.api.modules.common.application.dto.CustomerDto;
 import br.com.rotafood.api.modules.common.domain.entity.Address;
 import br.com.rotafood.api.modules.common.domain.entity.Customer;
 import br.com.rotafood.api.modules.common.domain.entity.CustomerAddress;
+import br.com.rotafood.api.modules.common.domain.repository.AddressRepository;
 import br.com.rotafood.api.modules.common.domain.repository.CustomerRepository;
 
 import java.util.Optional;
@@ -19,6 +20,9 @@ public class CustomerService {
 
     @Autowired
     private CustomerRepository customerRepository;
+
+    @Autowired
+    private AddressRepository addressRepository;
 
     public Optional<Customer> getByPhone(String phone) {
         return customerRepository.findByPhone(phone);
@@ -32,33 +36,22 @@ public class CustomerService {
                     newCustomer.setPhone(dto.phone());
                     return newCustomer;
                 });
+        
+        
 
         customer.setName(dto.name());
 
         if (addressDto != null) {
-            boolean alreadyLinked = false;
+            Address address = this.addressRepository.findById(addressDto.id()).orElseThrow();
 
-            for (CustomerAddress ca : customer.getAddresses()) {
-                Address a = ca.getAddress();
-                if (a.getId() != null && a.getId().equals(addressDto.id())) {
-                    a.updateFromAddressDto(addressDto);
-                    alreadyLinked = true;
-                    break;
-                }
-            }
+            boolean alreadyLinked = customer.getAddresses().stream()
+                    .anyMatch(ca -> ca.getAddress().getId().equals(address.getId()));
 
             if (!alreadyLinked) {
-                Address newAddress = addressDto.id() != null
-                    ? new Address(addressDto.id(), addressDto.country(), addressDto.state(), addressDto.city(),
-                        addressDto.neighborhood(), addressDto.postalCode(), addressDto.streetName(),
-                        addressDto.streetNumber(), addressDto.formattedAddress(), addressDto.complement(),
-                        addressDto.latitude(), addressDto.longitude())
-                    : new Address(addressDto);
-
-                CustomerAddress customerAddress = new CustomerAddress();
-                customerAddress.setCustomer(customer);
-                customerAddress.setAddress(newAddress);
-                customer.getAddresses().add(customerAddress);
+                CustomerAddress ca = new CustomerAddress();
+                ca.setCustomer(customer);
+                ca.setAddress(address);
+                customer.getAddresses().add(ca);
             }
         }
 

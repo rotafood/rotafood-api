@@ -49,8 +49,8 @@ public class SecurityConfigurations {
                     "*/logistic-test/routes/*",
                     "/*/api-docs/**",  
                     "/*/places/**",  
+                    "/*/webhook/whatsapp",  
                     "/*/logs/**", 
-                    "/*/ws/print/**",
                     "/*/catalogs/online/**",
                     "/swagger-ui.html", 
                     "/swagger-ui/**").permitAll()

@@ -11,7 +11,7 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/webhook/whatsapp")
+@RequestMapping(ApiVersion.VERSION + "/webhook/whatsapp")
 @Validated
 public class WhatsAppWebhookController {
 
