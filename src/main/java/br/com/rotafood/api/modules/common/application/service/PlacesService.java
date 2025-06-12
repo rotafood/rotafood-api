@@ -131,7 +131,7 @@ public class PlacesService {
     public List<AddressDto> searchByAddress(String q) {
         List<Address> local = addressRepository
                 .findByFormattedAddressContainingIgnoreCase(q);
-        if (!local.isEmpty()) {
+        if (!local.isEmpty() && local.size() >= 3) {
             return local.stream()
                  .filter(a ->
                         a.getPostalCode()   != null && !a.getPostalCode().isBlank() &&

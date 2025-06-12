@@ -6,6 +6,7 @@ import java.util.UUID;
 import br.com.rotafood.api.modules.common.domain.entity.Address;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 
 public record AddressDto (
@@ -24,6 +25,7 @@ public record AddressDto (
     String neighborhood,
     
     @NotBlank
+    @Size(min = 8, max = 9, message = "O CEP deve ter entre 8 e 9 caracteres")
     String postalCode,
     
     @NotBlank
