@@ -132,7 +132,13 @@ public class PlacesService {
         List<Address> local = addressRepository
                 .findByFormattedAddressContainingIgnoreCase(q);
         if (!local.isEmpty()) {
-            return local.stream().map(AddressDto::new).toList();
+            return local.stream()
+                 .filter(a ->
+                        a.getPostalCode()   != null && !a.getPostalCode().isBlank() &&
+                        a.getLatitude()     != null &&
+                        a.getLongitude()    != null
+                )
+                .map(AddressDto::new).toList();
         }
 
         GeocodingResult[] results;
@@ -165,18 +171,18 @@ public class PlacesService {
             Address a = new Address();
             a.setCountry("Brasil");
             a.setState(extractComponent(r, AddressComponentType.ADMINISTRATIVE_AREA_LEVEL_1));
-                a.setCity(extractComponent(r, AddressComponentType.ADMINISTRATIVE_AREA_LEVEL_2));
+            a.setCity(extractComponent(r, AddressComponentType.ADMINISTRATIVE_AREA_LEVEL_2));
 
-                String nb = extractComponent(r, AddressComponentType.SUBLOCALITY_LEVEL_1);
-                a.setNeighborhood(nb.isBlank()
-                        ? extractComponent(r, AddressComponentType.NEIGHBORHOOD)
-                        : nb);
+            String nb = extractComponent(r, AddressComponentType.SUBLOCALITY_LEVEL_1);
+            a.setNeighborhood(nb.isBlank()
+                    ? extractComponent(r, AddressComponentType.NEIGHBORHOOD)
+                    : nb);
 
-                a.setPostalCode(extractComponent(r, AddressComponentType.POSTAL_CODE));
-                a.setStreetName(extractComponent(r, AddressComponentType.ROUTE));
+            a.setPostalCode(extractComponent(r, AddressComponentType.POSTAL_CODE));
+            a.setStreetName(extractComponent(r, AddressComponentType.ROUTE));
 
-                String num = extractComponent(r, AddressComponentType.STREET_NUMBER);
-                a.setStreetNumber(num.isBlank() ? "S/N" : num);
+            String num = extractComponent(r, AddressComponentType.STREET_NUMBER);
+            a.setStreetNumber(num.isBlank() ? "S/N" : num);
 
             a.setFormattedAddress(r.formattedAddress);
             a.setComplement("");
@@ -186,6 +192,11 @@ public class PlacesService {
             Address saved = addressRepository.save(a);
             return new AddressDto(saved);
         })
+         .filter(dto ->
+            dto.postalCode() != null && !dto.postalCode().isBlank() &&
+            dto.latitude()   != null &&
+            dto.longitude()  != null
+        )
         .toList();
   
     }
@@ -196,7 +207,7 @@ public class PlacesService {
                     .filter(c -> c.types != null &&
                                 Arrays.asList(c.types).contains(type))
                     .findFirst()
-                    .map(c -> c.longName)      // ou .shortName se preferir
+                    .map(c -> c.longName)      
                     .orElse("");
     }
 }
