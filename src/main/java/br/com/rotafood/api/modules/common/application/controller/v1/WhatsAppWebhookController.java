@@ -2,6 +2,7 @@ package br.com.rotafood.api.modules.common.application.controller.v1;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,10 +17,15 @@ import jakarta.validation.Valid;
 public class WhatsAppWebhookController {
 
     @PostMapping
-    public ResponseEntity<Void> receive(
+    public ResponseEntity<Void> post(
             @RequestBody @Valid WhatsAppWebhookRequest payload) {  
 
         System.err.println("\n\n"  + payload + "\n\n");
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<Void> get() {
         return ResponseEntity.ok().build();
     }
 

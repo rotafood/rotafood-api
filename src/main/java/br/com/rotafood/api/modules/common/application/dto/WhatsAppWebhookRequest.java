@@ -1,13 +1,11 @@
 package br.com.rotafood.api.modules.common.application.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 
 import java.util.List;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 public record WhatsAppWebhookRequest(
         @NotBlank String object,
 
@@ -15,7 +13,6 @@ public record WhatsAppWebhookRequest(
         @Valid List<Entry> entry
 ) {
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
     public record Entry(
             @NotBlank String id,
 
@@ -23,7 +20,6 @@ public record WhatsAppWebhookRequest(
             @Valid List<Change> changes
     ) {
 
-        @JsonIgnoreProperties(ignoreUnknown = true)
         public record Change(
                 @NotBlank
                 @Pattern(
@@ -34,7 +30,6 @@ public record WhatsAppWebhookRequest(
                 @NotNull @Valid Value value
         ) {
 
-            @JsonIgnoreProperties(ignoreUnknown = true)
             public record Value(
 
                     @NotBlank
@@ -53,7 +48,6 @@ public record WhatsAppWebhookRequest(
             ) {
 
 
-                @JsonIgnoreProperties(ignoreUnknown = true)
                 public record Metadata(
                         @NotBlank
                         @JsonProperty("display_phone_number")
@@ -64,7 +58,6 @@ public record WhatsAppWebhookRequest(
                         String phoneNumberId
                 ) {}
 
-                @JsonIgnoreProperties(ignoreUnknown = true)
                 public record Contact(
                         @NotBlank @JsonProperty("wa_id") String waId,
                         @Valid Profile profile
@@ -72,7 +65,6 @@ public record WhatsAppWebhookRequest(
                     public record Profile(@NotBlank String name) {}
                 }
 
-                @JsonIgnoreProperties(ignoreUnknown = true)
                 public record Message(
                         @NotBlank String id,
                         @NotBlank String from,
@@ -104,7 +96,6 @@ public record WhatsAppWebhookRequest(
                     ) {}
                 }
 
-                @JsonIgnoreProperties(ignoreUnknown = true)
                 public record Status(
                         @NotBlank String id,
                         @NotBlank @JsonProperty("recipient_id") String recipientId,
@@ -112,7 +103,6 @@ public record WhatsAppWebhookRequest(
                         @NotBlank String timestamp
                 ) {}
 
-                @JsonIgnoreProperties(ignoreUnknown = true)
                 public record Error(
                         @Positive int code,
                         @NotBlank String title,
