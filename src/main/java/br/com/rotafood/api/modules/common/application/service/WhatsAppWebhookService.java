@@ -12,8 +12,8 @@ public class WhatsAppWebhookService {
 
 
     public void verifyWebhookToken(String mode, String token) {
-        if ("subscribe".equals(mode) && this.verifyToken.equals(token)) {
-            throw new AccessDeniedException("Acesso negado");
-        } 
+        if (!"subscribe".equals(mode) || !this.verifyToken.equals(token)) {
+            throw new AccessDeniedException("Token de verificação do Webhook inválido.");
+        }
     }
 }
