@@ -1,8 +1,10 @@
 package br.com.rotafood.api.modules.common.application.controller.v1;
 
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.validation.annotation.Validated;
@@ -37,10 +39,18 @@ public class PlacesController {
     }
 
 
-     @GetMapping("/search")
+    @GetMapping("/search")
     public List<AddressDto> searchByAddress(
         @RequestParam @Size(min = 5, message = "Digite pelo menos 5 caracteres") String q
     ) {
         return placesService.searchByAddress(q);
+    }
+
+    @GetMapping("/reverse-geocode")
+    public AddressDto getAddressByCoordinates(
+        @RequestParam @NotNull BigDecimal lat,
+        @RequestParam @NotNull BigDecimal lon
+    ) {
+        return placesService.reverseGeocode(lat, lon);
     }
 }
