@@ -98,6 +98,11 @@ public class OrderService {
         
         synchronizeOrderDetails(dto, order);
 
+        orderRepository.save(order);
+
+        this.recentOrderCacheService.addOrUpdateRecentOrder(merchantId, new FullOrderDto(order));
+
+
         return order;
     }
 
