@@ -11,14 +11,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import jakarta.servlet.FilterChain; 
+import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Component
 @Order(1)
-public class SecurityFilter extends OncePerRequestFilter { 
+public class SecurityFilter extends OncePerRequestFilter {
 
     @Autowired
     private TokenService tokenService;
@@ -33,10 +33,10 @@ public class SecurityFilter extends OncePerRequestFilter {
 
 
             var authentication = new UsernamePasswordAuthenticationToken(
-                        merchantUserDto, 
+                        merchantUserDto,
                         null,
-                        List.of(authority)          
-                        ); 
+                        List.of(authority)
+                        );
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }

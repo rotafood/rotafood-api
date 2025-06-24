@@ -46,11 +46,11 @@ public class PlacesController {
         return placesService.searchByAddress(q);
     }
 
-    @GetMapping("/reverse-geocode")
+    @GetMapping("/reverse-geocoding")
     public AddressDto getAddressByCoordinates(
-        @RequestParam @NotNull BigDecimal lat,
-        @RequestParam @NotNull BigDecimal lon
+        @RequestParam @NotNull BigDecimal latitude,
+        @RequestParam @NotNull BigDecimal longitude
     ) {
-        return placesService.reverseGeocode(lat, lon);
+        return placesService.reverseGeocode(latitude, longitude);
     }
 }

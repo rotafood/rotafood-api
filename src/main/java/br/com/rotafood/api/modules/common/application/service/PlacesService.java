@@ -1,12 +1,14 @@
 package br.com.rotafood.api.modules.common.application.service;
 
 import br.com.rotafood.api.modules.common.application.dto.AddressDto;
+import br.com.rotafood.api.modules.common.application.mapper.AddressMapper; 
 import br.com.rotafood.api.modules.common.domain.entity.Address;
 import br.com.rotafood.api.modules.common.domain.repository.AddressRepository;
 import br.com.rotafood.api.modules.order.application.dto.BrasilApiResponse;
 
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
+import com.google.maps.model.AddressType;
 import com.google.maps.model.ComponentFilter;
 import com.google.maps.model.GeocodingResult;
 import com.google.maps.model.LatLng;
@@ -16,9 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class PlacesService {
@@ -26,11 +27,13 @@ public class PlacesService {
     private final AddressRepository addressRepository;
     private final GeoApiContext geoApiContext;
     private final RestTemplate restTemplate;
+    private final AddressMapper addressMapper; 
 
-    public PlacesService(AddressRepository addressRepository, GeoApiContext geoApiContext, RestTemplate restTemplate) {
+    public PlacesService(AddressRepository addressRepository, GeoApiContext geoApiContext, RestTemplate restTemplate, AddressMapper addressMapper) {
         this.addressRepository = addressRepository;
         this.geoApiContext = geoApiContext;
         this.restTemplate = restTemplate;
+        this.addressMapper = addressMapper;
     }
 
     @Transactional
@@ -40,7 +43,7 @@ public class PlacesService {
         }
 
         return addressRepository.findByPostalCode(cep)
-                .map(AddressDto::new)
+                .map(addressMapper::toDto)
                 .orElseGet(() -> fetchFromApisAndSave(cep));
     }
 
@@ -50,50 +53,23 @@ public class PlacesService {
                 BrasilApiResponse.class);
 
         if (response == null) {
-            throw new RuntimeException("CEP não encontrado.") ;
+            throw new RuntimeException("CEP não encontrado.");
         }
 
-        Address address = new Address();
-        address.setPostalCode(response.cep());
-        address.setState(response.state());
-        address.setCity(response.city());
-        address.setNeighborhood(response.neighborhood());
-        address.setStreetName(response.street());
-        address.setCountry("Brasil");
-        address.setFormattedAddress(String.format(
-                "%s - %s, %s - %s",
-                defaultValue(response.street()),
-                defaultValue(response.neighborhood()),
-                defaultValue(response.city()),
-                defaultValue(response.state())));
+        AddressDto dto = addressMapper.fromBrasilApiResponse(response);
+        Address addressToSave = addressMapper.toEntity(dto);
+        Address savedAddress = addressRepository.save(addressToSave);
 
-        BigDecimal latitude = null;
-        BigDecimal longitude = null;
-        if (response.location() != null && response.location().latitude() != null && response.location().longitude() != null) {
-            latitude = response.location().latitude();
-            longitude = response.location().longitude();
-        }
-
-        address.setLatitude(response.location().latitude());
-        address.setLongitude(response.location().longitude());
-
-
-        address.setLatitude(latitude);
-        address.setLongitude(longitude);
-
-        return new AddressDto(addressRepository.save(address));
+        return addressMapper.toDto(savedAddress);
     }
 
-    private String defaultValue(String value) {
-        return value == null ? "" : value;
-    }
 
     public List<AddressDto> searchByAddress(String q) {
         List<Address> localResults = addressRepository.findByFormattedAddressContainingIgnoreCase(q);
 
         if (localResults.size() >= 3) {
             return localResults.stream()
-                    .map(AddressDto::new)
+                    .map(addressMapper::toDto)
                     .toList();
         }
 
@@ -101,44 +77,57 @@ public class PlacesService {
         try {
             googleResults = GeocodingApi.newRequest(geoApiContext)
                 .address(q)
-                .components(
-                        ComponentFilter.country("BR"),
-                        ComponentFilter.administrativeArea("SP"),
-                        ComponentFilter.locality("Limeira")
-                )
+                .language("pt-BR")
+                .components(ComponentFilter.country("BR"))
                 .await();
         } catch (Exception e) {
             throw new RuntimeException("Erro ao chamar Geocoding API do Google", e);
         }
 
-        return Arrays.stream(googleResults)
-                .map(AddressDto::new)
-                .map(addressDto -> {
-                    var address = new Address(addressDto);
-                    this.addressRepository.save(address);
-                    return new AddressDto(address);
-                })
-
-                .collect(Collectors.toList());
+        List<AddressDto> finalResults = new ArrayList<>();
+        for (GeocodingResult result : googleResults) {
+            AddressDto dto = addressMapper.fromGeocodingResult(result);
+            Address entity = addressMapper.toEntity(dto);
+            Address savedEntity = this.addressRepository.save(entity);
+            finalResults.add(addressMapper.toDto(savedEntity));
+        }
+        return finalResults;
     }
 
     @Transactional
     public AddressDto reverseGeocode(BigDecimal latitude, BigDecimal longitude) {
         try {
             LatLng location = new LatLng(latitude.doubleValue(), longitude.doubleValue());
-            GeocodingResult[] results = GeocodingApi.reverseGeocode(geoApiContext, location).await();
+
+            GeocodingResult[] results = GeocodingApi.reverseGeocode(geoApiContext, location)
+                    .language("pt-BR")
+                    .resultType(AddressType.STREET_ADDRESS)
+                    .await();
 
             if (results == null || results.length == 0) {
-                throw new RuntimeException("Endereço não encontrado para as coordenadas fornecidas.");
+                throw new Exception("Não foi possível encontrar um endereço de rua para as coordenadas fornecidas.");
             }
-            GeocodingResult firstResult = results[0];
 
-            Address newAddress = new Address(new AddressDto(firstResult));
-            return new AddressDto(addressRepository.save(newAddress));
+            GeocodingResult candidate = results[0];
+
+            if (!addressMapper.isResultComplete(candidate)) {
+                throw new Exception(
+                    "O endereço encontrado não possui todos os dados obrigatórios (Rua, Bairro, CEP, etc). " +
+                    "Endereço retornado pela API: " + candidate.formattedAddress
+                );
+            }
+            
+            AddressDto dto = addressMapper.fromGeocodingResult(candidate);
+            Address newAddress = addressMapper.toEntity(dto);
+            Address savedAddress = addressRepository.save(newAddress);
+
+            return addressMapper.toDto(savedAddress);
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao processar geocoding reverso: " + e.getMessage(), e);
+            e.printStackTrace();
+            throw new RuntimeException("Erro inesperado durante o geocoding reverso: " + e.getMessage(), e);
         }
     }
+
 
 
 

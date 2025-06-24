@@ -153,7 +153,7 @@ public class OrderService {
     }
 
     public Page<Order> getAllByFilters(UUID merchantId, List<OrderType> orderTypes, List<OrderStatus> orderStatus,
-                                       String startDate, String endDate, Pageable pageable) {
+                                        String startDate, String endDate, Pageable pageable) {
         Instant start = DateUtils.parseDateStringToInstant(startDate, false);
         Instant end = DateUtils.parseDateStringToInstant(endDate, true);
         return orderRepository.findAllByFilters(merchantId, orderTypes, orderStatus, start, end, pageable);
