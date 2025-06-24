@@ -117,7 +117,7 @@
 		<dependency>
 			<groupId>io.minio</groupId>
 			<artifactId>minio</artifactId>
-			<version>RELEASE</version>
+			<version>8.5.11</version>
 		</dependency>
 
 		<dependency>
@@ -133,7 +133,7 @@
 		<dependency>
 			<groupId>com.stripe</groupId>
 			<artifactId>stripe-java</artifactId>
-			<version>RELEASE</version>
+			<version>29.1.0</version>
 		</dependency>
 
 		<dependency>
