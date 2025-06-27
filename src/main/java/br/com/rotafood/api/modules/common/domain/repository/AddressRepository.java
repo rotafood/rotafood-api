@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import br.com.rotafood.api.modules.common.domain.entity.Address;
 
 public interface AddressRepository extends JpaRepository<Address, UUID> {
-    Optional<Address> findByPostalCode(String postalCode);
+    Optional<Address> findFirstByPostalCode(String postalCode);
 
     Optional<Address> findFirstByFormattedAddressContainingIgnoreCase(String q);
 

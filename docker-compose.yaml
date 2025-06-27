@@ -54,8 +54,8 @@ services:
     image: minio/minio:latest
     container_name: minio
     ports:
-      - "9000:9000"  
-      - "9001:9001"  
+      - "9000:9000"
+      - "9001:9001"
     environment:
       MINIO_ROOT_USER: NLWkirZyIvd5woumCeEFhZvpaqGXVMaT
       MINIO_ROOT_PASSWORD: jYzSJ301Ru1lLmOs9tsc3F1wcb4zkpNh52mfw1ppG8BbKBwt

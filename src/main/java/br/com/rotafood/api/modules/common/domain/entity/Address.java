@@ -53,7 +53,7 @@ public class Address {
         this.complement = dto.complement();
         this.latitude = dto.latitude();
         this.longitude = dto.longitude();
-    } 
+    }
 
     public void updateFromAddressDto(AddressDto dto) {
         this.country = dto.country();

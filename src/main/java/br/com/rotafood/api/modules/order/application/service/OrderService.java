@@ -2,6 +2,7 @@ package br.com.rotafood.api.modules.order.application.service;
 
 import br.com.rotafood.api.infra.config.redis.RecentOrderCacheService;
 import br.com.rotafood.api.infra.utils.DateUtils;
+import br.com.rotafood.api.modules.common.application.dto.AddressDto;
 import br.com.rotafood.api.modules.common.application.service.CustomerService;
 import br.com.rotafood.api.modules.merchant.domain.entity.Merchant;
 import br.com.rotafood.api.modules.merchant.domain.repository.MerchantRepository;
@@ -123,7 +124,9 @@ public class OrderService {
         order.setPayment(dto.payment() != null ? orderPaymentService.createOrUpdate(dto.payment()) : null);
         order.setMerchantSequence(dto.merchantSequence() != null ? dto.merchantSequence() : getNextMerchantSequence(merchant.getId()));
         order.setCustomer(dto.customer() != null
-                ? customerService.createOrUpdateWithAddressIfDelivery(dto.customer(), dto.delivery() != null ? dto.delivery().address() : null)
+                ? customerService.createOrUpdateWithAddressIfDelivery(
+                    dto.customer(), order.getDelivery() != null ? new AddressDto(order.getDelivery().getAddress()) : null
+                    )
                 : null);
         order.setCommand(dto.command() != null ? addOrderToCommand(order, dto.command()) : null);
     }

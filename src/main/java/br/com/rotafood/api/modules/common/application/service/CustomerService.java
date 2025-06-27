@@ -1,5 +1,6 @@
 package br.com.rotafood.api.modules.common.application.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,7 @@ public class CustomerService {
 
     @Transactional
     public Customer createOrUpdateWithAddressIfDelivery(CustomerDto dto, AddressDto addressDto) {
+        
         Customer customer = customerRepository.findByPhone(dto.phone())
                 .orElseGet(() -> {
                     Customer newCustomer = new Customer();
@@ -42,7 +44,9 @@ public class CustomerService {
         customer.setName(dto.name());
 
         if (addressDto != null) {
-            Address address = this.addressRepository.findById(addressDto.id()).orElseThrow();
+            Address address = addressDto.id() != null
+                    ? this.addressRepository.findById(addressDto.id()).orElseThrow(() -> new EntityNotFoundException("Endereço não encontrado"))
+                    : this.addressRepository.save(new Address(addressDto));
 
             boolean alreadyLinked = customer.getAddresses().stream()
                     .anyMatch(ca -> ca.getAddress().getId().equals(address.getId()));

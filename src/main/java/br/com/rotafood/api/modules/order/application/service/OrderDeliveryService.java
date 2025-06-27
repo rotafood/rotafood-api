@@ -29,23 +29,30 @@ public class OrderDeliveryService {
     @Transactional
     public OrderDelivery createOrUpdate(OrderDeliveryDto orderDeliveryDto) {
 
-         OrderDelivery orderDelivery = orderDeliveryDto.id() != null 
+        OrderDelivery orderDelivery = orderDeliveryDto.id() != null
             ? this.orderDeliveryRepository.findById(orderDeliveryDto.id()).orElseThrow(() -> 
                 new EntityNotFoundException("Delivery não encontrado para ID: " + orderDeliveryDto.id()))
             : new OrderDelivery();
 
-        Address address = orderDeliveryDto.address() != null
-                ? addressRepository.save(new Address(orderDeliveryDto.address()))
-                : new Address(orderDeliveryDto.address());
+        Address address = orderDeliveryDto.address().id() != null
+            ? this.addressRepository.findById(orderDeliveryDto.address().id()).orElseThrow(() -> 
+                new EntityNotFoundException("Endereço não encontrado para ID: " + orderDeliveryDto.address().id()))
+            : this.addressRepository.save(new Address(orderDeliveryDto.address()));
+
+        
         orderDelivery.setDeliveryBy(orderDeliveryDto.deliveryBy());
         orderDelivery.setMode(orderDeliveryDto.mode());
         orderDelivery.setDescription(orderDeliveryDto.description());
         orderDelivery.setPickupCode(orderDeliveryDto.pickupCode());
         orderDelivery.setDeliveryDateTime(orderDeliveryDto.deliveryDateTime());
         orderDelivery.setAddress(address);
+        orderDeliveryRepository.save(orderDelivery);
 
-        return orderDeliveryRepository.save(orderDelivery);
+        return orderDelivery;
     }
+
+
+
 
     @Transactional
     public void deleteByOrderId(UUID orderId) {

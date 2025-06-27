@@ -34,8 +34,7 @@ public class PlacesController {
         @Pattern(regexp = "\\d{8,9}", message = "CEP deve conter 8 ou 9 dígitos numéricos")
         String cep
     ) {
-        var address = placesService.findOrCreateByCep(cep);
-        return address;
+        return placesService.findByCep(cep);
     }
 
 

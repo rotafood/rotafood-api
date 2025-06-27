@@ -15,8 +15,9 @@ public record AddressDto(
     @NotBlank String country,
     @NotBlank String state,
     @NotBlank String city,
-    @NotBlank String neighborhood,
-    @NotBlank @Size(min = 8, max = 9, message = "O CEP deve ter entre 8 e 9 caracteres") String postalCode,
+    @NotNull String neighborhood,
+    @NotBlank @Size(min = 8, max = 9, message = "O CEP deve ter entre 8 e 9 caracteres") 
+    String postalCode,
     @NotBlank String streetName,
     @NotNull String streetNumber,
     @NotNull String formattedAddress,

@@ -75,7 +75,7 @@ public class CatalogOnlineController {
 
     @PutMapping("/{onlineName}/orders")
     public FullOrderDto createOrUpdateOrder(
-        @PathVariable String onlineName, 
+        @PathVariable String onlineName,
         @RequestBody @Valid FullOrderDto orderDto
     ) {
         return new FullOrderDto(this.orderService.createFromCatalogOnline(orderDto, orderDto.merchantId()));
@@ -83,7 +83,7 @@ public class CatalogOnlineController {
 
     @PostMapping("/{onlineName}/distances")
     public RouteDto getDistances(
-            @PathVariable String onlineName, 
+            @PathVariable String onlineName,
             @RequestBody @Valid AddressDto addressDto
     ) {
         var merchant = this.merchantRepository.findByOnlineName(onlineName)
@@ -99,5 +99,4 @@ public class CatalogOnlineController {
 
         return distance;
     }
- 
 }

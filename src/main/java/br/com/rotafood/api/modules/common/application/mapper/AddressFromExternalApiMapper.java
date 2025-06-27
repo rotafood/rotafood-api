@@ -1,7 +1,6 @@
 package br.com.rotafood.api.modules.common.application.mapper;
 
 import br.com.rotafood.api.modules.common.application.dto.AddressDto;
-import br.com.rotafood.api.modules.common.domain.entity.Address;
 import br.com.rotafood.api.modules.order.application.dto.BrasilApiResponse;
 import com.google.maps.model.AddressComponentType;
 import com.google.maps.model.GeocodingResult;
@@ -11,43 +10,7 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 
 @Component
-public class AddressMapper {
-
-    public AddressDto toDto(Address address) {
-        if (address == null) return null;
-        return new AddressDto(
-            address.getId(),
-            address.getCountry(),
-            address.getState(),
-            address.getCity(),
-            address.getNeighborhood(),
-            address.getPostalCode(),
-            address.getStreetName(),
-            address.getStreetNumber(),
-            address.getFormattedAddress(),
-            address.getComplement(),
-            address.getLatitude(),
-            address.getLongitude()
-        );
-    }
-
-    public Address toEntity(AddressDto dto) {
-        if (dto == null) return null;
-        Address entity = new Address();
-        entity.setId(dto.id());
-        entity.setCountry(dto.country());
-        entity.setState(dto.state());
-        entity.setCity(dto.city());
-        entity.setNeighborhood(dto.neighborhood());
-        entity.setPostalCode(dto.postalCode());
-        entity.setStreetName(dto.streetName());
-        entity.setStreetNumber(dto.streetNumber());
-        entity.setFormattedAddress(dto.formattedAddress());
-        entity.setComplement(dto.complement());
-        entity.setLatitude(dto.latitude());
-        entity.setLongitude(dto.longitude());
-        return entity;
-    }
+public class AddressFromExternalApiMapper {
     
     public AddressDto fromBrasilApiResponse(BrasilApiResponse response) {
         if (response == null) return null;
